@@ -13,8 +13,8 @@ from function import makeequalmatrix
 print(bcolors.HEADER, 'Dyer Rosenfeld algoritmus:', bcolors.ENDC)
 
 # Beolvasás szürkeárnyalatos képként
-img = imreadgray('pictures/sima.png')
-img2 = imreadgray('pictures/sima.png')
+img = imreadgray('pictures/kor.png')
+img2 = imreadgray('pictures/kor.png')
 
 # Értékek átkonvertálása 0-255
 img = flip(img)

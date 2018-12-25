@@ -109,14 +109,14 @@ def connected(a, b, c, d, e, f, g, h, i, r):
         for y in range(x + 1, 4):
             if connect[x] < connect[y]:
                 m = connect[x]
-                if e < (m - r):
+                if e > (m - r):
                     con += 1
                     continue
                 elif findpath(a, b, c, d, f, g, h, i, m, x, y, r):
                     ret += 1
             else:
                 m = connect[y]
-                if e < (m - r):
+                if e > (m - r):
                     con += 1
                     continue
                 elif findpath(a, b, c, d, f, g, h, i, m, x, y, r):
