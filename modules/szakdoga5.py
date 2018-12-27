@@ -2,7 +2,7 @@ import bcolors
 from modules.functions import imreadgray
 from modules.functions import flip
 
-print(bcolors.HEADER, " _  ___             _                  _____ _           _ ")
+print(bcolors.OK, " _  ___             _                  _____ _           _ ")
 print(" | |/ (_)           | |                / ____| |         (_)")
 print(" | ' / _ _ __ ___   | |     ___  ___  | |    | |__   ___  _ ")
 print(" |  < | | '_ ` _ \  | |    / _ \/ _ \ | |    | '_ \ / _ \| |")

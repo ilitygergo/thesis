@@ -10,7 +10,7 @@ from modules.functions import connected
 from modules.functions import equalmatrix
 from modules.functions import makeequalmatrix
 
-print(bcolors.HEADER, " _____                    _____                       __     _     _ ")
+print(bcolors.OK, " _____                    _____                       __     _     _ ")
 print(" |  __ \                  |  __ \                     / _|   | |   | |")
 print(" | |  | |_   _  ___ _ __  | |__) |___  ___  ___ _ __ | |_ ___| | __| |")
 print(" | |  | | | | |/ _ \ '__| |  _  // _ \/ __|/ _ \ '_ \|  _/ _ \ |/ _` |")
@@ -20,7 +20,7 @@ print("          __/ |                                                       ")
 print("         |___/                                                        ", bcolors.ENDC)
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'sima'
+picture = 'Star'
 
 img = imreadgray('../pictures/' + picture + '.png')
 img2 = imreadgray('../pictures/' + picture + '.png')

@@ -4,7 +4,7 @@ from modules.functions import flip
 from modules.functions import minimizenotnull
 from modules.functions import maximizenotnull
 
-print(bcolors.HEADER, "                       _ _ _   _____                      _ _       ")
+print(bcolors.OK, "                       _ _ _   _____                      _ _       ")
 print("     /\                | | (_) |  __ \                    | | |      ")
 print("    /  \   _ __ ___ ___| | |_  | |__) |__ _ _ __ ___   ___| | | __ _ ")
 print("   / /\ \ | '__/ __/ _ \ | | | |  _  // _` | '_ ` _ \ / _ \ | |/ _` |")
