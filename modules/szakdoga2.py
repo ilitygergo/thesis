@@ -1,15 +1,22 @@
 import bcolors
-from modules.function import imreadgray
-from modules.function import flip
-from modules.function import minimizenotnull
-from modules.function import maximizenotnull
+from modules.functions import imreadgray
+from modules.functions import flip
+from modules.functions import minimizenotnull
+from modules.functions import maximizenotnull
 
-print(bcolors.HEADER, 'Carlo Arcelli and Giuliana Ramella algoritmus:', bcolors.ENDC)
+print(bcolors.HEADER, "                       _ _ _   _____                      _ _       ")
+print("     /\                | | (_) |  __ \                    | | |      ")
+print("    /  \   _ __ ___ ___| | |_  | |__) |__ _ _ __ ___   ___| | | __ _ ")
+print("   / /\ \ | '__/ __/ _ \ | | | |  _  // _` | '_ ` _ \ / _ \ | |/ _` |")
+print("  / ____ \| | | (_|  __/ | | | | | \ \ (_| | | | | | |  __/ | | (_| |")
+print(" /_/    \_\_|  \___\___|_|_|_| |_|  \_\__,_|_| |_| |_|\___|_|_|\__,_|", bcolors.ENDC)
 
 # Beolvasás szürkeárnyalatos képként
-img = imreadgray('../pictures/hollow.jpg')
-img2 = imreadgray('../pictures/hollow.jpg')
-helper = imreadgray('../pictures/hollow.jpg')
+picture = 'sima'
+
+img = imreadgray('../pictures/' + picture + '.png')
+img2 = imreadgray('../pictures/' + picture + '.png')
+helper = imreadgray('../pictures/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
 img = flip(img)
@@ -60,8 +67,8 @@ for row in range(1, size[0] - 1):
 
 print(helper, '\n')
 
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
-        if helper[row][col] == 0:
-            if img2[row][col] != 0:
+#for row in range(1, size[0] - 1):
+#    for col in range(1, size[1] - 1):
+#        if helper[row][col] == 0:
+#            if img2[row][col] != 0:
 

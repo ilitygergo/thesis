@@ -1,5 +1,5 @@
-from modules.function import connected
-from modules.function import rvalue
+from modules.functions import connected
+from modules.functions import rvalue
 
 grayness = rvalue(31, 0, 145, 18, 30) * 0
 connected(0, 0, 0, 0, 255, 255, 0, 255, 0, grayness)

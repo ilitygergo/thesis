@@ -1,19 +1,26 @@
 import cv2
 import bcolors
 import numpy as np
-from modules.function import rvalue
-from modules.function import minimize
-from modules.function import imreadgray
-from modules.function import notendpoint
-from modules.function import flip
-from modules.function import connected
-from modules.function import equalmatrix
-from modules.function import makeequalmatrix
+from modules.functions import rvalue
+from modules.functions import minimize
+from modules.functions import imreadgray
+from modules.functions import notendpoint
+from modules.functions import flip
+from modules.functions import connected
+from modules.functions import equalmatrix
+from modules.functions import makeequalmatrix
 
-print(bcolors.HEADER, 'Dyer Rosenfeld algoritmus:', bcolors.ENDC)
+print(bcolors.HEADER, " _____                    _____                       __     _     _ ")
+print(" |  __ \                  |  __ \                     / _|   | |   | |")
+print(" | |  | |_   _  ___ _ __  | |__) |___  ___  ___ _ __ | |_ ___| | __| |")
+print(" | |  | | | | |/ _ \ '__| |  _  // _ \/ __|/ _ \ '_ \|  _/ _ \ |/ _` |")
+print(" | |__| | |_| |  __/ |    | | \ \ (_) \__ \  __/ | | | ||  __/ | (_| |")
+print(" |_____/ \__, |\___|_|    |_|  \_\___/|___/\___|_| |_|_| \___|_|\__,_|")
+print("          __/ |                                                       ")
+print("         |___/                                                        ", bcolors.ENDC)
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'Don'
+picture = 'sima'
 
 img = imreadgray('../pictures/' + picture + '.png')
 img2 = imreadgray('../pictures/' + picture + '.png')

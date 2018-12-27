@@ -121,27 +121,27 @@ def connected(a, b, c, d, e, f, g, h, i, r):
                     continue
                 elif findpath(a, b, c, d, f, g, h, i, m, x, y, r):
                     ret += 1
-    print('szam: ', szam)
-    print('con: ', con)
-    print('ret: ', ret)
+    # print('szam: ', szam)
+    # print('con: ', con)
+    # print('ret: ', ret)
     if szam == 1:
         print('True')
         return True
     if szam == 2:
         if ret >= 1:
-            print('True')
-            print(ret)
+            # print('True')
+            # print(ret)
             return True
     elif szam == 3:
         if ret >= 3:
-            print('True')
+            # print('True')
             return True
     elif szam == 4:
         if ret >= 8:
-            print('True')
+            # print('True')
             return True
     else:
-        print('False')
+        # print('False')
         return False
 
 
@@ -149,42 +149,42 @@ def findpath(a, b, c, d, f, g, h, i, m, x, y, r):
     if x == 0 and y == 1:
         if (b >= (m - r) and a >= (m - r) and d >= (m - r)) or (b >= (m - r) and c >= (m - r) and f >= (m - r) and i >= (m - r) and h >= (m - r) and g >= (m - r) and d >= (m - r)):
             # b and d
-            print('b and d')
+            # print('b and d')
             return True
         else:
             return False
     elif x == 0 and y == 2:
         if (b >= (m - r) and c >= (m - r) and f >= (m - r)) or (b >= (m - r) and a >= (m - r) and d >= (m - r) and g >= (m - r) and h >= (m - r) and i >= (m - r) and f >= (m - r)):
             # b and f
-            print('b and f')
+            # print('b and f')
             return True
         else:
             return False
     elif x == 0 and y == 3:
         if (b >= (m - r) and a >= (m - r) and d >= (m - r) and g >= (m - r) and h >= (m - r)) or (b >= (m - r) and c >= (m - r) and f >= (m - r) and i >= (m - r) and h >= (m - r)):
             # b and h
-            print('b and h')
+            # print('b and h')
             return True
         else:
             return False
     elif x == 1 and y == 2:
         if (d >= (m - r) and a >= (m - r) and b >= (m - r) and c >= (m - r) and f >= (m - r)) or (d >= (m - r) and g >= (m - r) and h >= (m - r) and i >= (m - r) and f >= (m - r)):
             # d and f
-            print('d and f')
+            # print('d and f')
             return True
         else:
             return False
     elif x == 1 and y == 3:
         if (d >= (m - r) and g >= (m - r) and h >= (m - r)) or (d >= (m - r) and a >= (m - r) and b >= (m - r) and c >= (m - r) and f >= (m - r) and i >= (m - r) and h >= (m - r)):
             # d and h
-            print('d and h')
+            # print('d and h')
             return True
         else:
             return False
     elif x == 2 and y == 3:
         if (f >= (m - r) and i >= (m - r) and h >= (m - r)) or (f >= (m - r) and c >= (m - r) and b >= (m - r) and a >= (m - r) and d >= (m - r) and g >= (m - r) and h >= (m - r)):
             # f and h
-            print('f and h')
+            # print('f and h')
             return True
         else:
             return False
