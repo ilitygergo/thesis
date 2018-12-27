@@ -1,4 +1,6 @@
+import cv2
 import bcolors
+import numpy as np
 from modules.functions import imreadgray
 from modules.functions import flip
 from modules.functions import minimizenotnull
@@ -12,10 +14,13 @@ print("  / ____ \| | | (_|  __/ | | | | | \ \ (_| | | | | | |  __/ | | (_| |")
 print(" /_/    \_\_|  \___\___|_|_|_| |_|  \_\__,_|_| |_| |_|\___|_|_|\__,_|", bcolors.ENDC)
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'sima'
+picture = 'test2'
 
+# img a transzformálás előtti állapot
 img = imreadgray('../pictures/' + picture + '.png')
+# img2 a transzformálás utáni állapot
 img2 = imreadgray('../pictures/' + picture + '.png')
+# helper
 helper = imreadgray('../pictures/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
@@ -50,25 +55,36 @@ for row in range(1, size[0] - 1):
         img[row][col] = img2[row][col]
         helper[row][col] = img2[row][col]
 
+print(img2, '\n')
+
 # 2 Üregfeltöltés
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
         if img2[row][col] != 0:
             if img2[row][col] <= img2[row+1][col] and img2[row][col] <= img2[row-1][col] and img2[row][col] <= img2[row][col+1] and img2[row][col] <= img2[row][col-1]:
-                helper[row][col] = 0
+                matrix[row][col] = 'X'
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
-        if helper[row][col] == 0:
+        if matrix[row][col] == 'X':
             if img2[row][col] != 0:
-                if img2[row][col] == img2[row+1][col] or img2[row][col] == img2[row-1][col] or img2[row][col] == img2[row][col+1] or img2[row][col] == img2[row][col-1]:
-                    helper[row][col] = 0
-
-print(helper, '\n')
+                if img2[row][col] == img2[row + 1][col] and matrix[row + 1][col] == 0:
+                    matrix[row][col] = 0
+                if img2[row][col] == img2[row - 1][col] and matrix[row - 1][col] == 0:
+                    matrix[row][col] = 0
+                if img2[row][col] == img2[row][col + 1] and matrix[row][col + 1] == 0:
+                    matrix[row][col] = 0
+                if img2[row][col] == img2[row][col - 1] and matrix[row][col - 1] == 0:
+                    matrix[row][col] = 0
 
 #for row in range(1, size[0] - 1):
 #    for col in range(1, size[1] - 1):
 #        if helper[row][col] == 0:
 #            if img2[row][col] != 0:
 
+# Értékek visszakonvertálása
+img = flip(img)
+
+# Kiíratás vagy mentés
+img = cv2.imwrite('../results/' + picture + '.png', img)
