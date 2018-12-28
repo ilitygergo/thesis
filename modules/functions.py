@@ -1,4 +1,6 @@
 import cv2
+import bcolors
+import copy
 
 
 # Reads a colored picture in gray
@@ -19,20 +21,20 @@ def flip(img):
 
 # Calculates the value of R'
 def rvalue(b, d, e, f, h):
-    min = 0
-    max = 0
+    minimum = 0
+    maximum = 0
     index = 0
     neighbour = [b, d, e, f, h]
     while index < 4:
-        if min > neighbour[index + 1]:
-            min = neighbour[index + 1]
+        if minimum > neighbour[index + 1]:
+            minimum = neighbour[index + 1]
         index += 1
     index = 0
     while index < 4:
-        if max < neighbour[index + 1]:
-            max = neighbour[index + 1]
+        if maximum < neighbour[index + 1]:
+            maximum = neighbour[index + 1]
         index += 1
-    r = max - min + 1
+    r = maximum - minimum + 1
     return r
 
 
@@ -206,3 +208,53 @@ def makeequalmatrix(mat1, mat2, size):
     for row in range(0, size[0]):
         for col in range(0, size[1]):
             mat1[row][col] = mat2[row][col]
+
+
+# Prints out the matrix
+def printmatrix(matrix):
+    print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in matrix]))
+    print('\n')
+
+
+# Finds pixels with same value and returns a matrix
+def nearestneighbour(matrix, img, r, c):
+    stack = []
+    x = copy.deepcopy(r)
+    y = copy.deepcopy(c)
+
+    while True:
+        if img[x][y] == img[x - 1][y] and matrix[x - 1][y] == 'X':
+            # print(bcolors.WARN, 'up', bcolors.ENDC)
+            stack.append([x, y])
+            matrix[x][y] = 'O'
+            x -= 1
+            # printmatrix(matrix)
+        elif img[x][y] == img[x][y + 1] and matrix[x][y + 1] == 'X':
+            # print(bcolors.WARN, 'right', bcolors.ENDC)
+            stack.append([x, y])
+            matrix[x][y] = 'O'
+            y += 1
+            # printmatrix(matrix)
+        elif img[x][y] == img[x + 1][y] and matrix[x + 1][y] == 'X':
+            # print(bcolors.WARN, 'down', bcolors.ENDC)
+            stack.append([x, y])
+            matrix[x][y] = 'O'
+            x += 1
+            # printmatrix(matrix)
+        elif img[x][y] == img[x][y - 1] and matrix[x][y - 1] == 'X':
+            # print(bcolors.WARN, 'left', bcolors.ENDC)
+            stack.append([x, y])
+            matrix[x][y] = 'O'
+            y -= 1
+            # printmatrix(matrix)
+        elif len(stack) > 0:
+            # print(bcolors.WARN, 'pop', bcolors.ENDC)
+            value = stack.pop()
+            matrix[x][y] = 'O'
+            x = value[0]
+            y = value[1]
+        elif len(stack) == 0:
+            matrix[x][y] = 'O'
+            break
+
+    return matrix

@@ -1,6 +1,6 @@
 import cv2
 import bcolors
-import numpy as np
+from modules.functions import printmatrix
 from modules.functions import rvalue
 from modules.functions import minimize
 from modules.functions import imreadgray
@@ -127,7 +127,7 @@ while nemegyenlo:
                     else:
                         matrix2[row][col] = ' '
 
-        print(np.matrix(matrix2))
+        printmatrix(matrix2)
         print('\n')
         print('Összesen:', hatar)
 
@@ -157,7 +157,8 @@ while nemegyenlo:
                     i = img[row + 1, col + 1]
                     grayness = rvalue(b, d, e, f, h) * percent
                     # print(img[row][col])
-                    if notendpoint(b, d, h, f, e - grayness) and connected(a, b, c, d, e, f, g, h, i, grayness) and img[row][col] != 0:
+                    if notendpoint(b, d, h, f, e - grayness) and connected(a, b, c, d, e, f, g, h, i, grayness)\
+                            and img[row][col] != 0:
                         # print(row, col, ' - ', img[row][col])
                         igen += 1
                         matrix3[row][col] = 'X'

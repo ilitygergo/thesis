@@ -1,10 +1,11 @@
 import cv2
 import bcolors
-import numpy as np
 from modules.functions import imreadgray
 from modules.functions import flip
 from modules.functions import minimizenotnull
 from modules.functions import maximizenotnull
+from modules.functions import nearestneighbour
+from modules.functions import printmatrix
 
 print(bcolors.OK, "                       _ _ _   _____                      _ _       ")
 print("     /\                | | (_) |  __ \                    | | |      ")
@@ -14,7 +15,7 @@ print("  / ____ \| | | (_|  __/ | | | | | \ \ (_| | | | | | |  __/ | | (_| |")
 print(" /_/    \_\_|  \___\___|_|_|_| |_|  \_\__,_|_| |_| |_|\___|_|_|\__,_|", bcolors.ENDC)
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'test2'
+picture = 'test'
 
 # img a transzformálás előtti állapot
 img = imreadgray('../pictures/' + picture + '.png')
@@ -33,9 +34,9 @@ size = img.shape
 h = 0
 n = size[0]
 m = size[1]
-matrix = [0] * n
+matrix = ['O'] * n
 for x in range(n):
-    matrix[x] = [0] * m
+    matrix[x] = ['O'] * m
 print(img2, '\n')
 
 # 1 Simítás minimalizálás és maximalizálás
@@ -57,32 +58,36 @@ for row in range(1, size[0] - 1):
 
 print(img2, '\n')
 
-# 2 Üregfeltöltés
+# 2 Üregek kiválasztása
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
         if img2[row][col] != 0:
-            if img2[row][col] <= img2[row+1][col] and img2[row][col] <= img2[row-1][col] and img2[row][col] <= img2[row][col+1] and img2[row][col] <= img2[row][col-1]:
+            if img2[row][col] <= img2[row +1 ][col] and img2[row][col] <= img2[row - 1][col] and img2[row][col] <= img2[row][col + 1] and img2[row][col] <= img2[row][col - 1]:
                 matrix[row][col] = 'X'
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
         if matrix[row][col] == 'X':
             if img2[row][col] != 0:
-                if img2[row][col] == img2[row + 1][col] and matrix[row + 1][col] == 0:
-                    matrix[row][col] = 0
-                if img2[row][col] == img2[row - 1][col] and matrix[row - 1][col] == 0:
-                    matrix[row][col] = 0
-                if img2[row][col] == img2[row][col + 1] and matrix[row][col + 1] == 0:
-                    matrix[row][col] = 0
-                if img2[row][col] == img2[row][col - 1] and matrix[row][col - 1] == 0:
-                    matrix[row][col] = 0
+                if img2[row][col] == img2[row - 1][col] and matrix[row - 1][col] == 'O':
+                    print(1)
+                    print(img2[row][col])
+                    matrix = nearestneighbour(matrix, img2, row, col)
+                elif img2[row][col] == img2[row][col + 1] and matrix[row][col + 1] == 'O':
+                    print(2)
+                    print(img2[row][col])
+                    matrix = nearestneighbour(matrix, img2, row, col)
+                elif img2[row][col] == img2[row - 1][col] and matrix[row - 1][col] == 'O':
+                    print(3)
+                    print(img2[row][col])
+                    matrix = nearestneighbour(matrix, img2, row, col)
+                elif img2[row][col] == img2[row][col - 1] and matrix[row][col - 1] == 'O':
+                    print(4)
+                    print(img2[row][col])
+                    matrix = nearestneighbour(matrix, img2, row, col)
 
-#for row in range(1, size[0] - 1):
-#    for col in range(1, size[1] - 1):
-#        if helper[row][col] == 0:
-#            if img2[row][col] != 0:
-
+printmatrix(matrix)
 # Értékek visszakonvertálása
 img = flip(img)
 
