@@ -58,7 +58,7 @@ for row in range(1, size[0] - 1):
 
 print(img2, '\n')
 
-# 2 Üregek kiválasztása
+# 2 Üregek kiválasztása és feltöltése/eltüntetése
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
@@ -71,23 +71,46 @@ for row in range(1, size[0] - 1):
         if matrix[row][col] == 'X':
             if img2[row][col] != 0:
                 if img2[row][col] == img2[row - 1][col] and matrix[row - 1][col] == 'O':
-                    print(1)
-                    print(img2[row][col])
                     matrix = nearestneighbour(matrix, img2, row, col)
                 elif img2[row][col] == img2[row][col + 1] and matrix[row][col + 1] == 'O':
-                    print(2)
-                    print(img2[row][col])
                     matrix = nearestneighbour(matrix, img2, row, col)
                 elif img2[row][col] == img2[row - 1][col] and matrix[row - 1][col] == 'O':
-                    print(3)
-                    print(img2[row][col])
                     matrix = nearestneighbour(matrix, img2, row, col)
                 elif img2[row][col] == img2[row][col - 1] and matrix[row][col - 1] == 'O':
-                    print(4)
-                    print(img2[row][col])
                     matrix = nearestneighbour(matrix, img2, row, col)
 
+lista = []
+k = 0
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        if matrix[row][col] == 'X':
+            k = img2[row][col]
+            if img2[row][col] != img2[row - 1][col - 1]:
+                lista.append(img2[row - 1][col - 1])
+
+            if img2[row][col] != img2[row - 1][col]:
+                lista.append(img2[row - 1][col])
+
+            if img2[row][col] != img2[row - 1][col + 1]:
+                lista.append(img2[row - 1][col + 1])
+
+            if img2[row][col] != img2[row][col - 1]:
+                lista.append(img2[row][col - 1])
+
+            if img2[row][col] != img2[row][col + 1]:
+                lista.append(img2[row][col + 1])
+
+            if img2[row][col] != img2[row + 1][col - 1]:
+                lista.append(img2[row + 1][col - 1])
+
+            if img2[row][col] != img2[row + 1][col]:
+                lista.append(img2[row + 1][col])
+
+            if img2[row][col] != img2[row + 1][col + 1]:
+                lista.append(img2[row + 1][col + 1])
+
 printmatrix(matrix)
+print(min(lista) - k)
 # Értékek visszakonvertálása
 img = flip(img)
 

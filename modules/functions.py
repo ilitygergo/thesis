@@ -212,8 +212,9 @@ def makeequalmatrix(mat1, mat2, size):
 
 # Prints out the matrix
 def printmatrix(matrix):
-    print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in matrix]))
-    print('\n')
+    if len(matrix) < 15:
+        print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in matrix]))
+        print('\n')
 
 
 # Finds pixels with same value and returns a matrix
