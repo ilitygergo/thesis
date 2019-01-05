@@ -1,9 +1,14 @@
+import cv2
 import bcolors
 import matplotlib.pyplot as plt
 from modules.functions import imreadgray
 from modules.functions import flip
 from modules.functions import localmaximum
 from modules.functions import endpoint
+from modules.functions import connectedcorner
+from modules.functions import connectedpath
+from modules.functions import equalmatrix
+from modules.functions import makeequalmatrix
 
 
 # If one of the neighbours of point has a value 0 than it is true
@@ -23,10 +28,11 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'sima'
+picture = 'chromosome'
 
 img = imreadgray('../pictures/' + picture + '.png')
 img2 = imreadgray('../pictures/' + picture + '.png')
+helper = imreadgray('../pictures/' + picture + '.png')
 ave = imreadgray('../pictures/' + picture + '.png')
 g1 = imreadgray('../pictures/' + picture + '.png')
 g2 = imreadgray('../pictures/' + picture + '.png')
@@ -34,6 +40,7 @@ g2 = imreadgray('../pictures/' + picture + '.png')
 # Converting the values 0-255
 img = flip(img)
 img2 = flip(img2)
+helper = flip(helper)
 ave = flip(ave)
 g1 = flip(g1)
 g2 = flip(g2)
@@ -42,6 +49,8 @@ g2 = flip(g2)
 y, x, _ = plt.hist(img)
 maximum = max(x)
 size = img.shape
+notequal = True
+lepes = 1
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
@@ -73,21 +82,43 @@ for row in range(1, size[0] - 1):
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
         img[row][col] = min(g1[row][col], g2[row][col])
-
-print(img)
+        helper[row][col] = min(g1[row][col], g2[row][col])
 
 # Smoothing by the 5 condition
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
-        if img[row][col] != 0:
-            if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
-                continue
-            if localmaximum(img[row][col], img[row][col + 1], img[row - 1][col + 1],
-                             img[row - 1][col], img[row - 1][col - 1], img[row][col - 1],
-                             img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1]):
-                continue
-            if endpoint(img, row, col):
-                continue
-            img[row][col] = 0
+while notequal:
+    for row in range(1, size[0] - 1):
+        for col in range(1, size[1] - 1):
+            if img[row][col] != 0:
+                if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
+                    if localmaximum(img[row][col], img[row][col + 1], img[row - 1][col + 1],
+                                     img[row - 1][col], img[row - 1][col - 1], img[row][col - 1],
+                                     img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1]):
+                        continue
+                    if endpoint(img, row, col):
+                        continue
+                    if not connectedcorner(img, row, col):
+                        continue
+                    if not connectedpath(img, row, col):
+                        continue
+                    helper[row][col] = 0
 
-print(img)
+    for row in range(1, size[0] - 1):
+        for col in range(1, size[1] - 1):
+            img[row][col] = helper[row][col]
+
+    print(bcolors.BLUE, '\n', lepes, '. run:')
+    print(img, '\n', bcolors.ENDC)
+
+    # Making sure that the function runs until the image has no points left to remove
+    lepes += 1
+
+    if equalmatrix(img, img2, size):
+        break
+    else:
+        makeequalmatrix(img2, img, size)
+
+# Converting the values back to normal
+img = flip(img)
+
+# Saving
+cv2.imwrite('../results/' + picture + '.png', img)

@@ -303,3 +303,30 @@ def endpoint(img, row, col):
                 return True
 
     return False
+
+
+# Checks the connectivity of the corners
+def connectedcorner(img, row, col):
+    num = 0
+    if min(img[row][col + 1], img[row - 1][col]) == 0 or img[row - 1][col + 1] >= img[row][col]:
+        num += 1
+    if min(img[row - 1][col], img[row][col - 1]) == 0 or img[row - 1][col - 1] >= img[row][col]:
+        num += 1
+    if min(img[row][col - 1], img[row + 1][col]) == 0 or img[row + 1][col - 1] >= img[row][col]:
+        num += 1
+    if min(img[row + 1][col], img[row][col + 1]) == 0 or img[row + 1][col + 1] >= img[row][col]:
+        num += 1
+    if num == 4:
+        return True
+    return False
+
+
+# Checks the connectivity of the path
+def connectedpath(img, row, col):
+    if min(img[row][col + 1], img[row][col - 1]) > 0:
+        if img[row + 1][col] < img[row][col] and img[row - 1][col] < img[row][col]:
+            return False
+    if min(img[row - 1][col], img[row + 1][col]) > 0:
+        if img[row - 1][col] < img[row][col] and img[row + 1][col] < img[row][col]:
+            return False
+    return True
