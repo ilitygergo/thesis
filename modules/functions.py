@@ -1,6 +1,7 @@
 import cv2
 import bcolors
 import copy
+import numpy as np
 
 
 # Reads a colored picture in gray
@@ -259,3 +260,46 @@ def nearestneighbour(matrix, img, r, c):
             break
 
     return matrix
+
+
+# The middle point has the highest grayness
+def localmaximum(n0, n1, n2, n3, n4, n5, n6, n7, n8):
+    array = [n0, n1, n2, n3, n4, n5, n6, n7, n8]
+    if max(array) == n0:
+        return True
+    return False
+
+
+# Checks if it is an end point
+def endpoint(img, row, col):
+    array = []
+    array.extend([img[row - 1][col], img[row][col - 1], img[row + 1][col], img[row][col + 1]])
+
+    if np.count_nonzero(array) == 1:
+        del array[:]
+
+        if img[row - 1][col] != 0:
+            array.extend([img[row - 2][col], img[row - 1][col - 1], img[row - 1][col + 1]])
+
+            if np.count_nonzero(array) == 1:
+                return True
+
+        if img[row][col - 1] != 0:
+            array.extend([img[row - 1][col - 1], img[row][col - 2], img[row + 1][col - 1]])
+
+            if np.count_nonzero(array) == 1:
+                return True
+
+        if img[row + 1][col] != 0:
+            array.extend([img[row + 1][col - 1], img[row + 2][col], img[row + 1][col + 1]])
+
+            if np.count_nonzero(array) == 1:
+                return True
+
+        if img[row][col + 1] != 0:
+            array.extend([img[row - 1][col + 1], img[row][col + 2], img[row + 1][col + 1]])
+
+            if np.count_nonzero(array) == 1:
+                return True
+
+    return False

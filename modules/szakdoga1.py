@@ -19,16 +19,16 @@ print(" |_____/ \__, |\___|_|    |_|  \_\___/|___/\___|_| |_|_| \___|_|\__,_|")
 print("          __/ |                                                       ")
 print("         |___/                                                        ", bcolors.ENDC)
 
-# Beolvasás szürkeárnyalatos képként
+# Reading in the pictures as a gray picture
 picture = 'chromosome'
 
 img = imreadgray('../pictures/' + picture + '.png')
 img2 = imreadgray('../pictures/' + picture + '.png')
 
-# Értékek átkonvertálása 0-255
+# Converting values 0-255
 img = flip(img)
 
-# Lépésszámláló és inicializálás
+# Counter and initialization
 lepes = 1
 size = img.shape
 nemegyenlo = True
@@ -38,7 +38,7 @@ for row in range(0, size[0]):
 
 while nemegyenlo:
 
-    # Folyton ismétlődő inicializálás
+    # Initialization that occurs continuously
     percent = 0
     grayness = 0
     a = 0
@@ -51,7 +51,7 @@ while nemegyenlo:
     h = 0
     i = 0
 
-    # Mátrixok
+    # Matrixes
     n = size[0]-2
     m = size[1]-2
     matrix = [0] * n
@@ -74,17 +74,17 @@ while nemegyenlo:
     print(bcolors.BOLD, img, bcolors.ENDC,  '\n')
     print('\n')
 
-    # Határpontok megkeresése
+    # Finding the border points
 
     for oldal in range(0, 4):
         if oldal == 0:
-            print(bcolors.OK, 'Északi határpontok:', bcolors.ENDC)
+            print(bcolors.OK, 'North borders:', bcolors.ENDC)
         elif oldal == 1:
-            print(bcolors.OK, 'Nyugati határpontok:', bcolors.ENDC)
+            print(bcolors.OK, 'West borders:', bcolors.ENDC)
         elif oldal == 2:
-            print(bcolors.OK, 'Déli határpontok:', bcolors.ENDC)
+            print(bcolors.OK, 'South borders:', bcolors.ENDC)
         elif oldal == 3:
-            print(bcolors.OK, 'Keleti határpontok:', bcolors.ENDC)
+            print(bcolors.OK, 'East borders:', bcolors.ENDC)
         hatar = 0
         for row in range(1, size[0] - 1):
             for col in range(1, (size[1] - 1)):
@@ -131,7 +131,7 @@ while nemegyenlo:
         print('\n')
         print('Összesen:', hatar)
 
-        # Minimalizálás végpont és összefüggőség alapján
+        # Minimize by endpoint and connectedness
         a = 0
         b = 0
         c = 0
@@ -177,11 +177,11 @@ while nemegyenlo:
                 if matrix3[row][col] == 'X':
                     img[row][col] = minimize(b, d, h, f, e)
 
-        print('Törölhető:', bcolors.ERR, igen, bcolors.ENDC)
-        print('Nem törölhető:', bcolors.OK, nem, bcolors.ENDC, '\n')
+        print('Delete:', bcolors.ERR, igen, bcolors.ENDC)
+        print('Cannot delete:', bcolors.OK, nem, bcolors.ENDC, '\n')
         print(bcolors.OK, 'Output:', bcolors.ENDC)
         print(bcolors.BOLD, img, bcolors.ENDC)
-    print(bcolors.BLUE, '\n', lepes, '. lépés eredménye:')
+    print(bcolors.BLUE, '\n', lepes, '. run:')
     print(img, '\n', bcolors.ENDC)
 
     # Making sure that the function runs until the image has no points left to remove
@@ -191,8 +191,8 @@ while nemegyenlo:
     else:
         makeequalmatrix(img2, img, size)
 
-# Értékek visszakonvertálása
+# Converting the values back to normal
 img = flip(img)
 
-# Kiíratás vagy mentés
+# Saving
 cv2.imwrite('../results/' + picture + '.png', img)
