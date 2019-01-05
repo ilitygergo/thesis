@@ -115,4 +115,4 @@ print(min(lista) - k)
 img = flip(img)
 
 # Kiíratás vagy mentés
-img = cv2.imwrite('../results/' + picture + '.png', img)
+cv2.imwrite('../results/' + picture + '.png', img)

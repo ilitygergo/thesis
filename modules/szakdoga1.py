@@ -20,7 +20,7 @@ print("          __/ |                                                       ")
 print("         |___/                                                        ", bcolors.ENDC)
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'Star'
+picture = 'chromosome'
 
 img = imreadgray('../pictures/' + picture + '.png')
 img2 = imreadgray('../pictures/' + picture + '.png')
@@ -195,4 +195,4 @@ while nemegyenlo:
 img = flip(img)
 
 # Kiíratás vagy mentés
-img = cv2.imwrite('../results/' + picture + '.png', img)
+cv2.imwrite('../results/' + picture + '.png', img)
