@@ -265,14 +265,13 @@ def nearestneighbour(matrix, img, r, c):
 # If one of the neighbours of point has a value 0 than it is true
 def borderpoint(n1, n3, n5, n7):
     if n1 == 0 or n3 == 0 or n5 == 0 or n7 == 0:
-        return False
-    return True
+        return True
+    return False
 
 
 # The middle point has the highest grayness
 def localmaximum(n0, n1, n2, n3, n4, n5, n6, n7, n8):
-    array = [n0, n1, n2, n3, n4, n5, n6, n7, n8]
-    if max(array) == n0:
+    if n0 > n1 and n0 > n2 and n0 > n3 and n0 > n4 and n0 > n5 and n0 > n6 and n0 > n7 and n0 > n8:
         return True
     return False
 
@@ -312,7 +311,7 @@ def endpoint(img, row, col):
     return False
 
 
-# Checks the connectivity of the corners
+# Returns True if the point can be deleted so the path is not weakened in the corner
 def connectedcorner(img, row, col):
     num = 0
     if min(img[row][col + 1], img[row - 1][col]) == 0 or img[row - 1][col + 1] >= img[row][col]:
@@ -328,12 +327,20 @@ def connectedcorner(img, row, col):
     return False
 
 
-# Checks the connectivity of the path
+# Returns True if the point can be deleted so tha path is not weakened
 def connectedpath(img, row, col):
     if min(img[row][col + 1], img[row][col - 1]) > 0:
         if img[row + 1][col] < img[row][col] and img[row - 1][col] < img[row][col]:
             return False
     if min(img[row - 1][col], img[row + 1][col]) > 0:
-        if img[row - 1][col] < img[row][col] and img[row + 1][col] < img[row][col]:
+        if img[row][col - 1] < img[row][col] and img[row][col + 1] < img[row][col]:
             return False
     return True
+
+
+# Saves the image into the gif folder
+def gif(img, num):
+    flip(img)
+    cv2.imwrite('../gifs/' + str(num) + '.png', img)
+    flip(img)
+

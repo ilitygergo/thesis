@@ -10,6 +10,7 @@ from modules.functions import connectedpath
 from modules.functions import equalmatrix
 from modules.functions import makeequalmatrix
 from modules.functions import borderpoint
+from modules.functions import gif
 
 print(bcolors.OK, "  _____       _            _        _____ _       ")
 print("  / ____|     | |          (_)      / ____(_)      ")
@@ -21,7 +22,7 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'chromosome'
+picture = 'eight'
 
 img = imreadgray('../pictures/' + picture + '.png')
 img2 = imreadgray('../pictures/' + picture + '.png')
@@ -77,30 +78,54 @@ for row in range(1, size[0] - 1):
         img[row][col] = min(g1[row][col], g2[row][col])
         helper[row][col] = min(g1[row][col], g2[row][col])
 
+print(bcolors.BLUE, 'CGDT:', img, bcolors.ENDC)
+# gif(img, 0)
+
 # Smoothing by the 5 condition
 while notequal:
+    hatar = 0
+    localmax = 0
+    end = 0
+    conc = 0
+    conp = 0
+    torolt = 0
     for row in range(1, size[0] - 1):
         for col in range(1, size[1] - 1):
             if img[row][col] != 0:
                 if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
+                    hatar += 1
                     if localmaximum(img[row][col], img[row][col + 1], img[row - 1][col + 1],
                                      img[row - 1][col], img[row - 1][col - 1], img[row][col - 1],
                                      img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1]):
+                        localmax += 1
                         continue
                     if endpoint(img, row, col):
+                        end += 1
                         continue
                     if not connectedcorner(img, row, col):
+                        conc += 1
                         continue
                     if not connectedpath(img, row, col):
+                        conp += 1
                         continue
+                    torolt += 1
                     helper[row][col] = 0
+
 
     for row in range(1, size[0] - 1):
         for col in range(1, size[1] - 1):
             img[row][col] = helper[row][col]
 
-    print(bcolors.BLUE, '\n', lepes, '. run:')
-    print(img, '\n', bcolors.ENDC)
+    print(bcolors.WARN, '\n', lepes, '. run:', bcolors.ENDC)
+    print(img, '\n')
+
+    print('Borders: ', hatar)
+    print('LocalMax:', localmax)
+    print('Endpoints:', end)
+    print('ConnectedCorner:', conc)
+    print('ConnectedPath:', conp)
+    print('Deleted:', torolt)
+    # gif(img, lepes)
 
     # Making sure that the function runs until the image has no points left to remove
     lepes += 1
@@ -109,8 +134,6 @@ while notequal:
         break
     else:
         makeequalmatrix(img2, img, size)
-        print(bcolors.WARN, '\n', lepes, '. run:', bcolors.ENDC)
-        print(img, '\n')
 
 # Converting the values back to normal
 img = flip(img)
