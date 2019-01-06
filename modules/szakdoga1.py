@@ -181,8 +181,6 @@ while nemegyenlo:
         print('Cannot delete:', bcolors.OK, nem, bcolors.ENDC, '\n')
         print(bcolors.OK, 'Output:', bcolors.ENDC)
         print(bcolors.BOLD, img, bcolors.ENDC)
-    print(bcolors.BLUE, '\n', lepes, '. run:')
-    print(img, '\n', bcolors.ENDC)
 
     # Making sure that the function runs until the image has no points left to remove
     lepes += 1
@@ -190,6 +188,8 @@ while nemegyenlo:
         break
     else:
         makeequalmatrix(img2, img, size)
+        print(bcolors.BLUE, '\n', lepes, '. run:')
+        print(img, '\n', bcolors.ENDC)
 
 # Converting the values back to normal
 img = flip(img)

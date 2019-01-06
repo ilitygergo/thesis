@@ -262,6 +262,13 @@ def nearestneighbour(matrix, img, r, c):
     return matrix
 
 
+# If one of the neighbours of point has a value 0 than it is true
+def borderpoint(n1, n3, n5, n7):
+    if n1 == 0 or n3 == 0 or n5 == 0 or n7 == 0:
+        return False
+    return True
+
+
 # The middle point has the highest grayness
 def localmaximum(n0, n1, n2, n3, n4, n5, n6, n7, n8):
     array = [n0, n1, n2, n3, n4, n5, n6, n7, n8]

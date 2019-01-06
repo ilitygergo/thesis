@@ -9,14 +9,7 @@ from modules.functions import connectedcorner
 from modules.functions import connectedpath
 from modules.functions import equalmatrix
 from modules.functions import makeequalmatrix
-
-
-# If one of the neighbours of point has a value 0 than it is true
-def borderpoint(n1, n3, n5, n7):
-    if n1 == 0 or n3 == 0 or n5 == 0 or n7 == 0:
-        return False
-    return True
-
+from modules.functions import borderpoint
 
 print(bcolors.OK, "  _____       _            _        _____ _       ")
 print("  / ____|     | |          (_)      / ____(_)      ")
@@ -47,7 +40,7 @@ g2 = flip(g2)
 
 # Initialization
 y, x, _ = plt.hist(img)
-maximum = max(x)
+maximum = int(max(x))
 size = img.shape
 notequal = True
 lepes = 1
@@ -71,8 +64,8 @@ for row in range(1, size[0] - 1):
         d = int(img[row][col - 1])
         g1[row][col] = (a + b + c + d) * (int(ave[row][col]) / maximum)**2 + int(img[row][col])
 
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
+for row in range(size[0] - 1, 1):
+    for col in range(size[1] - 1, 1):
         a = int(img[row + 1][col + 1])
         b = int(img[row + 1][col])
         c = int(img[row + 1][col - 1])
@@ -116,6 +109,8 @@ while notequal:
         break
     else:
         makeequalmatrix(img2, img, size)
+        print(bcolors.WARN, '\n', lepes, '. run:', bcolors.ENDC)
+        print(img, '\n')
 
 # Converting the values back to normal
 img = flip(img)
