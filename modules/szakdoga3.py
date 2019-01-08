@@ -22,7 +22,7 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'eight'
+picture = 'sima'
 
 img = imreadgray('../pictures/' + picture + '.png')
 img2 = imreadgray('../pictures/' + picture + '.png')
@@ -32,12 +32,12 @@ g1 = imreadgray('../pictures/' + picture + '.png')
 g2 = imreadgray('../pictures/' + picture + '.png')
 
 # Converting the values 0-255
-img = flip(img)
-img2 = flip(img2)
-helper = flip(helper)
-ave = flip(ave)
-g1 = flip(g1)
-g2 = flip(g2)
+flip(img)
+flip(img2)
+flip(helper)
+flip(ave)
+flip(g1)
+flip(g2)
 
 # Initialization
 y, x, _ = plt.hist(img)
@@ -135,8 +135,6 @@ while notequal:
     else:
         makeequalmatrix(img2, img, size)
 
-# Converting the values back to normal
-img = flip(img)
-
 # Saving
-cv2.imwrite('../results/' + picture + '.png', img)
+flip(img)
+cv2.imwrite('../results/szakdoga3/' + picture + '.png', img)

@@ -20,7 +20,7 @@ print("          __/ |                                                       ")
 print("         |___/                                                        ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'chromosome'
+picture = 'sima'
 
 img = imreadgray('../pictures/' + picture + '.png')
 img2 = imreadgray('../pictures/' + picture + '.png')
@@ -195,4 +195,4 @@ while nemegyenlo:
 img = flip(img)
 
 # Saving
-cv2.imwrite('../results/' + picture + '.png', img)
+cv2.imwrite('../results/szakdoga1/' + picture + '.png', img)
