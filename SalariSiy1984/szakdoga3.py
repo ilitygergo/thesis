@@ -1,16 +1,15 @@
 import cv2
 import bcolors
 import matplotlib.pyplot as plt
-from modules.functions import imreadgray
-from modules.functions import flip
-from modules.functions import localmaximum
-from modules.functions import endpoint
-from modules.functions import connectedcorner
-from modules.functions import connectedpath
-from modules.functions import equalmatrix
-from modules.functions import makeequalmatrix
-from modules.functions import borderpoint
-from modules.functions import gif
+from Common.functions import imreadgray
+from Common.functions import flip
+from Common.functions import localmaximum
+from Common.functions import endpoint
+from Common.functions import connectedcorner
+from Common.functions import connectedpath
+from Common.functions import equalmatrix
+from Common.functions import makeequalmatrix
+from Common.functions import borderpoint
 
 print(bcolors.OK, "  _____       _            _        _____ _       ")
 print("  / ____|     | |          (_)      / ____(_)      ")
@@ -22,14 +21,14 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'sima'
+picture = 'chromosomes'
 
-img = imreadgray('../pictures/' + picture + '.png')
-img2 = imreadgray('../pictures/' + picture + '.png')
-helper = imreadgray('../pictures/' + picture + '.png')
-ave = imreadgray('../pictures/' + picture + '.png')
-g1 = imreadgray('../pictures/' + picture + '.png')
-g2 = imreadgray('../pictures/' + picture + '.png')
+img = imreadgray('../Common/' + picture + '.png')
+img2 = imreadgray('../Common/' + picture + '.png')
+helper = imreadgray('../Common/' + picture + '.png')
+ave = imreadgray('../Common/' + picture + '.png')
+g1 = imreadgray('../Common/' + picture + '.png')
+g2 = imreadgray('../Common/' + picture + '.png')
 
 # Converting the values 0-255
 flip(img)
@@ -63,7 +62,7 @@ for row in range(1, size[0] - 1):
         b = int(img[row - 1][col])
         c = int(img[row - 1][col + 1])
         d = int(img[row][col - 1])
-        g1[row][col] = (a + b + c + d) * (int(ave[row][col]) / maximum)**2 + int(img[row][col])
+        g1[row][col] = int(img[row][col]) + min(a, b, c, d) * (int(ave[row][col]) / maximum)**2
 
 for row in range(size[0] - 1, 1):
     for col in range(size[1] - 1, 1):
@@ -71,15 +70,14 @@ for row in range(size[0] - 1, 1):
         b = int(img[row + 1][col])
         c = int(img[row + 1][col - 1])
         d = int(img[row][col + 1])
-        g2[row][col] = (a + b + c + d) * (int(ave[row][col]) / maximum)**2 + int(img[row][col])
+        g2[row][col] = int(img[row][col]) + min(a, b, c, d) * (int(ave[row][col]) / maximum)**2
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
-        img[row][col] = min(g1[row][col], g2[row][col])
-        helper[row][col] = min(g1[row][col], g2[row][col])
+        img[row][col] = min(int(g1[row][col]), int(g2[row][col]))
+        helper[row][col] = min(int(g1[row][col]), int(g2[row][col]))
 
 print(bcolors.BLUE, 'CGDT:', img, bcolors.ENDC)
-# gif(img, 0)
 
 # Smoothing by the 5 condition
 while notequal:
@@ -111,7 +109,6 @@ while notequal:
                     torolt += 1
                     helper[row][col] = 0
 
-
     for row in range(1, size[0] - 1):
         for col in range(1, size[1] - 1):
             img[row][col] = helper[row][col]
@@ -125,7 +122,6 @@ while notequal:
     print('ConnectedCorner:', conc)
     print('ConnectedPath:', conp)
     print('Deleted:', torolt)
-    # gif(img, lepes)
 
     # Making sure that the function runs until the image has no points left to remove
     lepes += 1
@@ -137,4 +133,4 @@ while notequal:
 
 # Saving
 flip(img)
-cv2.imwrite('../results/szakdoga3/' + picture + '.png', img)
+cv2.imwrite('results/' + picture + '.png', img)

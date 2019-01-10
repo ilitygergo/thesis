@@ -1,14 +1,14 @@
 import cv2
 import bcolors
-from modules.functions import printmatrix
-from modules.functions import rvalue
-from modules.functions import minimize
-from modules.functions import imreadgray
-from modules.functions import notendpoint
-from modules.functions import flip
-from modules.functions import connected
-from modules.functions import equalmatrix
-from modules.functions import makeequalmatrix
+from Common.functions import printmatrix
+from Common.functions import rvalue
+from Common.functions import minimize
+from Common.functions import imreadgray
+from Common.functions import notendpoint
+from Common.functions import flip
+from Common.functions import connected
+from Common.functions import equalmatrix
+from Common.functions import makeequalmatrix
 
 print(bcolors.OK, " _____                    _____                       __     _     _ ")
 print(" |  __ \                  |  __ \                     / _|   | |   | |")
@@ -22,8 +22,8 @@ print("         |___/                                                        ", 
 # Reading in the pictures as a gray picture
 picture = 'sima'
 
-img = imreadgray('../pictures/' + picture + '.png')
-img2 = imreadgray('../pictures/' + picture + '.png')
+img = imreadgray('../Common/' + picture + '.png')
+img2 = imreadgray('../Common/' + picture + '.png')
 
 # Converting values 0-255
 img = flip(img)
@@ -181,10 +181,11 @@ while nemegyenlo:
         print('Cannot delete:', bcolors.OK, nem, bcolors.ENDC, '\n')
         print(bcolors.OK, 'Output:', bcolors.ENDC)
         print(bcolors.BOLD, img, bcolors.ENDC)
-        print(bcolors.BLUE, '\n', lepes, '. run:')
-        print(img, '\n', bcolors.ENDC)
 
     # Making sure that the function runs until the image has no points left to remove
+    print(bcolors.BLUE, '\n', lepes, '. run:')
+    print(img, '\n', bcolors.ENDC)
+
     lepes += 1
     if equalmatrix(img, img2, size):
         break
@@ -195,4 +196,4 @@ while nemegyenlo:
 img = flip(img)
 
 # Saving
-cv2.imwrite('../results/szakdoga1/' + picture + '.png', img)
+cv2.imwrite('results/' + picture + '.png', img)

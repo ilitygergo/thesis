@@ -1,6 +1,6 @@
 import bcolors
-from modules.functions import imreadgray
-from modules.functions import flip
+from Common.functions import imreadgray
+from Common.functions import flip
 
 print(bcolors.OK, " _  ___             _                  _____ _           _ ")
 print(" | |/ (_)           | |                / ____| |         (_)")
@@ -12,7 +12,7 @@ print(" |_|\_\_|_| |_| |_| |______\___|\___|  \_____|_| |_|\___/|_|", bcolors.EN
 # Beolvasás szürkeárnyalatos képként
 picture = 'sima'
 
-img = imreadgray('../pictures/' + picture + '.png')
+img = imreadgray('../Common/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
 img = flip(img)

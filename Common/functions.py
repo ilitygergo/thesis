@@ -336,11 +336,3 @@ def connectedpath(img, row, col):
         if img[row][col - 1] < img[row][col] and img[row][col + 1] < img[row][col]:
             return False
     return True
-
-
-# Saves the image into the gif folder
-def gif(img, num):
-    flip(img)
-    cv2.imwrite('../gifs/' + str(num) + '.png', img)
-    flip(img)
-

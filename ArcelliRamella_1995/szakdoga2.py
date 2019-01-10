@@ -1,11 +1,11 @@
 import cv2
 import bcolors
-from modules.functions import imreadgray
-from modules.functions import flip
-from modules.functions import minimizenotnull
-from modules.functions import maximizenotnull
-from modules.functions import nearestneighbour
-from modules.functions import printmatrix
+from Common.functions import imreadgray
+from Common.functions import flip
+from Common.functions import minimizenotnull
+from Common.functions import maximizenotnull
+from Common.functions import nearestneighbour
+from Common.functions import printmatrix
 
 print(bcolors.OK, "                       _ _ _   _____                      _ _       ")
 print("     /\                | | (_) |  __ \                    | | |      ")
@@ -18,11 +18,11 @@ print(" /_/    \_\_|  \___\___|_|_|_| |_|  \_\__,_|_| |_| |_|\___|_|_|\__,_|", b
 picture = 'test'
 
 # img a transzformálás előtti állapot
-img = imreadgray('../pictures/' + picture + '.png')
+img = imreadgray('../Common/' + picture + '.png')
 # img2 a transzformálás utáni állapot
-img2 = imreadgray('../pictures/' + picture + '.png')
+img2 = imreadgray('../Common/' + picture + '.png')
 # helper
-helper = imreadgray('../pictures/' + picture + '.png')
+helper = imreadgray('../Common/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
 img = flip(img)
