@@ -21,39 +21,47 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'chromosomes'
+picture = 'eight'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
 helper = imreadgray('../Common/' + picture + '.png')
-ave = imreadgray('../Common/' + picture + '.png')
 g1 = imreadgray('../Common/' + picture + '.png')
 g2 = imreadgray('../Common/' + picture + '.png')
 
 # Converting the values 0-255
 flip(img)
-flip(img2)
-flip(helper)
-flip(ave)
-flip(g1)
-flip(g2)
 
 # Initialization
-y, x, _ = plt.hist(img)
-maximum = int(max(x))
+
+maximum = 0
+modes = 0
+y, x, _ = plt.hist(img.ravel(),256,[0,256])
+print(x)
+print(y)
+for element in range(0, y.size):
+    if maximum < int(y[element]):
+        maximum = int(y[element])
+        modes = element
+maximum = modes
 size = img.shape
 notequal = True
 lepes = 1
 
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
-        a = int(img[row][col - 1])
-        b = int(img[row][col + 1])
-        c = int(img[row - 1][col])
-        d = int(img[row + 1][col])
-        ave[row][col] = (a + b + c + d) / 4
+if maximum == 0:
+    maximum += 1
+
+for row in range(size[0]):
+    for col in range(size[1]):
+        if row == 0 or col == 0 or row == size[0] or col == size[1]:
+            img[row][col] = 0
+        img2[row][col] = 0
+        helper[row][col] = 0
+        g1[row][col] = 0
+        g2[row][col] = 0
 
 print(img)
+maximum = 150
 
 # Central grey distance transform
 for row in range(1, size[0] - 1):
@@ -62,18 +70,24 @@ for row in range(1, size[0] - 1):
         b = int(img[row - 1][col])
         c = int(img[row - 1][col + 1])
         d = int(img[row][col - 1])
-        g1[row][col] = int(img[row][col]) + min(a, b, c, d) * (int(ave[row][col]) / maximum)**2
+        ave = (int(img[row][col - 1]) + int(img[row][col + 1]) + int(img[row - 1][col]) + int(
+            img[row + 1][col])) / 4
+        plus = (ave / maximum)**2
+        g1[row][col] = int(img[row][col]) + min(a, b, c, d) * plus
 
-for row in range(size[0] - 1, 1):
-    for col in range(size[1] - 1, 1):
+for row in reversed(range(1, size[0] - 1)):
+    for col in reversed(range(1, size[1] - 1)):
         a = int(img[row + 1][col + 1])
         b = int(img[row + 1][col])
         c = int(img[row + 1][col - 1])
         d = int(img[row][col + 1])
-        g2[row][col] = int(img[row][col]) + min(a, b, c, d) * (int(ave[row][col]) / maximum)**2
+        ave = (int(img[row][col - 1]) + int(img[row][col + 1]) + int(img[row - 1][col]) + int(
+            img[row + 1][col])) / 4
+        plus = (ave / maximum)**2
+        g2[row][col] = int(img[row][col]) + min(a, b, c, d) * plus
 
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
+for row in range(size[0]):
+    for col in range(size[1]):
         img[row][col] = min(int(g1[row][col]), int(g2[row][col]))
         helper[row][col] = min(int(g1[row][col]), int(g2[row][col]))
 
@@ -121,7 +135,7 @@ while notequal:
     print('Endpoints:', end)
     print('ConnectedCorner:', conc)
     print('ConnectedPath:', conp)
-    print('Deleted:', torolt)
+    print('Deleted:', bcolors.ERR, torolt, bcolors.ENDC)
 
     # Making sure that the function runs until the image has no points left to remove
     lepes += 1
