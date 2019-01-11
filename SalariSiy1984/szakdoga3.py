@@ -21,7 +21,7 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'eight'
+picture = 'test'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -33,23 +33,9 @@ g2 = imreadgray('../Common/' + picture + '.png')
 flip(img)
 
 # Initialization
-
-maximum = 0
-modes = 0
-y, x, _ = plt.hist(img.ravel(),256,[0,256])
-print(x)
-print(y)
-for element in range(0, y.size):
-    if maximum < int(y[element]):
-        maximum = int(y[element])
-        modes = element
-maximum = modes
 size = img.shape
 notequal = True
 lepes = 1
-
-if maximum == 0:
-    maximum += 1
 
 for row in range(size[0]):
     for col in range(size[1]):
@@ -61,7 +47,7 @@ for row in range(size[0]):
         g2[row][col] = 0
 
 print(img)
-maximum = 150
+maximum = 1
 
 # Central grey distance transform
 for row in range(1, size[0] - 1):
