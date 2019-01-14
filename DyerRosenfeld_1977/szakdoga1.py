@@ -193,7 +193,7 @@ while nemegyenlo:
         makeequalmatrix(img2, img, size)
 
 # Converting the values back to normal
-img = flip(img)
+flip(img)
 
 # Saving
 cv2.imwrite('results/' + picture + '.png', img)

@@ -1,6 +1,5 @@
 import cv2
 import bcolors
-import matplotlib.pyplot as plt
 from Common.functions import imreadgray
 from Common.functions import flip
 from Common.functions import localmaximum
@@ -21,11 +20,10 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'test'
+picture = 'chromosomeee'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
-helper = imreadgray('../Common/' + picture + '.png')
 g1 = imreadgray('../Common/' + picture + '.png')
 g2 = imreadgray('../Common/' + picture + '.png')
 
@@ -41,8 +39,6 @@ for row in range(size[0]):
     for col in range(size[1]):
         if row == 0 or col == 0 or row == size[0] or col == size[1]:
             img[row][col] = 0
-        img2[row][col] = 0
-        helper[row][col] = 0
         g1[row][col] = 0
         g2[row][col] = 0
 
@@ -74,8 +70,8 @@ for row in reversed(range(1, size[0] - 1)):
 
 for row in range(size[0]):
     for col in range(size[1]):
-        img[row][col] = min(int(g1[row][col]), int(g2[row][col]))
-        helper[row][col] = min(int(g1[row][col]), int(g2[row][col]))
+        print('CGDT')
+        # img[row][col] = min(int(g1[row][col]), int(g2[row][col]))
 
 print(bcolors.BLUE, 'CGDT:', img, bcolors.ENDC)
 
@@ -107,11 +103,7 @@ while notequal:
                         conp += 1
                         continue
                     torolt += 1
-                    helper[row][col] = 0
-
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            img[row][col] = helper[row][col]
+                    img[row][col] = 0
 
     print(bcolors.WARN, '\n', lepes, '. run:', bcolors.ENDC)
     print(img, '\n')
