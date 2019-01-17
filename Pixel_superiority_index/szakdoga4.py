@@ -15,7 +15,7 @@ print("                   __/ |                                        ")
 print("                  |___/                                         ", bcolors.ENDC, '\n')
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'hanzo'
+picture = 'fingerprintmini'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -97,6 +97,13 @@ for i in range(3):
 
 print(bcolors.WARN, 'Initial skeleton', bcolors.ENDC)
 print(bcolors.ERR, 'Deleted:', deleted, bcolors.ENDC)
+print(img2)
+
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        if psi[row][col] == 5 and (img2[row + 1][col] >= 100 or img2[row - 1][col] >= 100 or img2[row][col + 1] >= 100 or img2[row][col - 1] >= 100):
+            img2[row][col] = img[row][col]
+
 print(img2)
 
 # Converting the values back to normal
