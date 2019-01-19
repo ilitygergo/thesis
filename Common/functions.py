@@ -2,6 +2,7 @@ import cv2
 import bcolors
 import copy
 import numpy as np
+import itertools
 
 
 # Reads a colored picture in gray
@@ -336,3 +337,110 @@ def connectedpath(img, row, col):
         if img[row][col - 1] < img[row][col] and img[row][col + 1] < img[row][col]:
             return False
     return True
+
+
+# Returns the minimum neighbours value in the 3x3 neighbourhood
+def nearneighbourmin(img, row, col):
+    x = int(img[row][col])
+    if int(img[row][col + 1]) < x:
+        x = int(img[row][col + 1])
+    if int(img[row - 1][col + 1]) < x:
+        x = int(img[row - 1][col + 1])
+    if int(img[row - 1][col]) < x:
+        x = int(img[row - 1][col])
+    if int(img[row - 1][col - 1]) < x:
+        x = int(img[row - 1][col - 1])
+    if int(img[row][col - 1]) < x:
+        x = int(img[row][col - 1])
+    if int(img[row + 1][col - 1]) < x:
+        x = int(img[row + 1][col - 1])
+    if int(img[row + 1][col]) < x:
+        x = int(img[row + 1][col])
+    if int(img[row + 1][col + 1]) < x:
+        x = int(img[row + 1][col + 1])
+    return x
+
+
+# Returns the minimum value in the 5x5 neighbourhood
+def farneighbourmin(img, row, col):
+    x = nearneighbourmin(img, row, col)
+    if int(img[row][col + 2]) < x:
+        x = int(img[row][col + 2])
+    if int(img[row - 1][col + 2]) < x:
+        x = int(img[row - 1][col + 2])
+    if int(img[row - 2][col + 2]) < x:
+        x = int(img[row - 2][col + 2])
+    if int(img[row - 2][col + 1]) < x:
+        x = int(img[row - 2][col + 1])
+    if int(img[row - 2][col]) < x:
+        x = int(img[row - 2][col])
+    if int(img[row - 2][col - 1]) < x:
+        x = int(img[row - 2][col - 1])
+    if int(img[row - 2][col - 2]) < x:
+        x = int(img[row - 2][col - 2])
+    if int(img[row - 1][col - 2]) < x:
+        x = int(img[row - 1][col - 2])
+    if int(img[row][col - 2]) < x:
+        x = int(img[row][col - 2])
+    if int(img[row + 1][col - 2]) < x:
+        x = int(img[row + 1][col - 2])
+    if int(img[row + 2][col - 2]) < x:
+        x = int(img[row + 2][col - 2])
+    if int(img[row + 2][col - 1]) < x:
+        x = int(img[row + 2][col - 1])
+    if int(img[row + 2][col]) < x:
+        x = int(img[row + 2][col])
+    if int(img[row + 2][col + 1]) < x:
+        x = int(img[row + 2][col + 1])
+    if int(img[row + 2][col + 2]) < x:
+        x = int(img[row + 2][col + 2])
+    if int(img[row + 1][col + 2]) < x:
+        x = int(img[row + 1][col + 2])
+    return x
+
+
+# Count the value differences in the 8 neighbourhood
+def countf(img, row, col):
+    if img[row][col + 1] < img[row][col] and (img[row][col + 1] < img[row - 1][col + 1] or img[row][col + 1] < img[row - 1][col]):
+        f1 = -1
+    elif img[row][col + 1] > img[row - 1][col] and img[row - 1][col] < img[row][col]:
+        f1 = 1
+    else:
+        f1 = 0
+    if img[row - 1][col] < img[row][col] and (img[row - 1][col] < img[row - 1][col - 1] or img[row - 1][col] < img[row][col - 1]):
+        f3 = -1
+    elif img[row - 1][col] > img[row][col - 1] and img[row][col - 1] < img[row][col]:
+        f3 = 1
+    else:
+        f3 = 0
+    if img[row][col - 1] < img[row][col] and (img[row][col - 1] < img[row + 1][col - 1] or img[row][col - 1] < img[row + 1][col]):
+        f5 = -1
+    elif img[row][col - 1] > img[row + 1][col] and img[row + 1][col] < img[row][col]:
+        f5 = 1
+    else:
+        f5 = 0
+    if img[row + 1][col] < img[row][col] and (img[row + 1][col] < img[row + 1][col + 1] or img[row + 1][col] < img[row][col + 1]):
+        f7 = -1
+    elif img[row + 1][col] > img[row][col + 1] and img[row][col + 1] < img[row][col]:
+        f7 = 1
+    else:
+        f7 = 0
+    if img[row - 1][col + 1] > img[row - 1][col] and img[row - 1][col] < img[row][col]:
+        f2 = 1
+    else:
+        f2 = 0
+    if img[row - 1][col - 1] > img[row][col - 1] and img[row][col - 1] < img[row][col]:
+        f4 = 1
+    else:
+        f4 = 0
+    if img[row + 1][col - 1] > img[row + 1][col] and img[row + 1][col] < img[row][col]:
+        f6 = 1
+    else:
+        f6 = 0
+    if img[row + 1][col + 1] > img[row][col + 1] and img[row][col + 1] < img[row][col]:
+        f8 = 1
+    else:
+        f8 = 0
+    x = [f1, f2, f3, f4, f5, f6, f7, f8, f1]
+    f = len(list(itertools.groupby(x, lambda x: x > 0))) - (x[0] > 0)
+    return f

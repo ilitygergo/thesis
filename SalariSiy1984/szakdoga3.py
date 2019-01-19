@@ -34,6 +34,8 @@ flip(img)
 size = img.shape
 notequal = True
 lepes = 1
+hist = [0] * 256
+maximum = 0
 
 for row in range(size[0]):
     for col in range(size[1]):
@@ -42,8 +44,15 @@ for row in range(size[0]):
         g1[row][col] = 0
         g2[row][col] = 0
 
+for row in range(size[0]):
+    for col in range(size[1]):
+        hist[int(img[row][col])] += 1
+
+for a in range(256):
+    if maximum < hist[a]:
+        maximum = hist[a]
+
 print(img)
-maximum = 1
 
 # Central grey distance transform
 for row in range(1, size[0] - 1):
@@ -70,8 +79,11 @@ for row in reversed(range(1, size[0] - 1)):
 
 for row in range(size[0]):
     for col in range(size[1]):
-        print('CGDT')
-        # img[row][col] = min(int(g1[row][col]), int(g2[row][col]))
+        img[row][col] = min(int(g1[row][col]), int(g2[row][col]))
+
+flip(img)
+cv2.imwrite('results/CGDT.png', img)
+flip(img)
 
 print(bcolors.BLUE, 'CGDT:', img, bcolors.ENDC)
 

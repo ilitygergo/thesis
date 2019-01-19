@@ -2,8 +2,11 @@ import cv2
 import bcolors
 from Common.functions import imreadgray
 from Common.functions import flip
-from Common.functions import notendpoint
-from Common.functions import connected
+from Common.functions import borderpoint
+from Common.functions import localmaximum
+from Common.functions import endpoint
+from Common.functions import connectedcorner
+from Common.functions import connectedpath
 
 print(bcolors.OK, " _  __                    _____       _       _  ___           ")
 print(" | |/ /                   / ____|     | |     | |/ (_)          ")
@@ -81,19 +84,19 @@ deleted = 0
 for i in range(3):
     for row in range(1, size[0] - 1):
         for col in range(1, size[1] - 1):
-            if psi[row][col] == 6 + i:
-                a = img2[row - 1, col - 1]
-                b = img2[row - 1, col]
-                c = img2[row - 1, col + 1]
-                d = img2[row, col - 1]
-                e = img2[row, col]
-                f = img2[row, col + 1]
-                g = img2[row + 1, col - 1]
-                h = img2[row + 1, col]
-                j = img2[row + 1, col + 1]
-                if notendpoint(b, d, h, f, e) and connected(a, b, c, d, e, f, g, h, j, 0):
-                    deleted += 1
-                    img2[row][col] = 0
+            if img[row][col] != 0:
+                if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
+                    if localmaximum(img[row][col], img[row][col + 1], img[row - 1][col + 1],
+                                     img[row - 1][col], img[row - 1][col - 1], img[row][col - 1],
+                                     img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1]):
+                        continue
+                    if endpoint(img, row, col):
+                        continue
+                    if not connectedcorner(img, row, col):
+                        continue
+                    if not connectedpath(img, row, col):
+                        continue
+                    img[row][col] = 0
 
 print(bcolors.WARN, 'Initial skeleton', bcolors.ENDC)
 print(bcolors.ERR, 'Deleted:', deleted, bcolors.ENDC)
