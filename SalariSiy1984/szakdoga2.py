@@ -20,7 +20,7 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'fingerprintmini'
+picture = 'test2'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -36,6 +36,7 @@ notequal = True
 lepes = 1
 hist = [0] * 256
 maximum = 0
+maxima = 0
 
 for row in range(size[0]):
     for col in range(size[1]):
@@ -49,41 +50,45 @@ for row in range(size[0]):
         hist[int(img[row][col])] += 1
 
 for a in range(256):
-    if maximum < hist[a]:
-        maximum = hist[a]
+    if a == 0:
+        continue
+    if maxima < hist[a]:
+        maxima = hist[a]
+        maximum = a
 
+# maximum = 200
 print(img)
 
 # Central grey distance transform
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
-        a = int(img[row - 1][col - 1])
-        b = int(img[row - 1][col])
-        c = int(img[row - 1][col + 1])
-        d = int(img[row][col - 1])
-        ave = (int(img[row][col - 1]) + int(img[row][col + 1]) + int(img[row - 1][col]) + int(
-            img[row + 1][col])) / 4
-        plus = (ave / maximum)**2
-        g1[row][col] = int(img[row][col]) + min(a, b, c, d) * plus
+        a = g1[row - 1][col - 1]
+        b = g1[row - 1][col]
+        c = g1[row - 1][col + 1]
+        d = g1[row][col - 1]
+        ave = (int(img[row][col - 1]) + int(img[row][col + 1]) + int(img[row - 1][col]) + int(img[row + 1][col])) / 4
+        plus = (int(ave) / maximum)**2
+        if int(img[row][col]) + int(min(a, b, c, d) * plus) > 255:
+            g1[row][col] = 255
+        else:
+            g1[row][col] = int(img[row][col]) + int(min(a, b, c, d) * int(plus))
 
 for row in reversed(range(1, size[0] - 1)):
     for col in reversed(range(1, size[1] - 1)):
-        a = int(img[row + 1][col + 1])
-        b = int(img[row + 1][col])
-        c = int(img[row + 1][col - 1])
-        d = int(img[row][col + 1])
-        ave = (int(img[row][col - 1]) + int(img[row][col + 1]) + int(img[row - 1][col]) + int(
-            img[row + 1][col])) / 4
+        a = g2[row + 1][col + 1]
+        b = g2[row + 1][col]
+        c = g2[row + 1][col - 1]
+        d = g2[row][col + 1]
+        ave = (int(img[row][col - 1]) + int(img[row][col + 1]) + int(img[row - 1][col]) + int(img[row + 1][col])) / 4
         plus = (ave / maximum)**2
-        g2[row][col] = int(img[row][col]) + min(a, b, c, d) * plus
+        if (int(img[row][col]) + int(min(a, b, c, d) * plus)) > 255:
+            g2[row][col] = 255
+        else:
+            g2[row][col] = int(img[row][col]) + int(min(a, b, c, d) * plus)
 
 for row in range(size[0]):
     for col in range(size[1]):
-        img[row][col] = min(int(g1[row][col]), int(g2[row][col]))
-
-flip(img)
-cv2.imwrite('results/CGDT.png', img)
-flip(img)
+        img[row][col] = min(g1[row][col], g2[row][col])
 
 print(bcolors.BLUE, 'CGDT:', img, bcolors.ENDC)
 
