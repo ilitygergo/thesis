@@ -339,8 +339,30 @@ def connectedpath(img, row, col):
     return True
 
 
+# Returns the maximum neighbours value in the 3x3 neighbourhood
+def open(img, row, col):
+    x = int(img[row][col])
+    if int(img[row][col + 1]) > x:
+        x = int(img[row][col + 1])
+    if int(img[row - 1][col + 1]) > x:
+        x = int(img[row - 1][col + 1])
+    if int(img[row - 1][col]) > x:
+        x = int(img[row - 1][col])
+    if int(img[row - 1][col - 1]) > x:
+        x = int(img[row - 1][col - 1])
+    if int(img[row][col - 1]) > x:
+        x = int(img[row][col - 1])
+    if int(img[row + 1][col - 1]) > x:
+        x = int(img[row + 1][col - 1])
+    if int(img[row + 1][col]) > x:
+        x = int(img[row + 1][col])
+    if int(img[row + 1][col + 1]) > x:
+        x = int(img[row + 1][col + 1])
+    return x
+
+
 # Returns the minimum neighbours value in the 3x3 neighbourhood
-def nearneighbourmin(img, row, col):
+def erosion(img, row, col):
     x = int(img[row][col])
     if int(img[row][col + 1]) < x:
         x = int(img[row][col + 1])
@@ -361,40 +383,40 @@ def nearneighbourmin(img, row, col):
     return x
 
 
-# Returns the minimum value in the 5x5 neighbourhood
-def farneighbourmin(img, row, col):
-    x = nearneighbourmin(img, row, col)
-    if int(img[row][col + 2]) < x:
+# Returns the maximum value in the 5x5 neighbourhood
+def openfar(img, row, col):
+    x = open(img, row, col)
+    if int(img[row][col + 2]) > x:
         x = int(img[row][col + 2])
-    if int(img[row - 1][col + 2]) < x:
+    if int(img[row - 1][col + 2]) > x:
         x = int(img[row - 1][col + 2])
-    if int(img[row - 2][col + 2]) < x:
+    if int(img[row - 2][col + 2]) > x:
         x = int(img[row - 2][col + 2])
-    if int(img[row - 2][col + 1]) < x:
+    if int(img[row - 2][col + 1]) > x:
         x = int(img[row - 2][col + 1])
-    if int(img[row - 2][col]) < x:
+    if int(img[row - 2][col]) > x:
         x = int(img[row - 2][col])
-    if int(img[row - 2][col - 1]) < x:
+    if int(img[row - 2][col - 1]) > x:
         x = int(img[row - 2][col - 1])
-    if int(img[row - 2][col - 2]) < x:
+    if int(img[row - 2][col - 2]) > x:
         x = int(img[row - 2][col - 2])
-    if int(img[row - 1][col - 2]) < x:
+    if int(img[row - 1][col - 2]) > x:
         x = int(img[row - 1][col - 2])
-    if int(img[row][col - 2]) < x:
+    if int(img[row][col - 2]) > x:
         x = int(img[row][col - 2])
-    if int(img[row + 1][col - 2]) < x:
+    if int(img[row + 1][col - 2]) > x:
         x = int(img[row + 1][col - 2])
-    if int(img[row + 2][col - 2]) < x:
+    if int(img[row + 2][col - 2]) > x:
         x = int(img[row + 2][col - 2])
-    if int(img[row + 2][col - 1]) < x:
+    if int(img[row + 2][col - 1]) > x:
         x = int(img[row + 2][col - 1])
-    if int(img[row + 2][col]) < x:
+    if int(img[row + 2][col]) > x:
         x = int(img[row + 2][col])
-    if int(img[row + 2][col + 1]) < x:
+    if int(img[row + 2][col + 1]) > x:
         x = int(img[row + 2][col + 1])
-    if int(img[row + 2][col + 2]) < x:
+    if int(img[row + 2][col + 2]) > x:
         x = int(img[row + 2][col + 2])
-    if int(img[row + 1][col + 2]) < x:
+    if int(img[row + 1][col + 2]) > x:
         x = int(img[row + 1][col + 2])
     return x
 
@@ -441,6 +463,16 @@ def countf(img, row, col):
         f8 = 1
     else:
         f8 = 0
-    x = [f1, f2, f3, f4, f5, f6, f7, f8, f1]
-    f = len(list(itertools.groupby(x, lambda x: x > 0))) - (x[0] > 0)
-    return f
+    X = [f1, f2, f3, f4, f5, f6, f7, f8, f1]
+    last_sign = 0
+    sign_changes = 0
+
+    for x in X:
+        if x == 0:
+            continue
+        elif x == 1:
+            if last_sign == -1:
+                sign_changes += 1
+        last_sign = x
+
+    return sign_changes

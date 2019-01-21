@@ -20,7 +20,7 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'test2'
+picture = 'chinese'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')

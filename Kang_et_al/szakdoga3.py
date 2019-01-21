@@ -18,7 +18,7 @@ print("                   __/ |                                        ")
 print("                  |___/                                         ", bcolors.ENDC, '\n')
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'test2'
+picture = 'fingerprintmini'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -52,26 +52,26 @@ print(img, '\n')
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
         if img[row][col] != 0:
-            if int(img[row - 1][col]) <= int(img[row][col]) and int(img[row - 1][col]) != 0:
+            if img[row - 1][col] <= img[row][col] and img[row - 1][col] != 0:
                 psi[row][col] += 1
-            if int(img[row - 1][col - 1]) <= int(img[row][col]) and int(img[row - 1][col - 1]) != 0:
+            if img[row - 1][col - 1] <= img[row][col] and img[row - 1][col - 1] != 0:
                 psi[row][col] += 1
-            if int(img[row][col - 1]) <= int(img[row][col]) and int(img[row][col - 1]) != 0:
+            if img[row][col - 1] <= img[row][col] and img[row][col - 1] != 0:
                 psi[row][col] += 1
-            if int(img[row + 1][col - 1]) <= int(img[row][col]) and int(img[row + 1][col - 1]) != 0:
+            if img[row + 1][col - 1] <= img[row][col] and img[row + 1][col - 1] != 0:
                 psi[row][col] += 1
-            if int(img[row + 1][col]) <= int(img[row][col]) and int(img[row + 1][col]) != 0:
+            if img[row + 1][col] <= img[row][col] and img[row + 1][col] != 0:
                 psi[row][col] += 1
-            if int(img[row + 1][col + 1]) <= int(img[row][col]) and int(img[row + 1][col + 1]) != 0:
+            if img[row + 1][col + 1] <= img[row][col] and img[row + 1][col + 1] != 0:
                 psi[row][col] += 1
-            if int(img[row][col + 1]) <= int(img[row][col]) and int(img[row][col + 1]) != 0:
+            if img[row][col + 1] <= img[row][col] and img[row][col + 1] != 0:
                 psi[row][col] += 1
-            if int(img[row - 1][col + 1]) <= int(img[row][col]) and int(img[row - 1][col + 1]) != 0:
+            if img[row - 1][col + 1] <= img[row][col] and img[row - 1][col + 1] != 0:
                 psi[row][col] += 1
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
-        if psi[row][col] == 6:
+        if psi[row][col] == 5:
             helper[row][col] = 5
         if psi[row][col] >= 6:
             skeleton[row][col] = psi[row][col]
@@ -101,11 +101,6 @@ for i in range(3):
 print(bcolors.WARN, 'Initial skeleton', bcolors.ENDC)
 print(bcolors.ERR, 'Deleted:', deleted, bcolors.ENDC)
 print(img2)
-
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
-        if psi[row][col] == 5 and (img2[row + 1][col] >= 100 or img2[row - 1][col] >= 100 or img2[row][col + 1] >= 100 or img2[row][col - 1] >= 100):
-            img2[row][col] = img[row][col]
 
 print(img2)
 

@@ -1,25 +1,15 @@
-from Common.functions import imreadgray
-from Common.functions import flip
+X = [1, 0, -1, 0, 1, 0, -1, 0, 1, -1]
+print(X)
 
-picture = 'fingerprintmini'
-img = imreadgray('../Common/' + picture + '.png')
-flip(img)
+last_sign = 0
+sign_changes = 0
 
-size = img.shape
-hist = [0] * 256
-maxima = 0
-maximum = 0
-
-for row in range(size[0]):
-    for col in range(size[1]):
-        hist[int(img[row][col])] += 1
-
-for max in range(256):
-    if max == 0:
+for x in X:
+    if x == 0:
         continue
-    if maxima < hist[max]:
-        maxima = hist[max]
-        maximum = max
+    elif x == 1:
+        if last_sign == -1:
+            sign_changes += 1
+    last_sign = x
 
-print(hist)
-print(maximum)
+print(sign_changes)
