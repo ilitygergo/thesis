@@ -16,8 +16,9 @@ print(" | . \| | | | | | | | |___|  __/  __/ | |____| | | | (_) | |")
 print(" |_|\_\_|_| |_| |_| |______\___|\___|  \_____|_| |_|\___/|_|", bcolors.ENDC)
 
 # Reading in the image as a gray image
-picture = 'sima'
+picture = 'fingerprintmini'
 
+img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
 comp = imreadgray('../Common/' + picture + '.png')
 compstar = imreadgray('../Common/' + picture + '.png')
@@ -32,6 +33,7 @@ helper3 = imreadgray('../Common/' + picture + '.png')
 helper4 = imreadgray('../Common/' + picture + '.png')
 
 # Converting values 0-255
+flip(img)
 flip(img2)
 flip(comp)
 flip(compstar)
@@ -69,7 +71,7 @@ while equal:
     for row in range(1, size[0] - 1):
         for col in range(1, size[1] - 1):
             E[row][col] = erosion(comp, row, col)
-    print('E:', E)
+    # print('E:', E)
 
     # Ridge detection
     for row in range(1, size[0] - 1):
@@ -106,7 +108,7 @@ while equal:
                 R[row][col] = comp[row][col]
             else:
                 R[row][col] = 0
-    print('R:', R)
+    # print('R:', R)
 
     # Comp*
     for row in range(1, size[0] - 1):

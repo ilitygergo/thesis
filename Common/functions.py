@@ -383,82 +383,6 @@ def erosion(img, row, col):
     return x
 
 
-# Returns the maximum value in the 5x5 neighbourhood
-def dilationfar(img, row, col):
-    x = dilation(img, row, col)
-    if int(img[row][col + 2]) > x:
-        x = int(img[row][col + 2])
-    if int(img[row - 1][col + 2]) > x:
-        x = int(img[row - 1][col + 2])
-    if int(img[row - 2][col + 2]) > x:
-        x = int(img[row - 2][col + 2])
-    if int(img[row - 2][col + 1]) > x:
-        x = int(img[row - 2][col + 1])
-    if int(img[row - 2][col]) > x:
-        x = int(img[row - 2][col])
-    if int(img[row - 2][col - 1]) > x:
-        x = int(img[row - 2][col - 1])
-    if int(img[row - 2][col - 2]) > x:
-        x = int(img[row - 2][col - 2])
-    if int(img[row - 1][col - 2]) > x:
-        x = int(img[row - 1][col - 2])
-    if int(img[row][col - 2]) > x:
-        x = int(img[row][col - 2])
-    if int(img[row + 1][col - 2]) > x:
-        x = int(img[row + 1][col - 2])
-    if int(img[row + 2][col - 2]) > x:
-        x = int(img[row + 2][col - 2])
-    if int(img[row + 2][col - 1]) > x:
-        x = int(img[row + 2][col - 1])
-    if int(img[row + 2][col]) > x:
-        x = int(img[row + 2][col])
-    if int(img[row + 2][col + 1]) > x:
-        x = int(img[row + 2][col + 1])
-    if int(img[row + 2][col + 2]) > x:
-        x = int(img[row + 2][col + 2])
-    if int(img[row + 1][col + 2]) > x:
-        x = int(img[row + 1][col + 2])
-    return x
-
-
-# Returns the minimum value in the 5x5 neighbourhood
-def erosionfar(img, row, col):
-    x = erosion(img, row, col)
-    if int(img[row][col + 2]) < x:
-        x = int(img[row][col + 2])
-    if int(img[row - 1][col + 2]) < x:
-        x = int(img[row - 1][col + 2])
-    if int(img[row - 2][col + 2]) < x:
-        x = int(img[row - 2][col + 2])
-    if int(img[row - 2][col + 1]) < x:
-        x = int(img[row - 2][col + 1])
-    if int(img[row - 2][col]) < x:
-        x = int(img[row - 2][col])
-    if int(img[row - 2][col - 1]) < x:
-        x = int(img[row - 2][col - 1])
-    if int(img[row - 2][col - 2]) < x:
-        x = int(img[row - 2][col - 2])
-    if int(img[row - 1][col - 2]) < x:
-        x = int(img[row - 1][col - 2])
-    if int(img[row][col - 2]) < x:
-        x = int(img[row][col - 2])
-    if int(img[row + 1][col - 2]) < x:
-        x = int(img[row + 1][col - 2])
-    if int(img[row + 2][col - 2]) < x:
-        x = int(img[row + 2][col - 2])
-    if int(img[row + 2][col - 1]) < x:
-        x = int(img[row + 2][col - 1])
-    if int(img[row + 2][col]) < x:
-        x = int(img[row + 2][col])
-    if int(img[row + 2][col + 1]) < x:
-        x = int(img[row + 2][col + 1])
-    if int(img[row + 2][col + 2]) < x:
-        x = int(img[row + 2][col + 2])
-    if int(img[row + 1][col + 2]) < x:
-        x = int(img[row + 1][col + 2])
-    return x
-
-
 # Count the value differences in the 8 neighbourhood
 def countf(img, row, col):
     if img[row][col + 1] < img[row][col] and (img[row][col + 1] < img[row - 1][col + 1] or img[row][col + 1] < img[row - 1][col]):
@@ -501,7 +425,7 @@ def countf(img, row, col):
         f8 = 1
     else:
         f8 = 0
-    X = [f1, f2, f3, f4, f5, f6, f7, f8, f1]
+    X = [f1, f8, f7, f6, f5, f4, f3, f2, f1]
     last_sign = 0
     sign_changes = 0
 
