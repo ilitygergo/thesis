@@ -340,7 +340,7 @@ def connectedpath(img, row, col):
 
 
 # Returns the maximum neighbours value in the 3x3 neighbourhood
-def open(img, row, col):
+def dilation(img, row, col):
     x = int(img[row][col])
     if int(img[row][col + 1]) > x:
         x = int(img[row][col + 1])
@@ -384,8 +384,8 @@ def erosion(img, row, col):
 
 
 # Returns the maximum value in the 5x5 neighbourhood
-def openfar(img, row, col):
-    x = open(img, row, col)
+def dilationfar(img, row, col):
+    x = dilation(img, row, col)
     if int(img[row][col + 2]) > x:
         x = int(img[row][col + 2])
     if int(img[row - 1][col + 2]) > x:
@@ -417,6 +417,44 @@ def openfar(img, row, col):
     if int(img[row + 2][col + 2]) > x:
         x = int(img[row + 2][col + 2])
     if int(img[row + 1][col + 2]) > x:
+        x = int(img[row + 1][col + 2])
+    return x
+
+
+# Returns the minimum value in the 5x5 neighbourhood
+def erosionfar(img, row, col):
+    x = erosion(img, row, col)
+    if int(img[row][col + 2]) < x:
+        x = int(img[row][col + 2])
+    if int(img[row - 1][col + 2]) < x:
+        x = int(img[row - 1][col + 2])
+    if int(img[row - 2][col + 2]) < x:
+        x = int(img[row - 2][col + 2])
+    if int(img[row - 2][col + 1]) < x:
+        x = int(img[row - 2][col + 1])
+    if int(img[row - 2][col]) < x:
+        x = int(img[row - 2][col])
+    if int(img[row - 2][col - 1]) < x:
+        x = int(img[row - 2][col - 1])
+    if int(img[row - 2][col - 2]) < x:
+        x = int(img[row - 2][col - 2])
+    if int(img[row - 1][col - 2]) < x:
+        x = int(img[row - 1][col - 2])
+    if int(img[row][col - 2]) < x:
+        x = int(img[row][col - 2])
+    if int(img[row + 1][col - 2]) < x:
+        x = int(img[row + 1][col - 2])
+    if int(img[row + 2][col - 2]) < x:
+        x = int(img[row + 2][col - 2])
+    if int(img[row + 2][col - 1]) < x:
+        x = int(img[row + 2][col - 1])
+    if int(img[row + 2][col]) < x:
+        x = int(img[row + 2][col])
+    if int(img[row + 2][col + 1]) < x:
+        x = int(img[row + 2][col + 1])
+    if int(img[row + 2][col + 2]) < x:
+        x = int(img[row + 2][col + 2])
+    if int(img[row + 1][col + 2]) < x:
         x = int(img[row + 1][col + 2])
     return x
 
