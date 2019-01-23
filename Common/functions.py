@@ -220,47 +220,100 @@ def printmatrix(matrix):
 
 
 # Finds pixels with same value and returns a matrix
-def nearestneighbour(matrix, img, r, c):
+def nearestneighbour(matrix, img, r, c, index):
     stack = []
     x = copy.deepcopy(r)
     y = copy.deepcopy(c)
 
     while True:
-        if img[x][y] == img[x - 1][y] and matrix[x - 1][y] == 'X':
+        if img[x][y] == img[x - 1][y] and matrix[x - 1][y] == 0:
             # print(bcolors.WARN, 'up', bcolors.ENDC)
             stack.append([x, y])
-            matrix[x][y] = 'O'
+            matrix[x][y] = index
             x -= 1
             # printmatrix(matrix)
-        elif img[x][y] == img[x][y + 1] and matrix[x][y + 1] == 'X':
-            # print(bcolors.WARN, 'right', bcolors.ENDC)
+        elif img[x][y] == img[x - 1][y + 1] and matrix[x - 1][y + 1] == 0:
+            # print(bcolors.WARN, 'up and right', bcolors.ENDC)
             stack.append([x, y])
-            matrix[x][y] = 'O'
+            matrix[x][y] = index
+            x -= 1
             y += 1
             # printmatrix(matrix)
-        elif img[x][y] == img[x + 1][y] and matrix[x + 1][y] == 'X':
+        elif img[x][y] == img[x][y + 1] and matrix[x][y + 1] == 0:
+            # print(bcolors.WARN, 'right', bcolors.ENDC)
+            stack.append([x, y])
+            matrix[x][y] = index
+            y += 1
+            # printmatrix(matrix)
+        elif img[x][y] == img[x + 1][y + 1] and matrix[x + 1][y + 1] == 0:
+            # print(bcolors.WARN, 'right and down', bcolors.ENDC)
+            stack.append([x, y])
+            matrix[x][y] = index
+            x += 1
+            y += 1
+            # printmatrix(matrix)
+        elif img[x][y] == img[x + 1][y] and matrix[x + 1][y] == 0:
             # print(bcolors.WARN, 'down', bcolors.ENDC)
             stack.append([x, y])
-            matrix[x][y] = 'O'
+            matrix[x][y] = index
             x += 1
             # printmatrix(matrix)
-        elif img[x][y] == img[x][y - 1] and matrix[x][y - 1] == 'X':
+        elif img[x][y] == img[x + 1][y - 1] and matrix[x + 1][y - 1] == 0:
+            # print(bcolors.WARN, 'down and left', bcolors.ENDC)
+            stack.append([x, y])
+            matrix[x][y] = index
+            x += 1
+            y -= 1
+            # printmatrix(matrix)
+        elif img[x][y] == img[x][y - 1] and matrix[x][y - 1] == 0:
             # print(bcolors.WARN, 'left', bcolors.ENDC)
             stack.append([x, y])
-            matrix[x][y] = 'O'
+            matrix[x][y] = index
+            y -= 1
+            # printmatrix(matrix)
+        elif img[x][y] == img[x - 1][y - 1] and matrix[x - 1][y - 1] == 0:
+            # print(bcolors.WARN, 'left and up', bcolors.ENDC)
+            stack.append([x, y])
+            matrix[x][y] = index
+            x -= 1
             y -= 1
             # printmatrix(matrix)
         elif len(stack) > 0:
             # print(bcolors.WARN, 'pop', bcolors.ENDC)
             value = stack.pop()
-            matrix[x][y] = 'O'
+            matrix[x][y] = index
             x = value[0]
             y = value[1]
         elif len(stack) == 0:
-            matrix[x][y] = 'O'
+            matrix[x][y] = index
             break
 
     return matrix
+
+
+# Finds the connected components in a picture
+def connectedcomponents(matrix, img, size):
+    n = size[0]
+    m = size[1]
+    matrix2 = [0] * n
+    for x in range(n):
+        matrix2[x] = [0] * m
+
+    components = []
+    index = 1
+
+    for row in range(1, size[0] - 1):
+        for col in range(1, size[1] - 1):
+            if img[row][col] != 0:
+                matrix[row][col] = 1
+
+    for row in range(1, size[0] - 1):
+        for col in range(1, size[1] - 1):
+            if matrix[row][col] != 0 and matrix2[row][col] not in components:
+                nearestneighbour(matrix2, img, row, col, index)
+                components.append(index)
+                index += 1
+    return matrix2
 
 
 # If one of the neighbours of point has a value 0 than it is true
@@ -438,3 +491,17 @@ def countf(img, row, col):
         last_sign = x
 
     return sign_changes
+
+
+# Connects the components that could be connected via 5 psi pixels
+def find5(matrix, matrix2, img, img2, row, col):
+    size = img.shape
+    szomszed = 0
+    for row in range(1, size[0] - 1):
+        for col in range(1, size[1] - 1):
+            if img[row][col] != 0:
+                if matrix[row - 1][col] == 1 or matrix[row - 1][col - 1] == 1 or matrix[row][col - 1] == 1 \
+                        or matrix[row + 1][col - 1] == 1 or matrix[row + 1][col] == 1 or matrix[row + 1][col + 1] == 1 \
+                        or matrix[row][col + 1] == 1 or matrix[row - 1][col + 1] == 1:
+                    print('Raer')
+    return True

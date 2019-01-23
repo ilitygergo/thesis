@@ -16,7 +16,7 @@ print(" | . \| | | | | | | | |___|  __/  __/ | |____| | | | (_) | |")
 print(" |_|\_\_|_| |_| |_| |______\___|\___|  \_____|_| |_|\___/|_|", bcolors.ENDC)
 
 # Reading in the image as a gray image
-picture = 'fingerprintmini'
+picture = 'chromosome'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')

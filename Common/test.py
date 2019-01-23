@@ -1,26 +1,44 @@
-import cv2
 from Common.functions import imreadgray
 from Common.functions import flip
-from Common.functions import countf
+from Common.functions import nearestneighbour
+from Common.functions import connectedcomponents
+from Common.functions import printmatrix
+from Common.functions import find5
 
 img = imreadgray('../Common/fasz2.png')
+img2 = imreadgray('../Common/fasz.png')
+psi = imreadgray('../Common/fasz2.png')
+matrix = imreadgray('../Common/fasz2.png')
+matrix2 = imreadgray('../Common/fasz2.png')
+
 flip(img)
+flip(img2)
+size = img.shape
+for row in range(0, size[0]):
+    for col in range(0, size[1]):
+        psi[row][col] = 0
+        matrix[row][col] = 0
+        matrix2[row][col] = 0
 
-X = [1, 0, -1, 0, 1, 0, -1, 0, 1, -1]
-# print(X)
+psi[2][1] = 5
+psi[3][2] = 5
+psi[3][3] = 5
+psi[4][2] = 5
+psi[4][3] = 5
+psi[4][4] = 5
 
-last_sign = 0
-sign_changes = 0
+matrix = nearestneighbour(matrix, psi, 3, 3, 1)
+matrix2 = connectedcomponents(matrix2, img, size)
 
-for x in X:
-    if x == 0:
-        continue
-    elif x == 1:
-        if last_sign == -1:
-            sign_changes += 1
-    last_sign = x
+print('Img:')
+printmatrix(img)
+print('Img2:')
+printmatrix(img2)
+print('Matrix:')
+printmatrix(matrix)
+print('Matrix2:')
+printmatrix(matrix2)
 
-# print(sign_changes)
-
-print(img)
-print(countf(img, 2, 2))
+find5(matrix, matrix2, img, img2, 3, 3)
+print('Img after find5:')
+printmatrix(img)

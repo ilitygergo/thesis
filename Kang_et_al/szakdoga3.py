@@ -2,11 +2,14 @@ import cv2
 import bcolors
 from Common.functions import imreadgray
 from Common.functions import flip
-from Common.functions import borderpoint
 from Common.functions import localmaximum
 from Common.functions import endpoint
 from Common.functions import connectedcorner
 from Common.functions import connectedpath
+from Common.functions import borderpoint
+from Common.functions import find5
+from Common.functions import connectedcomponents
+from Common.functions import printmatrix
 
 print(bcolors.OK, " _  __                    _____       _       _  ___           ")
 print(" | |/ /                   / ____|     | |     | |/ (_)          ")
@@ -18,15 +21,19 @@ print("                   __/ |                                        ")
 print("                  |___/                                         ", bcolors.ENDC, '\n')
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'fingerprintmini'
+picture = 'fasz2'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
 helper = imreadgray('../Common/' + picture + '.png')
 psi = imreadgray('../Common/' + picture + '.png')
+psis = imreadgray('../Common/' + picture + '.png')
 skeleton = imreadgray('../Common/' + picture + '.png')
+matrix = imreadgray('../Common/' + picture + '.png')
+matrix2 = imreadgray('../Common/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
+flip(psis)
 flip(img)
 flip(img2)
 flip(helper)
@@ -39,12 +46,15 @@ psivalue = 6
 xrp = 0
 f = 0
 
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
+for row in range(0, size[0]):
+    for col in range(0, size[1]):
         psi[row][col] = 0
         skeleton[row][col] = 0
         helper[row][col] = 0
         img2[row][col] = 0
+        psis[row][col] = 0
+        matrix[row][col] = 0
+        matrix2[row][col] = 0
 
 print(bcolors.WARN, 'Original grayscale image', bcolors.ENDC)
 print(img, '\n')
@@ -52,21 +62,21 @@ print(img, '\n')
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
         if img[row][col] != 0:
-            if img[row - 1][col] <= img[row][col] and img[row - 1][col] != 0:
+            if img[row - 1][col] <= img[row][col]:
                 psi[row][col] += 1
-            if img[row - 1][col - 1] <= img[row][col] and img[row - 1][col - 1] != 0:
+            if img[row - 1][col - 1] <= img[row][col]:
                 psi[row][col] += 1
-            if img[row][col - 1] <= img[row][col] and img[row][col - 1] != 0:
+            if img[row][col - 1] <= img[row][col]:
                 psi[row][col] += 1
-            if img[row + 1][col - 1] <= img[row][col] and img[row + 1][col - 1] != 0:
+            if img[row + 1][col - 1] <= img[row][col]:
                 psi[row][col] += 1
-            if img[row + 1][col] <= img[row][col] and img[row + 1][col] != 0:
+            if img[row + 1][col] <= img[row][col]:
                 psi[row][col] += 1
-            if img[row + 1][col + 1] <= img[row][col] and img[row + 1][col + 1] != 0:
+            if img[row + 1][col + 1] <= img[row][col]:
                 psi[row][col] += 1
-            if img[row][col + 1] <= img[row][col] and img[row][col + 1] != 0:
+            if img[row][col + 1] <= img[row][col]:
                 psi[row][col] += 1
-            if img[row - 1][col + 1] <= img[row][col] and img[row - 1][col + 1] != 0:
+            if img[row - 1][col + 1] <= img[row][col]:
                 psi[row][col] += 1
 
 for row in range(1, size[0] - 1):
@@ -81,27 +91,39 @@ print(bcolors.WARN, 'PSI >= 6', bcolors.ENDC)
 print(img2, '\n')
 deleted = 0
 
-for i in range(3):
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            if img[row][col] != 0:
-                if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
-                    if localmaximum(img[row][col], img[row][col + 1], img[row - 1][col + 1],
-                                     img[row - 1][col], img[row - 1][col - 1], img[row][col - 1],
-                                     img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1]):
+for x in range(3):
+    for row in range(2, size[0] - 2):
+        for col in range(2, size[1] - 2):
+            if psi[row][col] == 6 + x:
+                if borderpoint(img2[row][col + 1], img2[row - 1][col], img2[row][col - 1], img2[row + 1][col]):
+                    if localmaximum(img2[row][col], img2[row][col + 1], img2[row - 1][col + 1],
+                                     img2[row - 1][col], img2[row - 1][col - 1], img2[row][col - 1],
+                                     img2[row + 1][col - 1], img2[row + 1][col], img2[row + 1][col + 1]):
                         continue
-                    if endpoint(img, row, col):
+                    if endpoint(img2, row, col):
                         continue
-                    if not connectedcorner(img, row, col):
+                    if not connectedcorner(img2, row, col):
                         continue
-                    if not connectedpath(img, row, col):
+                    if not connectedpath(img2, row, col):
                         continue
-                    img[row][col] = 0
+                    deleted += 1
+                    img2[row][col] = 0
+
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        if psi[row][col] == 5:
+            if img2[row - 1][col] != 0 or img2[row - 1][col - 1] != 0 or img2[row][col - 1] != 0 \
+                    or img2[row + 1][col - 1] != 0 or img2[row + 1][col] != 0 or img2[row + 1][col + 1] != 0 \
+                    or img2[row][col + 1] != 0 or img2[row - 1][col + 1] != 0:
+                matrix[row][col] = 1
+
+matrix2 = connectedcomponents(matrix2, img, size)
+
+printmatrix(matrix)
+printmatrix(matrix2)
 
 print(bcolors.WARN, 'Initial skeleton', bcolors.ENDC)
 print(bcolors.ERR, 'Deleted:', deleted, bcolors.ENDC)
-print(img2)
-
 print(img2)
 
 # Converting the values back to normal
