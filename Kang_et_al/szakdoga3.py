@@ -7,7 +7,7 @@ from Common.functions import endpoint
 from Common.functions import connectedcorner
 from Common.functions import connectedpath
 from Common.functions import borderpoint
-from Common.functions import find5
+from Common.functions import findroad
 from Common.functions import connectedcomponents
 from Common.functions import printmatrix
 
@@ -21,7 +21,7 @@ print("                   __/ |                                        ")
 print("                  |___/                                         ", bcolors.ENDC, '\n')
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'fasz2'
+picture = 'fingerprintmini'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -31,6 +31,7 @@ psis = imreadgray('../Common/' + picture + '.png')
 skeleton = imreadgray('../Common/' + picture + '.png')
 matrix = imreadgray('../Common/' + picture + '.png')
 matrix2 = imreadgray('../Common/' + picture + '.png')
+help = imreadgray('../Common/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
 flip(psis)
@@ -55,6 +56,7 @@ for row in range(0, size[0]):
         psis[row][col] = 0
         matrix[row][col] = 0
         matrix2[row][col] = 0
+        help[row][col] = 0
 
 print(bcolors.WARN, 'Original grayscale image', bcolors.ENDC)
 print(img, '\n')
@@ -118,11 +120,38 @@ for row in range(1, size[0] - 1):
                 matrix[row][col] = 1
 
 matrix2 = connectedcomponents(matrix2, img, size)
+print('Skeleton:')
+print(img2)
 
-printmatrix(matrix)
-printmatrix(matrix2)
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        if img2[row][col] != 0:
+            if psi[row - 1][col] == 5:
+                findroad(matrix, matrix2, helper, img, img2, row - 1, col, img2[row][col])
+                matrix2 = connectedcomponents(matrix2, img, size)
+            if psi[row - 1][col - 1] == 5:
+                findroad(matrix, matrix2, helper, img, img2, row - 1, col - 1, img2[row][col])
+                matrix2 = connectedcomponents(matrix2, img, size)
+            if psi[row][col - 1] == 5:
+                findroad(matrix, matrix2, helper, img, img2, row, col - 1, img2[row][col])
+                matrix2 = connectedcomponents(matrix2, img, size)
+            if psi[row + 1][col - 1] == 5:
+                findroad(matrix, matrix2, helper, img, img2, row + 1, col - 1, img2[row][col])
+                matrix2 = connectedcomponents(matrix2, img, size)
+            if psi[row + 1][col] == 5:
+                findroad(matrix, matrix2, helper, img, img2, row + 1, col, img2[row][col])
+                matrix2 = connectedcomponents(matrix2, img, size)
+            if psi[row + 1][col + 1] == 5:
+                findroad(matrix, matrix2, helper, img, img2, row + 1, col + 1, img2[row][col])
+                matrix2 = connectedcomponents(matrix2, img, size)
+            if psi[row][col + 1] == 5:
+                findroad(matrix, matrix2, helper, img, img2, row, col + 1, img2[row][col])
+                matrix2 = connectedcomponents(matrix2, img, size)
+            if psi[row - 1][col + 1] == 5:
+                findroad(matrix, matrix2, helper, img, img2, row - 1, col + 1, img2[row][col])
+                matrix2 = connectedcomponents(matrix2, img, size)
 
-print(bcolors.WARN, 'Initial skeleton', bcolors.ENDC)
+print(bcolors.WARN, 'Skeleton after connectivity restoration:', bcolors.ENDC)
 print(bcolors.ERR, 'Deleted:', deleted, bcolors.ENDC)
 print(img2)
 

@@ -493,15 +493,88 @@ def countf(img, row, col):
     return sign_changes
 
 
-# Connects the components that could be connected via 5 psi pixels
-def find5(matrix, matrix2, img, img2, row, col):
+# Finds the road trough a from b
+def findroad(matrix, matrix2, helper, img, img2, r, c, index):
     size = img.shape
-    szomszed = 0
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            if img[row][col] != 0:
-                if matrix[row - 1][col] == 1 or matrix[row - 1][col - 1] == 1 or matrix[row][col - 1] == 1 \
-                        or matrix[row + 1][col - 1] == 1 or matrix[row + 1][col] == 1 or matrix[row + 1][col + 1] == 1 \
-                        or matrix[row][col + 1] == 1 or matrix[row - 1][col + 1] == 1:
-                    print('Raer')
-    return True
+    stack = []
+    x = copy.deepcopy(r)
+    y = copy.deepcopy(c)
+
+    while True:
+        if matrix[x][y] == matrix[x - 1][y] and helper[x - 1][y] == 0:
+            print(bcolors.WARN, 'up', bcolors.ENDC)
+            x -= 1
+            stack.append([x, y])
+            helper[x][y] = 1
+            printmatrix(helper)
+        elif matrix[x][y] == matrix[x - 1][y + 1] and helper[x - 1][y + 1] == 0:
+            print(bcolors.WARN, 'up and right', bcolors.ENDC)
+            x -= 1
+            y += 1
+            stack.append([x, y])
+            helper[x][y] = 1
+            printmatrix(helper)
+        elif matrix[x][y] == matrix[x][y + 1] and helper[x][y + 1] == 0:
+            print(bcolors.WARN, 'right', bcolors.ENDC)
+            y += 1
+            stack.append([x, y])
+            helper[x][y] = 1
+            printmatrix(helper)
+        elif matrix[x][y] == matrix[x + 1][y + 1] and helper[x + 1][y + 1] == 0:
+            print(bcolors.WARN, 'right and down', bcolors.ENDC)
+            x += 1
+            y += 1
+            stack.append([x, y])
+            helper[x][y] = 1
+            printmatrix(helper)
+        elif matrix[x][y] == matrix[x + 1][y] and helper[x + 1][y] == 0:
+            print(bcolors.WARN, 'down', bcolors.ENDC)
+            x += 1
+            stack.append([x, y])
+            helper[x][y] = 1
+            printmatrix(helper)
+        elif matrix[x][y] == matrix[x + 1][y - 1] and helper[x + 1][y - 1] == 0:
+            print(bcolors.WARN, 'down and left', bcolors.ENDC)
+            x += 1
+            y -= 1
+            stack.append([x, y])
+            helper[x][y] = 1
+            printmatrix(helper)
+        elif matrix[x][y] == matrix[x][y - 1] and helper[x][y - 1] == 0:
+            print(bcolors.WARN, 'left', bcolors.ENDC)
+            y -= 1
+            stack.append([x, y])
+            helper[x][y] = 1
+            printmatrix(helper)
+        elif matrix[x][y] == matrix[x - 1][y - 1] and helper[x - 1][y - 1] == 0:
+            print(bcolors.WARN, 'left and up', bcolors.ENDC)
+            x -= 1
+            y -= 1
+            stack.append([x, y])
+            helper[x][y] = 1
+            printmatrix(helper)
+        elif len(stack) > 0:
+            print(bcolors.WARN, 'pop', bcolors.ENDC)
+            value = stack.pop()
+            helper[x][y] = 1
+            x = value[0]
+            y = value[1]
+        elif len(stack) == 0:
+            helper[x][y] = 1
+            break
+        if (matrix2[x - 1][y] != index and matrix2[x - 1][y] != 0) or (
+                matrix2[x - 1][y - 1] != index and matrix2[x - 1][y - 1] != 0) or (
+                matrix2[x][y - 1] != index and matrix2[x][y - 1] != 0) or (
+                matrix2[x + 1][y - 1] != index and matrix2[x + 1][y - 1] != 0) or (
+                matrix2[x + 1][y] != index and matrix2[x + 1][y] != 0) or (
+                matrix2[x + 1][y + 1] != index and matrix2[x + 1][y + 1] != 0) or (
+                matrix2[x][y + 1] != index and matrix2[x][y + 1] != 0) or (
+                matrix2[x - 1][y + 1] != index and matrix2[x - 1][y + 1] != 0):
+            for row in range(1, size[0] - 1):
+                for col in range(1, size[1] - 1):
+                    if helper[row][col] == 1:
+                        img[row][col] = img2[row][col]
+            img[r][c] = img2[r][c]
+            return True
+
+    return False
