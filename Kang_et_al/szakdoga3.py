@@ -21,7 +21,7 @@ print("                   __/ |                                        ")
 print("                  |___/                                         ", bcolors.ENDC, '\n')
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'sima'
+picture = 'test'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -114,12 +114,9 @@ for x in range(3):
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
         if psi[row][col] == 5:
-            if img2[row - 1][col] != 0 or img2[row - 1][col - 1] != 0 or img2[row][col - 1] != 0 \
-                    or img2[row + 1][col - 1] != 0 or img2[row + 1][col] != 0 or img2[row + 1][col + 1] != 0 \
-                    or img2[row][col + 1] != 0 or img2[row - 1][col + 1] != 0:
                 matrix[row][col] = 1
 
-matrix2 = connectedcomponents(matrix2, img, size)
+matrix2 = connectedcomponents(matrix2, img2, size)
 print('Skeleton:')
 print(img2)
 
@@ -129,35 +126,35 @@ for row in range(1, size[0] - 1):
     count = True
     for col in range(1, size[1] - 1):
         if img2[row][col] != 0:
-            if psi[row - 1][col] == 5:
-                findroad(matrix, matrix2, helper, img, img2, row - 1, col, img2[row][col])
-                matrix2 = connectedcomponents(matrix2, img, size)
-            if psi[row - 1][col - 1] == 5:
-                findroad(matrix, matrix2, helper, img, img2, row - 1, col - 1, img2[row][col])
-                matrix2 = connectedcomponents(matrix2, img, size)
-            if psi[row][col - 1] == 5:
-                findroad(matrix, matrix2, helper, img, img2, row, col - 1, img2[row][col])
-                matrix2 = connectedcomponents(matrix2, img, size)
-            if psi[row + 1][col - 1] == 5:
-                findroad(matrix, matrix2, helper, img, img2, row + 1, col - 1, img2[row][col])
-                matrix2 = connectedcomponents(matrix2, img, size)
-            if psi[row + 1][col] == 5:
-                findroad(matrix, matrix2, helper, img, img2, row + 1, col, img2[row][col])
-                matrix2 = connectedcomponents(matrix2, img, size)
-            if psi[row + 1][col + 1] == 5:
-                findroad(matrix, matrix2, helper, img, img2, row + 1, col + 1, img2[row][col])
-                matrix2 = connectedcomponents(matrix2, img, size)
-            if psi[row][col + 1] == 5:
-                findroad(matrix, matrix2, helper, img, img2, row, col + 1, img2[row][col])
-                matrix2 = connectedcomponents(matrix2, img, size)
-            if psi[row - 1][col + 1] == 5:
-                findroad(matrix, matrix2, helper, img, img2, row - 1, col + 1, img2[row][col])
-                matrix2 = connectedcomponents(matrix2, img, size)
+            if matrix[row - 1][col] == 1:
+                findroad(matrix, matrix2, help, img, img2, row - 1, col, matrix2[row][col])
+                matrix2 = connectedcomponents(matrix2, img2, size)
+            if matrix[row - 1][col - 1] == 1:
+                findroad(matrix, matrix2, help, img, img2, row - 1, col - 1, matrix2[row][col])
+                matrix2 = connectedcomponents(matrix2, img2, size)
+            if matrix[row][col - 1] == 1:
+                findroad(matrix, matrix2, help, img, img2, row, col - 1, matrix2[row][col])
+                matrix2 = connectedcomponents(matrix2, img2, size)
+            if matrix[row + 1][col - 1] == 1:
+                findroad(matrix, matrix2, help, img, img2, row + 1, col - 1, matrix2[row][col])
+                matrix2 = connectedcomponents(matrix2, img2, size)
+            if matrix[row + 1][col] == 1:
+                findroad(matrix, matrix2, help, img, img2, row + 1, col, matrix2[row][col])
+                matrix2 = connectedcomponents(matrix2, img2, size)
+            if matrix[row + 1][col + 1] == 1:
+                findroad(matrix, matrix2, help, img, img2, row + 1, col + 1, matrix2[row][col])
+                matrix2 = connectedcomponents(matrix2, img2, size)
+            if matrix[row][col + 1] == 1:
+                findroad(matrix, matrix2, help, img, img2, row, col + 1, matrix2[row][col])
+                matrix2 = connectedcomponents(matrix2, img2, size)
+            if matrix[row - 1][col + 1] == 1:
+                findroad(matrix, matrix2, help, img, img2, row - 1, col + 1, matrix2[row][col])
+                matrix2 = connectedcomponents(matrix2, img2, size)
             if count:
-                print(size[0] - 1, '/', row)
+                print(size[0] - 2, ' / ', row)
                 count = False
         elif count:
-            print(size[0] - 1, '/', row)
+            print(size[0] - 2, ' / ', row)
             count = False
 
 print(bcolors.WARN, 'Skeleton after connectivity restoration:', bcolors.ENDC)

@@ -494,6 +494,12 @@ def countf(img, row, col):
 
 
 # Finds the road trough a from b
+# Matrix shows the road
+# Matrix 2 has the objects
+# Helper is a plain matrix
+# Img is the original image
+# Img2 is the thinned matrix
+# r - row, c - column, index -
 def findroad(matrix, matrix2, helper, img, img2, r, c, index):
     size = img.shape
     stack = []
@@ -501,80 +507,122 @@ def findroad(matrix, matrix2, helper, img, img2, r, c, index):
     y = copy.deepcopy(c)
 
     while True:
+
         if matrix[x][y] == matrix[x - 1][y] and helper[x - 1][y] == 0:
-            print(bcolors.WARN, 'up', bcolors.ENDC)
-            x -= 1
             stack.append([x, y])
             helper[x][y] = 1
-            printmatrix(helper)
+            if neighbour(matrix2, x, y, index):
+                stop(img, img2, helper, size)
+                print(True)
+                return True
+            x -= 1
+            print(1)
+
         elif matrix[x][y] == matrix[x - 1][y + 1] and helper[x - 1][y + 1] == 0:
-            print(bcolors.WARN, 'up and right', bcolors.ENDC)
-            x -= 1
-            y += 1
             stack.append([x, y])
             helper[x][y] = 1
-            printmatrix(helper)
+            if neighbour(matrix2, x, y, index):
+                stop(img, img2, helper, size)
+                print(True)
+                return True
+            x -= 1
+            y += 1
+            print(2)
+
         elif matrix[x][y] == matrix[x][y + 1] and helper[x][y + 1] == 0:
-            print(bcolors.WARN, 'right', bcolors.ENDC)
-            y += 1
             stack.append([x, y])
             helper[x][y] = 1
-            printmatrix(helper)
+            if neighbour(matrix2, x, y, index):
+                stop(img, img2, helper, size)
+                print(True)
+                return True
+            y += 1
+            print(3)
+
         elif matrix[x][y] == matrix[x + 1][y + 1] and helper[x + 1][y + 1] == 0:
-            print(bcolors.WARN, 'right and down', bcolors.ENDC)
+            stack.append([x, y])
+            helper[x][y] = 1
+            if neighbour(matrix2, x, y, index):
+                stop(img, img2, helper, size)
+                print(True)
+                return True
             x += 1
             y += 1
-            stack.append([x, y])
-            helper[x][y] = 1
-            printmatrix(helper)
+            print(4)
+
         elif matrix[x][y] == matrix[x + 1][y] and helper[x + 1][y] == 0:
-            print(bcolors.WARN, 'down', bcolors.ENDC)
-            x += 1
             stack.append([x, y])
             helper[x][y] = 1
-            printmatrix(helper)
+            if neighbour(matrix2, x, y, index):
+                stop(img, img2, helper, size)
+                print(True)
+                return True
+            x += 1
+            print(5)
+
         elif matrix[x][y] == matrix[x + 1][y - 1] and helper[x + 1][y - 1] == 0:
-            print(bcolors.WARN, 'down and left', bcolors.ENDC)
+            stack.append([x, y])
+            helper[x][y] = 1
+            if neighbour(matrix2, x, y, index):
+                stop(img, img2, helper, size)
+                print(True)
+                return True
             x += 1
             y -= 1
-            stack.append([x, y])
-            helper[x][y] = 1
-            printmatrix(helper)
+            print(6)
+
         elif matrix[x][y] == matrix[x][y - 1] and helper[x][y - 1] == 0:
-            print(bcolors.WARN, 'left', bcolors.ENDC)
-            y -= 1
             stack.append([x, y])
             helper[x][y] = 1
-            printmatrix(helper)
+            if neighbour(matrix2, x, y, index):
+                stop(img, img2, helper, size)
+                print(True)
+                return True
+            y -= 1
+            print(7)
+
         elif matrix[x][y] == matrix[x - 1][y - 1] and helper[x - 1][y - 1] == 0:
-            print(bcolors.WARN, 'left and up', bcolors.ENDC)
+            stack.append([x, y])
+            helper[x][y] = 1
+            if neighbour(matrix2, x, y, index):
+                stop(img, img2, helper, size)
+                print(True)
+                return True
             x -= 1
             y -= 1
-            stack.append([x, y])
-            helper[x][y] = 1
-            printmatrix(helper)
+            print(8)
+
         elif len(stack) > 0:
-            print(bcolors.WARN, 'pop', bcolors.ENDC)
             value = stack.pop()
             helper[x][y] = 1
             x = value[0]
             y = value[1]
+            print('>0')
+
         elif len(stack) == 0:
-            helper[x][y] = 1
+            print('=0')
             break
-        if (matrix2[x - 1][y] != index and matrix2[x - 1][y] != 0) or (
-                matrix2[x - 1][y - 1] != index and matrix2[x - 1][y - 1] != 0) or (
-                matrix2[x][y - 1] != index and matrix2[x][y - 1] != 0) or (
-                matrix2[x + 1][y - 1] != index and matrix2[x + 1][y - 1] != 0) or (
-                matrix2[x + 1][y] != index and matrix2[x + 1][y] != 0) or (
-                matrix2[x + 1][y + 1] != index and matrix2[x + 1][y + 1] != 0) or (
-                matrix2[x][y + 1] != index and matrix2[x][y + 1] != 0) or (
-                matrix2[x - 1][y + 1] != index and matrix2[x - 1][y + 1] != 0):
-            for row in range(1, size[0] - 1):
-                for col in range(1, size[1] - 1):
-                    if helper[row][col] == 1:
-                        img[row][col] = img2[row][col]
-            img[r][c] = img2[r][c]
-            return True
 
     return False
+
+
+# Checks if the neighbour is a different component
+def neighbour(matrix2, x, y, index):
+    if (matrix2[x - 1][y] != index and matrix2[x - 1][y] != 0) or (
+            matrix2[x - 1][y - 1] != index and matrix2[x - 1][y - 1] != 0) or (
+            matrix2[x][y - 1] != index and matrix2[x][y - 1] != 0) or (
+            matrix2[x + 1][y - 1] != index and matrix2[x + 1][y - 1] != 0) or (
+            matrix2[x + 1][y] != index and matrix2[x + 1][y] != 0) or (
+            matrix2[x + 1][y + 1] != index and matrix2[x + 1][y + 1] != 0) or (
+            matrix2[x][y + 1] != index and matrix2[x][y + 1] != 0) or (
+            matrix2[x - 1][y + 1] != index and matrix2[x - 1][y + 1] != 0):
+        return True
+    return False
+
+
+# The image2 values are replaced by the img values if the helper has 1
+def stop(img, img2, helper, size):
+    for row in range(1, size[0] - 1):
+        for col in range(1, size[1] - 1):
+            if helper[row][col] == 1:
+                img2[row][col] = img[row][col]
