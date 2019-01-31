@@ -626,3 +626,12 @@ def stop(img, img2, helper, size):
         for col in range(1, size[1] - 1):
             if helper[row][col] == 1:
                 img2[row][col] = img[row][col]
+
+
+# If two neighbours has a value grater than 0 than returns true
+def countnotzero(img, row, col):
+    lst = [int(img[row][col + 1]), int(img[row - 1][col + 1]), int(img[row - 1][col]), int(img[row - 1][col - 1]),
+           int(img[row][col - 1]), int(img[row + 1][col - 1]), int(img[row + 1][col]), int(img[row + 1][col + 1])]
+    if sum(x is not 0 for x in lst) == 2:
+        return True
+    return False

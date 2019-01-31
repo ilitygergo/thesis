@@ -3,8 +3,6 @@ import numpy as np
 import bcolors
 from Common.functions import imreadgray
 from Common.functions import flip
-from Common.functions import erosion
-from Common.functions import dilation
 from Common.functions import equalmatrix
 from Common.functions import makeequalmatrix
 from Common.functions import countf
@@ -17,7 +15,7 @@ print(" | . \| | | | | | | | |___|  __/  __/ | |____| | | | (_) | |")
 print(" |_|\_\_|_| |_| |_| |______\___|\___|  \_____|_| |_|\___/|_|", bcolors.ENDC)
 
 # Reading in the image as a gray image
-picture = 'fingerprintmini'
+picture = 'test'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -30,8 +28,6 @@ O1 = imreadgray('../Common/' + picture + '.png')
 O2 = imreadgray('../Common/' + picture + '.png')
 helper1 = imreadgray('../Common/' + picture + '.png')
 helper2 = imreadgray('../Common/' + picture + '.png')
-helper3 = imreadgray('../Common/' + picture + '.png')
-helper4 = imreadgray('../Common/' + picture + '.png')
 
 # Converting values 0-255
 flip(img)
@@ -57,8 +53,6 @@ for row in range(0, size[0]):
         O2[row][col] = 0
         helper1[row][col] = 0
         helper2[row][col] = 0
-        helper3[row][col] = 0
-        helper4[row][col] = 0
 
 equal = True
 lepes = 1
@@ -71,36 +65,15 @@ print(comp)
 while equal:
 
     # Erosion
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            E[row][col] = erosion(comp, row, col)
+    E = cv2.erode(comp, kernel, iterations=1)
     # print('E:', E)
 
     # Ridge detection
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            O1[row][col] = erosion(comp, row, col)
-            O2[row][col] = erosion(comp, row, col)
+    helper1 = cv2.erode(comp, kernel, iterations=1)
+    helper2 = cv2.erode(comp, kernel2, iterations=1)
 
-    makeequalmatrix(helper1, O1, size)
-    makeequalmatrix(helper2, O2, size)
-
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            O1[row][col] = dilation(helper1, row, col)
-            O2[row][col] = erosion(helper2, row, col)
-
-    makeequalmatrix(helper3, O2, size)
-
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            O2[row][col] = dilation(helper3, row, col)
-
-    makeequalmatrix(helper4, O2, size)
-
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            O2[row][col] = dilation(helper4, row, col)
+    O1 = cv2.dilate(helper1, kernel, iterations=1)
+    O2 = cv2.dilate(helper2, kernel2, iterations=1)
 
     # print('O1:', O1)
     # print('O2:', O2)
@@ -154,34 +127,13 @@ for row in range(0, size[0]):
         O2[row][col] = 0
         helper1[row][col] = 0
         helper2[row][col] = 0
-        helper3[row][col] = 0
-        helper4[row][col] = 0
 
 # Ridge detection
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
-        O1[row][col] = erosion(comp, row, col)
-        O2[row][col] = erosion(comp, row, col)
+helper1 = cv2.erode(comp, kernel, iterations=1)
+helper2 = cv2.erode(comp, kernel2, iterations=1)
 
-makeequalmatrix(helper1, O1, size)
-makeequalmatrix(helper2, O2, size)
-
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
-        O1[row][col] = dilation(helper1, row, col)
-        O2[row][col] = erosion(helper2, row, col)
-
-makeequalmatrix(helper3, O2, size)
-
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
-        O2[row][col] = dilation(helper3, row, col)
-
-makeequalmatrix(helper4, O2, size)
-
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
-        O2[row][col] = dilation(helper4, row, col)
+O1 = cv2.dilate(helper1, kernel, iterations=1)
+O2 = cv2.dilate(helper2, kernel2, iterations=1)
 
 # print('O1:', O1)
 # print('O2:', O2)

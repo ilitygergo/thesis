@@ -7,10 +7,9 @@ from Common.functions import endpoint
 from Common.functions import connectedcorner
 from Common.functions import connectedpath
 from Common.functions import borderpoint
-from Common.functions import connectedcomponents
-from Common.functions import neighbour
 from Common.functions import equalmatrix
 from Common.functions import makeequalmatrix
+from Common.functions import countnotzero
 
 print(bcolors.OK, " _  __                    _____       _       _  ___           ")
 print(" | |/ /                   / ____|     | |     | |/ (_)          ")
@@ -22,7 +21,7 @@ print("                   __/ |                                        ")
 print("                  |___/                                         ", bcolors.ENDC, '\n')
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'fingerprintmini'
+picture = 'chromosomemini'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -53,7 +52,6 @@ for row in range(0, size[0]):
     for col in range(0, size[1]):
         psi[row][col] = 0
         skeleton[row][col] = 0
-        helper[row][col] = 0
         img2[row][col] = 0
         psis[row][col] = 0
         matrix[row][col] = 0
@@ -86,8 +84,6 @@ for row in range(1, size[0] - 1):
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
-        if psi[row][col] == 5:
-            helper[row][col] = 5
         if psi[row][col] >= 6:
             skeleton[row][col] = psi[row][col]
             img2[row][col] = img[row][col]
@@ -134,32 +130,8 @@ for x in range(3):
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
         if psi[row][col] == 5:
-                matrix[row][col] = 1
-
-matrix2 = connectedcomponents(matrix2, img2, size)
-print('Skeleton:')
-print(img2)
-
-for row in range(1, size[0] - 1):
-    count = True
-    for col in range(1, size[1] - 1):
-        if img2[row][col] != 0:
-            if matrix[row - 1][col] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
-                img2[row - 1][col] = img[row - 1][col]
-            if matrix[row - 1][col - 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
-                img2[row - 1][col - 1] = img[row - 1][col - 1]
-            if matrix[row][col - 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
-                img2[row][col - 1] = img[row][col - 1]
-            if matrix[row + 1][col - 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
-                img2[row + 1][col - 1] = img[row + 1][col - 1]
-            if matrix[row + 1][col] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
-                img2[row + 1][col] = img[row + 1][col]
-            if matrix[row + 1][col + 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
-                img2[row + 1][col + 1] = img[row + 1][col + 1]
-            if matrix[row][col + 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
-                img2[row][col + 1] = img[row][col + 1]
-            if matrix[row - 1][col + 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
-                img2[row - 1][col + 1] = img[row - 1][col + 1]
+            if countnotzero(img2, row, col):
+                img2[row][col] = helper[row][col]
 
 print(bcolors.WARN, 'Skeleton after connectivity restoration:', bcolors.ENDC)
 print(bcolors.ERR, 'Deleted:', deleted, bcolors.ENDC)
