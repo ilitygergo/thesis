@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 import bcolors
 from Common.functions import imreadgray
 from Common.functions import flip
@@ -16,7 +17,7 @@ print(" | . \| | | | | | | | |___|  __/  __/ | |____| | | | (_) | |")
 print(" |_|\_\_|_| |_| |_| |______\___|\___|  \_____|_| |_|\___/|_|", bcolors.ENDC)
 
 # Reading in the image as a gray image
-picture = 'chromosome'
+picture = 'fingerprintmini'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -61,6 +62,8 @@ for row in range(0, size[0]):
 
 equal = True
 lepes = 1
+kernel = np.ones((3, 3), np.uint8)
+kernel2 = np.ones((5, 5), np.uint8)
 
 print('Comp:')
 print(comp)
@@ -143,8 +146,58 @@ while equal:
     else:
         makeequalmatrix(img2, comp, size)
 
+# Ridge detection once more
+for row in range(0, size[0]):
+    for col in range(0, size[1]):
+        R[row][col] = 0
+        O1[row][col] = 0
+        O2[row][col] = 0
+        helper1[row][col] = 0
+        helper2[row][col] = 0
+        helper3[row][col] = 0
+        helper4[row][col] = 0
+
+# Ridge detection
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        O1[row][col] = erosion(comp, row, col)
+        O2[row][col] = erosion(comp, row, col)
+
+makeequalmatrix(helper1, O1, size)
+makeequalmatrix(helper2, O2, size)
+
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        O1[row][col] = dilation(helper1, row, col)
+        O2[row][col] = erosion(helper2, row, col)
+
+makeequalmatrix(helper3, O2, size)
+
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        O2[row][col] = dilation(helper3, row, col)
+
+makeequalmatrix(helper4, O2, size)
+
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        O2[row][col] = dilation(helper4, row, col)
+
+# print('O1:', O1)
+# print('O2:', O2)
+
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        if (int(comp[row][col]) - int(O1[row][col]) > 0) and int(comp[row][col]) - int(O2[row][col]) > h:
+            R[row][col] = comp[row][col]
+        else:
+            R[row][col] = 0
+# print('R:', R)
+
+print(comp, '\n', bcolors.ENDC)
+
 # Converting the values back to normal
-flip(comp)
+flip(R)
 
 # Saving
-cv2.imwrite('results/' + picture + '.png', comp)
+cv2.imwrite('results/' + picture + '.png', R)

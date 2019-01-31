@@ -20,12 +20,13 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'chinese'
+picture = 'b'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
 g1 = imreadgray('../Common/' + picture + '.png')
 g2 = imreadgray('../Common/' + picture + '.png')
+borders = imreadgray('../Common/' + picture + '.png')
 
 # Converting the values 0-255
 flip(img)
@@ -44,6 +45,7 @@ for row in range(size[0]):
             img[row][col] = 0
         g1[row][col] = 0
         g2[row][col] = 0
+        borders[row][col] = 0
 
 for row in range(size[0]):
     for col in range(size[1]):
@@ -100,11 +102,17 @@ while notequal:
     conc = 0
     conp = 0
     torolt = 0
+
+    for row in range(1, size[0] - 1):
+        for col in range(1, size[1] - 1):
+            if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
+                hatar += 1
+                borders[row][col] = 1
+
     for row in range(1, size[0] - 1):
         for col in range(1, size[1] - 1):
             if img[row][col] != 0:
-                if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
-                    hatar += 1
+                if borders[row][col] == 1:
                     if localmaximum(img[row][col], img[row][col + 1], img[row - 1][col + 1],
                                      img[row - 1][col], img[row - 1][col - 1], img[row][col - 1],
                                      img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1]):

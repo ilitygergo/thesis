@@ -478,7 +478,7 @@ def countf(img, row, col):
         f8 = 1
     else:
         f8 = 0
-    X = [f1, f8, f7, f6, f5, f4, f3, f2, f1]
+    X = [f1, f2, f3, f4, f5, f6, f7, f8, f1]
     last_sign = 0
     sign_changes = 0
 

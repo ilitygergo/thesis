@@ -7,9 +7,10 @@ from Common.functions import endpoint
 from Common.functions import connectedcorner
 from Common.functions import connectedpath
 from Common.functions import borderpoint
-from Common.functions import findroad
 from Common.functions import connectedcomponents
-from Common.functions import printmatrix
+from Common.functions import neighbour
+from Common.functions import equalmatrix
+from Common.functions import makeequalmatrix
 
 print(bcolors.OK, " _  __                    _____       _       _  ___           ")
 print(" | |/ /                   / ____|     | |     | |/ (_)          ")
@@ -21,7 +22,7 @@ print("                   __/ |                                        ")
 print("                  |___/                                         ", bcolors.ENDC, '\n')
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'test'
+picture = 'fingerprintmini'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -32,6 +33,7 @@ skeleton = imreadgray('../Common/' + picture + '.png')
 matrix = imreadgray('../Common/' + picture + '.png')
 matrix2 = imreadgray('../Common/' + picture + '.png')
 help = imreadgray('../Common/' + picture + '.png')
+borders = imreadgray('../Common/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
 flip(psis)
@@ -57,6 +59,7 @@ for row in range(0, size[0]):
         matrix[row][col] = 0
         matrix2[row][col] = 0
         help[row][col] = 0
+        borders[row][col] = 0
 
 print(bcolors.WARN, 'Original grayscale image', bcolors.ENDC)
 print(img, '\n')
@@ -91,25 +94,42 @@ for row in range(1, size[0] - 1):
 
 print(bcolors.WARN, 'PSI >= 6', bcolors.ENDC)
 print(img2, '\n')
+
+for row in range(1, size[0] - 1):
+    for col in range(1, size[1] - 1):
+        img[row][col] = img2[row][col]
 deleted = 0
+change = True
 
 for x in range(3):
-    for row in range(2, size[0] - 2):
-        for col in range(2, size[1] - 2):
-            if psi[row][col] == 6 + x:
-                if borderpoint(img2[row][col + 1], img2[row - 1][col], img2[row][col - 1], img2[row + 1][col]):
-                    if localmaximum(img2[row][col], img2[row][col + 1], img2[row - 1][col + 1],
-                                     img2[row - 1][col], img2[row - 1][col - 1], img2[row][col - 1],
-                                     img2[row + 1][col - 1], img2[row + 1][col], img2[row + 1][col + 1]):
-                        continue
-                    if endpoint(img2, row, col):
-                        continue
-                    if not connectedcorner(img2, row, col):
-                        continue
-                    if not connectedpath(img2, row, col):
-                        continue
-                    deleted += 1
-                    img2[row][col] = 0
+
+    while change:
+
+        for row in range(1, size[0] - 1):
+            for col in range(1, size[1] - 1):
+                if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
+                    borders[row][col] = 1
+
+        for row in range(2, size[0] - 2):
+            for col in range(2, size[1] - 2):
+                if psi[row][col] == 6 + x:
+                    if borders[row][col] == 1:
+                        if localmaximum(img2[row][col], img2[row][col + 1], img2[row - 1][col + 1],
+                                         img2[row - 1][col], img2[row - 1][col - 1], img2[row][col - 1],
+                                         img2[row + 1][col - 1], img2[row + 1][col], img2[row + 1][col + 1]):
+                            continue
+                        if endpoint(img2, row, col):
+                            continue
+                        if not connectedcorner(img2, row, col):
+                            continue
+                        if not connectedpath(img2, row, col):
+                            continue
+                        deleted += 1
+                        img2[row][col] = 0
+        if equalmatrix(img, img2, size):
+            break
+        else:
+            makeequalmatrix(img, img2, size)
 
 for row in range(1, size[0] - 1):
     for col in range(1, size[1] - 1):
@@ -120,42 +140,26 @@ matrix2 = connectedcomponents(matrix2, img2, size)
 print('Skeleton:')
 print(img2)
 
-count = True
-
 for row in range(1, size[0] - 1):
     count = True
     for col in range(1, size[1] - 1):
         if img2[row][col] != 0:
-            if matrix[row - 1][col] == 1:
-                findroad(matrix, matrix2, help, img, img2, row - 1, col, matrix2[row][col])
-                matrix2 = connectedcomponents(matrix2, img2, size)
-            if matrix[row - 1][col - 1] == 1:
-                findroad(matrix, matrix2, help, img, img2, row - 1, col - 1, matrix2[row][col])
-                matrix2 = connectedcomponents(matrix2, img2, size)
-            if matrix[row][col - 1] == 1:
-                findroad(matrix, matrix2, help, img, img2, row, col - 1, matrix2[row][col])
-                matrix2 = connectedcomponents(matrix2, img2, size)
-            if matrix[row + 1][col - 1] == 1:
-                findroad(matrix, matrix2, help, img, img2, row + 1, col - 1, matrix2[row][col])
-                matrix2 = connectedcomponents(matrix2, img2, size)
-            if matrix[row + 1][col] == 1:
-                findroad(matrix, matrix2, help, img, img2, row + 1, col, matrix2[row][col])
-                matrix2 = connectedcomponents(matrix2, img2, size)
-            if matrix[row + 1][col + 1] == 1:
-                findroad(matrix, matrix2, help, img, img2, row + 1, col + 1, matrix2[row][col])
-                matrix2 = connectedcomponents(matrix2, img2, size)
-            if matrix[row][col + 1] == 1:
-                findroad(matrix, matrix2, help, img, img2, row, col + 1, matrix2[row][col])
-                matrix2 = connectedcomponents(matrix2, img2, size)
-            if matrix[row - 1][col + 1] == 1:
-                findroad(matrix, matrix2, help, img, img2, row - 1, col + 1, matrix2[row][col])
-                matrix2 = connectedcomponents(matrix2, img2, size)
-            if count:
-                print(size[0] - 2, ' / ', row)
-                count = False
-        elif count:
-            print(size[0] - 2, ' / ', row)
-            count = False
+            if matrix[row - 1][col] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
+                img2[row - 1][col] = img[row - 1][col]
+            if matrix[row - 1][col - 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
+                img2[row - 1][col - 1] = img[row - 1][col - 1]
+            if matrix[row][col - 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
+                img2[row][col - 1] = img[row][col - 1]
+            if matrix[row + 1][col - 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
+                img2[row + 1][col - 1] = img[row + 1][col - 1]
+            if matrix[row + 1][col] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
+                img2[row + 1][col] = img[row + 1][col]
+            if matrix[row + 1][col + 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
+                img2[row + 1][col + 1] = img[row + 1][col + 1]
+            if matrix[row][col + 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
+                img2[row][col + 1] = img[row][col + 1]
+            if matrix[row - 1][col + 1] == 1 and neighbour(matrix2, row, col, matrix2[row][col]):
+                img2[row - 1][col + 1] = img[row - 1][col + 1]
 
 print(bcolors.WARN, 'Skeleton after connectivity restoration:', bcolors.ENDC)
 print(bcolors.ERR, 'Deleted:', deleted, bcolors.ENDC)
