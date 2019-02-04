@@ -15,7 +15,7 @@ print(" | . \| | | | | | | | |___|  __/  __/ | |____| | | | (_) | |")
 print(" |_|\_\_|_| |_| |_| |______\___|\___|  \_____|_| |_|\___/|_|", bcolors.ENDC)
 
 # Reading in the image as a gray image
-picture = 'test'
+picture = 'test2'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -41,7 +41,7 @@ flip(O1)
 flip(O2)
 
 # Initialization
-h = 30
+h = 50
 size = comp.shape
 for row in range(0, size[0]):
     for col in range(0, size[1]):
@@ -58,6 +58,27 @@ equal = True
 lepes = 1
 kernel = np.ones((3, 3), np.uint8)
 kernel2 = np.ones((5, 5), np.uint8)
+
+kernel[0][0] = 0
+kernel[0][2] = 0
+kernel[2][0] = 0
+kernel[2][2] = 0
+
+kernel2[0][0] = 0
+kernel2[0][1] = 0
+kernel2[0][3] = 0
+kernel2[0][4] = 0
+kernel2[1][0] = 0
+kernel2[1][4] = 0
+kernel2[3][0] = 0
+kernel2[3][4] = 0
+kernel2[4][0] = 0
+kernel2[4][1] = 0
+kernel2[4][3] = 0
+kernel2[4][4] = 0
+
+print(kernel)
+print(kernel2)
 
 print('Comp:')
 print(comp)
@@ -103,7 +124,7 @@ while equal:
     # Connectivity restoration
     for row in range(1, size[0] - 1):
         for col in range(1, size[1] - 1):
-            if R[row][col] == 0 and c8[row][col] >= 2:
+            if c8[row][col] >= 2:
                 compstar[row][col] = comp[row][col]
 
     # print('Comp*:', compstar)

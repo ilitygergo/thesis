@@ -2,7 +2,6 @@ import cv2
 import bcolors
 import copy
 import numpy as np
-import itertools
 
 
 # Reads a colored picture in gray
@@ -323,6 +322,23 @@ def borderpoint(n1, n3, n5, n7):
     return False
 
 
+# If one of the 8 neighbours of point has a value 0 than it is true
+def borderpoint8(img, row, col):
+    if img[row + 1][col] == 0 or img[row + 1][col + 1] == 0 or img[row][col + 1] == 0 or img[row - 1][col + 1] == 0 or \
+            img[row - 1][col] == 0 or img[row - 1][col - 1] == 0 or img[row][col - 1] == 0 or img[row + 1][col - 1]:
+        return True
+    return False
+
+
+# If only one of the 8 neighbour has a value 0 than it is true
+def eightcomponent(img, row, col):
+    array = []
+    array.extend([img[row + 1][col + 1], img[row - 1][col + 1], img[row - 1][col - 1], img[row + 1][col - 1]])
+    if np.count_nonzero(array) == 1:
+        return True
+    return False
+
+
 # The middle point has the highest grayness
 def localmaximum(n0, n1, n2, n3, n4, n5, n6, n7, n8):
     if n0 > n1 and n0 > n2 and n0 > n3 and n0 > n4 and n0 > n5 and n0 > n6 and n0 > n7 and n0 > n8:
@@ -438,42 +454,50 @@ def erosion(img, row, col):
 
 # Count the value differences in the 8 neighbourhood
 def countf(img, row, col):
+    # l = 1
     if img[row][col + 1] < img[row][col] and (img[row][col + 1] < img[row - 1][col + 1] or img[row][col + 1] < img[row - 1][col]):
         f1 = -1
     elif img[row][col + 1] > img[row - 1][col] and img[row - 1][col] < img[row][col]:
         f1 = 1
     else:
         f1 = 0
+    # l = 2
     if img[row - 1][col] < img[row][col] and (img[row - 1][col] < img[row - 1][col - 1] or img[row - 1][col] < img[row][col - 1]):
         f3 = -1
     elif img[row - 1][col] > img[row][col - 1] and img[row][col - 1] < img[row][col]:
         f3 = 1
     else:
         f3 = 0
+    # l = 3
     if img[row][col - 1] < img[row][col] and (img[row][col - 1] < img[row + 1][col - 1] or img[row][col - 1] < img[row + 1][col]):
         f5 = -1
     elif img[row][col - 1] > img[row + 1][col] and img[row + 1][col] < img[row][col]:
         f5 = 1
     else:
         f5 = 0
+    # l = 4
     if img[row + 1][col] < img[row][col] and (img[row + 1][col] < img[row + 1][col + 1] or img[row + 1][col] < img[row][col + 1]):
         f7 = -1
     elif img[row + 1][col] > img[row][col + 1] and img[row][col + 1] < img[row][col]:
         f7 = 1
     else:
         f7 = 0
+    # l = 1
     if img[row - 1][col + 1] > img[row - 1][col] and img[row - 1][col] < img[row][col]:
         f2 = 1
     else:
         f2 = 0
+    # l = 2
     if img[row - 1][col - 1] > img[row][col - 1] and img[row][col - 1] < img[row][col]:
         f4 = 1
     else:
         f4 = 0
+    # l = 3
     if img[row + 1][col - 1] > img[row + 1][col] and img[row + 1][col] < img[row][col]:
         f6 = 1
     else:
         f6 = 0
+    # l = 4
     if img[row + 1][col + 1] > img[row][col + 1] and img[row][col + 1] < img[row][col]:
         f8 = 1
     else:
