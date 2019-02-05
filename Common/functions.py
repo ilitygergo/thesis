@@ -211,6 +211,13 @@ def makeequalmatrix(mat1, mat2, size):
             mat1[row][col] = mat2[row][col]
 
 
+# Makes a matrix values 0
+def matrixzero(mat, size):
+    for row in range(0, size[0]):
+        for col in range(0, size[1]):
+            mat[row][col] = 0
+
+
 # Prints out the matrix
 def printmatrix(matrix):
     if len(matrix) < 15:
@@ -325,7 +332,7 @@ def borderpoint(n1, n3, n5, n7):
 # If one of the 8 neighbours of point has a value 0 than it is true
 def borderpoint8(img, row, col):
     if img[row + 1][col] == 0 or img[row + 1][col + 1] == 0 or img[row][col + 1] == 0 or img[row - 1][col + 1] == 0 or \
-            img[row - 1][col] == 0 or img[row - 1][col - 1] == 0 or img[row][col - 1] == 0 or img[row + 1][col - 1]:
+            img[row - 1][col] == 0 or img[row - 1][col - 1] == 0 or img[row][col - 1] == 0 or img[row + 1][col - 1] == 0:
         return True
     return False
 
@@ -659,3 +666,9 @@ def countnotzero(img, row, col):
     if sum(x is not 0 for x in lst) == 2:
         return True
     return False
+
+
+# The 10 different objects that cannot be removed
+def isobject(img, c, r):
+    return True
+
