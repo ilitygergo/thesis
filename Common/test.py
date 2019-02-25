@@ -1,18 +1,37 @@
-import cv2
-import numpy as np
-from Common.functions import imreadgray
-from Common.functions import flip
+from Common.functions import converttopicture
+from Common.functions import simple
+from Common.functions import simpleafterremove
+from Common.functions import forbidden
+from Common.functions import borderpoint8
+from Common.functions import numtotext
 
-picture = 'sima'
-img = imreadgray('../Common/' + picture + '.png')
-flip(img)
+binary = 0
+matrix = 0
+# 16777216
 
-print(img)
+for x in range(20):
+    binary = format(x, 'b')
+    matrix = (converttopicture(list(reversed(binary))))
+    if matrix[2][2] == 0 or not borderpoint8(matrix, 2, 2):
+        numtotext('test', 0)
+        continue
+    if simple(matrix, 2, 2):
+        numtotext('test', 0)
+        continue
+    if not simpleafterremove(matrix, 2, 2):
+        numtotext('test', 0)
+        continue
+    if forbidden(matrix, 2, 2):
+        numtotext('test', 0)
+        continue
+    numtotext('test', 1)
+    print(x)
 
-kernel = np.ones((3, 3), np.uint8)
-erosion = cv2.erode(img, kernel, iterations=1)
-dilation = cv2.dilate(img, kernel, iterations=1)
+print(matrix)
 
-print(erosion)
-print(dilation)
+# Kiolvasás
+with open('test.txt') as file:
+    content = file.read().splitlines()
 
+print(int(str(1011), 2))
+print(content[int(str(1011), 2)])

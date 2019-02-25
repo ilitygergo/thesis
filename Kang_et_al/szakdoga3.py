@@ -103,7 +103,7 @@ for x in range(3):
 
         for row in range(1, size[0] - 1):
             for col in range(1, size[1] - 1):
-                if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
+                if borderpoint(img, row, col):
                     borders[row][col] = 1
 
         for row in range(2, size[0] - 2):

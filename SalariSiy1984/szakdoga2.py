@@ -105,7 +105,7 @@ while notequal:
 
     for row in range(1, size[0] - 1):
         for col in range(1, size[1] - 1):
-            if borderpoint(img[row][col + 1], img[row - 1][col], img[row][col - 1], img[row + 1][col]):
+            if borderpoint(img, row, col):
                 hatar += 1
                 borders[row][col] = 1
 

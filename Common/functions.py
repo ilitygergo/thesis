@@ -323,25 +323,8 @@ def connectedcomponents(matrix, img, size):
 
 
 # If one of the neighbours of point has a value 0 than it is true
-def borderpoint(n1, n3, n5, n7):
-    if n1 == 0 or n3 == 0 or n5 == 0 or n7 == 0:
-        return True
-    return False
-
-
-# If one of the 8 neighbours of point has a value 0 than it is true
-def borderpoint8(img, row, col):
-    if img[row + 1][col] == 0 or img[row + 1][col + 1] == 0 or img[row][col + 1] == 0 or img[row - 1][col + 1] == 0 or \
-            img[row - 1][col] == 0 or img[row - 1][col - 1] == 0 or img[row][col - 1] == 0 or img[row + 1][col - 1] == 0:
-        return True
-    return False
-
-
-# If only one of the 8 neighbour has a value 0 than it is true
-def eightcomponent(img, row, col):
-    array = []
-    array.extend([img[row + 1][col + 1], img[row - 1][col + 1], img[row - 1][col - 1], img[row + 1][col - 1]])
-    if np.count_nonzero(array) == 1:
+def borderpoint(img, row, col):
+    if img[row + 1][col] == 0 or img[row - 1][col] == 0 or img[row][col + 1] == 0 or img[row][col - 1] == 0:
         return True
     return False
 
@@ -353,7 +336,7 @@ def localmaximum(n0, n1, n2, n3, n4, n5, n6, n7, n8):
     return False
 
 
-# Checks if it is an end point
+# Returns true if the img[row][col] has only one 4 neighbour with nonzero value
 def endpoint(img, row, col):
     array = []
     array.extend([img[row - 1][col], img[row][col - 1], img[row + 1][col], img[row][col + 1]])
@@ -462,28 +445,32 @@ def erosion(img, row, col):
 # Count the value differences in the 8 neighbourhood
 def countf(img, row, col):
     # l = 1
-    if img[row][col + 1] < img[row][col] and (img[row][col + 1] < img[row - 1][col + 1] or img[row][col + 1] < img[row - 1][col]):
+    if img[row][col + 1] < img[row][col] and \
+            (img[row][col + 1] < img[row - 1][col + 1] or img[row][col + 1] < img[row - 1][col]):
         f1 = -1
     elif img[row][col + 1] > img[row - 1][col] and img[row - 1][col] < img[row][col]:
         f1 = 1
     else:
         f1 = 0
     # l = 2
-    if img[row - 1][col] < img[row][col] and (img[row - 1][col] < img[row - 1][col - 1] or img[row - 1][col] < img[row][col - 1]):
+    if img[row - 1][col] < img[row][col] and \
+            (img[row - 1][col] < img[row - 1][col - 1] or img[row - 1][col] < img[row][col - 1]):
         f3 = -1
     elif img[row - 1][col] > img[row][col - 1] and img[row][col - 1] < img[row][col]:
         f3 = 1
     else:
         f3 = 0
     # l = 3
-    if img[row][col - 1] < img[row][col] and (img[row][col - 1] < img[row + 1][col - 1] or img[row][col - 1] < img[row + 1][col]):
+    if img[row][col - 1] < img[row][col] and \
+            (img[row][col - 1] < img[row + 1][col - 1] or img[row][col - 1] < img[row + 1][col]):
         f5 = -1
     elif img[row][col - 1] > img[row + 1][col] and img[row + 1][col] < img[row][col]:
         f5 = 1
     else:
         f5 = 0
     # l = 4
-    if img[row + 1][col] < img[row][col] and (img[row + 1][col] < img[row + 1][col + 1] or img[row + 1][col] < img[row][col + 1]):
+    if img[row + 1][col] < img[row][col] and \
+            (img[row + 1][col] < img[row + 1][col + 1] or img[row + 1][col] < img[row][col + 1]):
         f7 = -1
     elif img[row + 1][col] > img[row][col + 1] and img[row][col + 1] < img[row][col]:
         f7 = 1
@@ -509,11 +496,11 @@ def countf(img, row, col):
         f8 = 1
     else:
         f8 = 0
-    X = [f1, f2, f3, f4, f5, f6, f7, f8, f1]
+    clockwise = [f1, f2, f3, f4, f5, f6, f7, f8, f1]
     last_sign = 0
     sign_changes = 0
 
-    for x in X:
+    for x in clockwise:
         if x == 0:
             continue
         elif x == 1:
@@ -668,7 +655,168 @@ def countnotzero(img, row, col):
     return False
 
 
-# The 10 different objects that cannot be removed
-def isobject(img, c, r):
+# Counts the components in a picture
+def hilditch(img, row, col):
+    c = 0
+    if img[row - 1][col] == 0 and (img[row - 1][col + 1] or img[row][col + 1]):
+        c += 1
+    if img[row][col + 1] == 0 and (img[row + 1][col + 1] or img[row + 1][col]):
+        c += 1
+    if img[row + 1][col] == 0 and (img[row + 1][col - 1] or img[row][col - 1]):
+        c += 1
+    if img[row][col - 1] == 0 and (img[row - 1][col - 1] or img[row - 1][col]):
+        c += 1
+    if c != 1:
+        return False
     return True
 
+
+# If one of the 8 neighbours of point has a value 0 than it is true
+def borderpoint8(img, row, col):
+    if img[row + 1][col] == 0 or img[row + 1][col + 1] == 0 or img[row][col + 1] == 0 or img[row - 1][col + 1] == 0 or \
+      img[row - 1][col] == 0 or img[row - 1][col - 1] == 0 or img[row][col - 1] == 0 or img[row + 1][col - 1] == 0:
+        return True
+    return False
+
+
+# Returns true if a point is simple
+def simple(img, row, col):
+    print(countf(img, row, col))
+    if borderpoint(img, row, col) and countf(img, row, col):
+        return True
+    return False
+
+
+# Returns true if neighbour remains simple after img[row][col] is deleted
+def simpleafterremove(img, row, col):
+    if simple(img, row, col):
+        if simpleafterhelper(img, row, col, row, col - 1) and simpleafterhelper(img, row, col, row + 1, col) and \
+           simpleafterhelper(img, row, col, row - 1, col) and simpleafterhelper(img, row, col, row, col + 1):
+            return True
+    return True
+
+
+# Returns True if the neighbour can be deleted
+def simpleafterhelper(img, x, y, row, col):
+    default = img[x][y]
+    if simple(img, row, col):
+        img[x][y] = 0
+        if simple(img, row, col):
+            img[x][y] = default
+            return True
+        else:
+            return False
+    return True
+
+
+# Returns True if the field equals any of the forbidden shapes
+def forbidden(img, row, col):
+    # a
+    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1]:
+        return True
+    # b
+    if img[row][col] == 1 and img[row][col + 1] == 1 and img[row][col + 2] == 0 and img[row - 1][col + 2] == 0 and \
+       img[row - 1][col + 1] == 0 and img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and \
+       img[row][col - 1] == 0 and img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and \
+       img[row + 1][col + 1] == 0 and img[row + 1][col + 2] == 0:
+        return True
+    # c
+    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 1 and img[row + 1][col + 1] == 0 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0:
+        return True
+    # d
+    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 1 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
+       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row - 1][col + 2] == 0:
+        return True
+    # g
+    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 1 and img[row + 1][col + 1] == 1 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
+       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row - 1][col + 2] == 0:
+        return True
+    # h
+    if img[row][col] == 1 and img[row][col + 1] == 1 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 1 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
+       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row - 1][col + 2] == 0:
+        return True
+    # i
+    if img[row][col] == 1 and img[row][col + 1] == 1 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 1 and img[row + 1][col + 1] == 0 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
+       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row - 1][col + 2] == 0:
+        return True
+    # j
+    if img[row][col] == 1 and img[row][col + 1] == 1 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 1 and img[row + 1][col + 1] == 1 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
+       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row - 1][col + 2] == 0:
+        return True
+    # e
+    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 1 and img[row + 1][col] == 0 and img[row + 1][col + 1] and \
+       img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and img[row + 1][col - 2] == 0 and \
+       img[row + 2][col - 2] == 0 and img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and \
+       img[row + 2][col + 1] == 0:
+        return True
+    # f
+    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 1 and img[row + 1][col] == 1 and img[row + 1][col + 1] and \
+       img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and img[row + 1][col - 2] == 0 and \
+       img[row + 2][col - 2] == 0 and img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and \
+       img[row + 2][col + 1] == 0:
+        return True
+    return False
+
+
+# Converts the picture into an array
+def converttoarray(img, row, col):
+    array = [img[row - 2][col - 2], img[row - 2][col - 1], img[row - 2][col], img[row - 2][col + 1], img[row - 2][col + 2],
+             img[row - 1][col - 2], img[row - 1][col - 1], img[row - 1][col], img[row - 1][col + 1], img[row - 1][col + 2],
+             img[row][col - 2], img[row][col - 1], img[row][col + 1], img[row][col + 2],
+             img[row + 1][col - 2], img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1], img[row + 1][col + 2],
+             img[row + 2][col- 2], img[row + 2][col - 1], img[row + 2][col], img[row + 2][col + 1], img[row + 2][col + 2]]
+    return array
+
+
+# Converts an array to a picture matrix
+def converttopicture(binary):
+    picture = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    for x in range(len(binary)):
+        picture[x] = int(binary[x])
+    return picture.reshape(5, 5)
+
+
+# binary to matrix
+def binarytomatrix(binary):
+    matrix = np.ones((5, 5), np.uint8)
+
+    for r in range(0, 5):
+        for c in range(0, 5):
+            matrix[r][c] = 0
+    return True
+
+
+# Writes a number into a file adds a new line
+def numtotext(filename, number):
+    with open(filename + '.txt', 'a') as file:
+        file.write(str(number))
+        file.write('\n')
