@@ -87,10 +87,8 @@ def notendpoint(b, d, h, f, r):
     if f >= r:
         szam += 1
     if szam >= 2:
-        # print('True')
         return True
     else:
-        # print('False')
         return False
 
 
@@ -679,10 +677,42 @@ def borderpoint8(img, row, col):
     return False
 
 
+# Checks the neighbourhood of a point and returns true if it has only one object
+def oneobject(img, row, col):
+    switch = 0
+    last_value = img[row - 1][col - 1]
+    values = [img[row][col - 1], img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1],
+              img[row][col + 1], img[row - 1][col + 1], img[row - 1][col]]
+    for x in values:
+        if last_value > 0 and x == 0:
+            switch += 1
+        if last_value == 0 and x > 0:
+            switch += 1
+        if switch > 2:
+            return False
+        last_value = x
+    return True
+
+
+# Returns False if it has 1 or 2 neighbours
+def notendpoint2(img, row, col):
+    neighbour = 0
+    if img[row - 1][col] != 0:
+        neighbour += 1
+    if img[row][col - 1] != 0:
+        neighbour += 1
+    if img[row + 1][col] != 0:
+        neighbour += 1
+    if img[row][col + 1] != 0:
+        neighbour += 1
+    if neighbour >= 3:
+        return True
+    return False
+
+
 # Returns true if a point is simple
 def simple(img, row, col):
-    print(countf(img, row, col))
-    if borderpoint(img, row, col) and countf(img, row, col):
+    if borderpoint(img, row, col) and oneobject(img, row, col):
         return True
     return False
 

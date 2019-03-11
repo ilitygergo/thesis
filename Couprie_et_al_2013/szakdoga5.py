@@ -7,7 +7,6 @@ from Common.functions import makeequalmatrix
 from Common.functions import simple
 from Common.functions import simpleafterremove
 from Common.functions import forbidden
-from Common.functions import borderpoint
 
 print(bcolors.OK, "  _____                       _             _           _ ")
 print("  / ____|                     (_)           | |         | |")
@@ -19,7 +18,7 @@ print("                   | |                                     ")
 print("                   |_|                                     ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'sima2'
+picture = 'sima'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -39,11 +38,13 @@ print(img, '\n')
 while True:
     for row in range(2, size[0] - 2):
         for col in range(2, size[1] - 2):
-            if img[row][col] != 0 and borderpoint(img, row, col):
-                if simple(img, row, col):
-                    if simpleafterremove(img, row, col):
-                        if not forbidden(img, row, col):
-                            helper[row][col] = 1
+            if img[row][col] == 0:
+                continue
+            if not simple(img, row, col):
+                continue
+            if forbidden(img, row, col):
+                continue
+            helper[row][col] = 1
     print(helper)
 
     for row in range(0, size[0]):
