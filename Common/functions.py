@@ -719,10 +719,9 @@ def simple(img, row, col):
 
 # Returns true if neighbour remains simple after img[row][col] is deleted
 def simpleafterremove(img, row, col):
-    if simple(img, row, col):
-        if simpleafterhelper(img, row, col, row, col - 1) and simpleafterhelper(img, row, col, row + 1, col) and \
-           simpleafterhelper(img, row, col, row - 1, col) and simpleafterhelper(img, row, col, row, col + 1):
-            return True
+    if simpleafterhelper(img, row, col, row, col - 1) and simpleafterhelper(img, row, col, row + 1, col) and \
+       simpleafterhelper(img, row, col, row - 1, col) and simpleafterhelper(img, row, col, row, col + 1):
+        return True
     return True
 
 
@@ -742,77 +741,202 @@ def simpleafterhelper(img, x, y, row, col):
 # Returns True if the field equals any of the forbidden shapes
 def forbidden(img, row, col):
     # a
-    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
        img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
-       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1]:
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0:
         return True
     # b
-    if img[row][col] == 1 and img[row][col + 1] == 1 and img[row][col + 2] == 0 and img[row - 1][col + 2] == 0 and \
+        # left
+    if img[row][col] != 0 and img[row][col + 1] != 0 and img[row][col + 2] == 0 and img[row - 1][col + 2] == 0 and \
        img[row - 1][col + 1] == 0 and img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and \
        img[row][col - 1] == 0 and img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and \
        img[row + 1][col + 1] == 0 and img[row + 1][col + 2] == 0:
         return True
+        # right
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] != 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and img[row + 1][col - 2] == 0:
+        return True
     # c
-    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+        # up
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
        img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
-       img[row + 1][col - 1] == 0 and img[row + 1][col] == 1 and img[row + 1][col + 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] != 0 and img[row + 1][col + 1] == 0 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0:
+        return True
+        # down
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] != 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
        img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0:
         return True
     # d
-    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+        # left up
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
        img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
-       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 1 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] != 0 and \
        img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
        img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
        img[row - 1][col + 2] == 0:
         return True
-    # g
-    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
-       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
-       img[row + 1][col - 1] == 0 and img[row + 1][col] == 1 and img[row + 1][col + 1] == 1 and \
-       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
-       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
-       img[row - 1][col + 2] == 0:
-        return True
-    # h
-    if img[row][col] == 1 and img[row][col + 1] == 1 and img[row - 1][col + 1] == 0 and \
-       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
-       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 1 and \
-       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
-       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
-       img[row - 1][col + 2] == 0:
-        return True
-    # i
-    if img[row][col] == 1 and img[row][col + 1] == 1 and img[row - 1][col + 1] == 0 and \
-       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
-       img[row + 1][col - 1] == 0 and img[row + 1][col] == 1 and img[row + 1][col + 1] == 0 and \
-       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
-       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
-       img[row - 1][col + 2] == 0:
-        return True
-    # j
-    if img[row][col] == 1 and img[row][col + 1] == 1 and img[row - 1][col + 1] == 0 and \
-       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
-       img[row + 1][col - 1] == 0 and img[row + 1][col] == 1 and img[row + 1][col + 1] == 1 and \
-       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
-       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
-       img[row - 1][col + 2] == 0:
+        # right down
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] != 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 2][col + 1] == 0 and img[row - 2][col] == 0 and img[row - 2][col - 1] == 0 and \
+       img[row - 2][col - 2] == 0 and img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and \
+       img[row + 1][col - 2] == 0:
         return True
     # e
-    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+        # right up
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
        img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
-       img[row + 1][col - 1] == 1 and img[row + 1][col] == 0 and img[row + 1][col + 1] and \
+       img[row + 1][col - 1] != 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
        img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and img[row + 1][col - 2] == 0 and \
        img[row + 2][col - 2] == 0 and img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and \
        img[row + 2][col + 1] == 0:
         return True
-    # f
-    if img[row][col] == 1 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+        # left down
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] != 0 and \
        img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
-       img[row + 1][col - 1] == 1 and img[row + 1][col] == 1 and img[row + 1][col + 1] and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 2][col - 1] == 0 and img[row - 2][col] == 0 and img[row - 2][col + 1] == 0 and \
+       img[row - 2][col + 2] == 0 and img[row - 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row + 1][col + 2] == 0:
+        return True
+    # f
+        # right up
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] != 0 and img[row + 1][col] != 0 and img[row + 1][col + 1] == 0 and \
        img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and img[row + 1][col - 2] == 0 and \
        img[row + 2][col - 2] == 0 and img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and \
        img[row + 2][col + 1] == 0:
+        return True
+        # right down
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] != 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] != 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 2][col + 1] == 0 and img[row - 2][col] == 0 and img[row - 2][col - 1] == 0 and \
+       img[row - 2][col - 2] == 0 and img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and \
+       img[row + 1][col - 2] == 0:
+        return True
+        # left down
+    if img[row][col] != 0 and img[row][col + 1] != 0 and img[row - 1][col + 1] != 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 2][col - 1] == 0 and img[row - 2][col] == 0 and img[row - 2][col + 1] == 0 and \
+       img[row - 2][col + 2] == 0 and img[row - 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row + 1][col + 2] == 0:
+        return True
+    # g
+        # left up
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] != 0 and img[row + 1][col + 1] != 0 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
+       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row - 1][col + 2] == 0:
+        return True
+        # left down
+    if img[row][col] != 0 and img[row][col + 1] != 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] != 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and img[row - 1][col + 2] == 0 and \
+       img[row - 2][col + 2] == 0 and img[row - 2][col + 1] == 0 and img[row - 2][col] == 0 and \
+       img[row - 2][col - 1] == 0:
+        return True
+        # right down
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] != 0 and img[row][col - 1] != 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 2][col + 1] == 0 and img[row - 2][col] == 0 and img[row - 2][col - 1] == 0 and \
+       img[row - 2][col - 2] == 0 and img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and \
+       img[row + 1][col - 2] == 0:
+        return True
+    # h
+        # left up
+    if img[row][col] != 0 and img[row][col + 1] != 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] != 0 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
+       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row - 1][col + 2] == 0:
+        return True
+        # right up
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] != 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] != 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and img[row + 1][col - 2] == 0 and \
+       img[row + 2][col - 2] == 0 and img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and \
+       img[row + 2][col + 1] == 0:
+        return True
+        # right down
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] != 0 and img[row - 1][col - 1] != 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 2][col + 1] == 0 and img[row - 2][col] == 0 and img[row - 2][col - 1] == 0 and \
+       img[row - 2][col - 2] == 0 and img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and \
+       img[row + 1][col - 2] == 0:
+        return True
+    # i
+        # left up
+    if img[row][col] != 0 and img[row][col + 1] != 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] != 0 and img[row + 1][col + 1] == 0 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
+       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row - 1][col + 2] == 0:
+        return True
+        # right up
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] != 0 and \
+       img[row + 1][col - 1] != 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and img[row + 1][col - 2] == 0 and \
+       img[row + 2][col - 2] == 0 and img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and \
+       img[row + 2][col + 1] == 0:
+        return True
+        # left down
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] != 0 and \
+       img[row - 1][col] != 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and img[row - 1][col + 2] == 0 and \
+       img[row - 2][col + 2] == 0 and img[row - 2][col + 1] == 0 and img[row - 2][col] == 0 and \
+       img[row - 2][col - 1] == 0:
+        return True
+    # j
+        # left up
+    if img[row][col] != 0 and img[row][col + 1] != 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] != 0 and img[row + 1][col + 1] != 0 and \
+       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0 and \
+       img[row + 2][col + 2] == 0 and img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and \
+       img[row - 1][col + 2] == 0:
+        return True
+        # right up
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] == 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] != 0 and \
+       img[row + 1][col - 1] != 0 and img[row + 1][col] != 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and img[row + 1][col - 2] == 0 and \
+       img[row + 2][col - 2] == 0 and img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and \
+       img[row + 2][col + 1] == 0:
+        return True
+        # left down
+    if img[row][col] != 0 and img[row][col + 1] != 0 and img[row - 1][col + 1] != 0 and \
+       img[row - 1][col] != 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row + 1][col + 2] == 0 and img[row][col + 2] == 0 and img[row - 1][col + 2] == 0 and \
+       img[row - 2][col + 2] == 0 and img[row - 2][col + 1] == 0 and img[row - 2][col] == 0 and \
+       img[row - 2][col - 1] == 0:
+        return True
+        # right down
+    if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
+       img[row - 1][col] != 0 and img[row - 1][col - 1] != 0 and img[row][col - 1] != 0 and \
+       img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
+       img[row - 2][col + 1] == 0 and img[row - 2][col] == 0 and img[row - 2][col - 1] == 0 and \
+       img[row - 2][col - 2] == 0 and img[row - 1][col - 2] == 0 and img[row][col - 2] == 0 and \
+       img[row + 1][col - 2] == 0:
         return True
     return False
 
