@@ -4,9 +4,11 @@ from Common.functions import imreadgray
 from Common.functions import flip
 from Common.functions import equalmatrix
 from Common.functions import makeequalmatrix
-from Common.functions import simple
+from Common.functions import oneobject
+from Common.functions import borderpoint8
 from Common.functions import simpleafterremove
 from Common.functions import forbidden
+from Common.functions import endpointmodified
 
 print(bcolors.OK, "  _____                       _             _           _ ")
 print("  / ____|                     (_)           | |         | |")
@@ -18,15 +20,17 @@ print("                   | |                                     ")
 print("                   |_|                                     ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'sima'
+picture = 'test'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
+border = imreadgray('../Common/' + picture + '.png')
 helper = imreadgray('../Common/' + picture + '.png')
 
 # Converting values 0-255
 img = flip(img)
 img2 = flip(img2)
+border = flip(border)
 helper = flip(helper)
 
 # Initialization
@@ -36,16 +40,27 @@ size = img.shape
 print(img, '\n')
 
 while True:
+
     for row in range(2, size[0] - 2):
         for col in range(2, size[1] - 2):
             if img[row][col] == 0:
                 continue
-            if not simple(img, row, col):
+            if borderpoint8(img, row, col):
+                border[row][col] = 1
+
+    for row in range(2, size[0] - 2):
+        for col in range(2, size[1] - 2):
+            if border[row][col] != 1:
+                continue
+            if endpointmodified(img, row, col):
+                continue
+            if not oneobject(img, row, col) <= 1:
+                continue
+            if not simpleafterremove(img, row, col, border):
                 continue
             if forbidden(img, row, col):
                 continue
             helper[row][col] = 1
-    print(helper)
 
     for row in range(0, size[0]):
         for col in range(0, size[1]):
@@ -53,6 +68,7 @@ while True:
                 img[row][col] = 0
 
     makeequalmatrix(helper, img, size)
+    makeequalmatrix(border, img, size)
 
     lepes += 1
     if equalmatrix(img, img2, size):

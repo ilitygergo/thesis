@@ -368,6 +368,14 @@ def endpoint(img, row, col):
 
     return False
 
+# Returns true if the img[row][col] has only one 4 neighbour with nonzero value or only one 8 neighbour with zero value
+def endpointmodified(img, row, col):
+    four = [img[row - 1][col], img[row][col - 1], img[row][col + 1], img[row + 1][col]]
+    eight = [img[row - 1][col - 1], img[row - 1][col + 1], img[row + 1][col - 1], img[row + 1][col + 1]]
+    if np.count_nonzero(four) == 1 or np.count_nonzero(eight) == 1:
+        return True
+    return False
+
 
 # Returns True if the point can be deleted so the path is not weakened in the corner
 def connectedcorner(img, row, col):
@@ -677,21 +685,18 @@ def borderpoint8(img, row, col):
     return False
 
 
-# Checks the neighbourhood of a point and returns true if it has only one object
+# Checks the neighbourhood of a point and returns the number of objects in the neighbourhood
 def oneobject(img, row, col):
-    switch = 0
-    last_value = img[row - 1][col - 1]
-    values = [img[row][col - 1], img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1],
-              img[row][col + 1], img[row - 1][col + 1], img[row - 1][col]]
-    for x in values:
-        if last_value > 0 and x == 0:
-            switch += 1
-        if last_value == 0 and x > 0:
-            switch += 1
-        if switch > 2:
-            return False
-        last_value = x
-    return True
+    objects = 0
+    if img[row - 1][col] == 0 and (img[row - 1][col + 1] != 0 or img[row][col + 1] != 0):
+        objects += 1
+    if img[row][col + 1] == 0 and (img[row + 1][col + 1] != 0 or img[row + 1][col] != 0):
+        objects += 1
+    if img[row + 1][col] == 0 and (img[row + 1][col - 1] != 0 or img[row][col - 1] != 0):
+        objects += 1
+    if img[row][col - 1] == 0 and (img[row - 1][col - 1] != 0 or img[row - 1][col] != 0):
+        objects += 1
+    return objects
 
 
 # Returns False if it has 1 or 2 neighbours
@@ -710,30 +715,26 @@ def notendpoint2(img, row, col):
     return False
 
 
-# Returns true if a point is simple
-def simple(img, row, col):
-    if borderpoint(img, row, col) and oneobject(img, row, col):
+# Returns true if neighbour remains simple after img[row][col] is deleted
+def simpleafterremove(img, row, col, border):
+    if simpleafterhelper(img, row, col, row, col - 1, border) and \
+       simpleafterhelper(img, row, col, row + 1, col,  border) and \
+       simpleafterhelper(img, row, col, row - 1, col, border) and \
+       simpleafterhelper(img, row, col, row, col + 1,  border):
         return True
     return False
 
 
-# Returns true if neighbour remains simple after img[row][col] is deleted
-def simpleafterremove(img, row, col):
-    if simpleafterhelper(img, row, col, row, col - 1) and simpleafterhelper(img, row, col, row + 1, col) and \
-       simpleafterhelper(img, row, col, row - 1, col) and simpleafterhelper(img, row, col, row, col + 1):
-        return True
-    return True
-
-
 # Returns True if the neighbour can be deleted
-def simpleafterhelper(img, x, y, row, col):
-    default = img[x][y]
-    if simple(img, row, col):
+def simpleafterhelper(img, x, y, row, col, border):
+    default = copy.deepcopy(img[x][y])
+    if oneobject(img, row, col) <= 1 and border[row][col] == 1 and img[row][col] != 0:
         img[x][y] = 0
-        if simple(img, row, col):
+        if oneobject(img, row, col) <= 1 and border[row][col] == 1 and img[row][col] != 0:
             img[x][y] = default
             return True
         else:
+            img[x][y] = default
             return False
     return True
 
@@ -769,7 +770,7 @@ def forbidden(img, row, col):
     if img[row][col] != 0 and img[row][col + 1] == 0 and img[row - 1][col + 1] == 0 and \
        img[row - 1][col] != 0 and img[row - 1][col - 1] == 0 and img[row][col - 1] == 0 and \
        img[row + 1][col - 1] == 0 and img[row + 1][col] == 0 and img[row + 1][col + 1] == 0 and \
-       img[row + 2][col - 1] == 0 and img[row + 2][col] == 0 and img[row + 2][col + 1] == 0:
+       img[row - 2][col - 1] == 0 and img[row - 2][col] == 0 and img[row - 2][col + 1] == 0:
         return True
     # d
         # left up

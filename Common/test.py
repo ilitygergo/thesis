@@ -1,5 +1,5 @@
 from Common.functions import converttopicture
-from Common.functions import simple
+from Common.functions import oneobject
 from Common.functions import simpleafterremove
 from Common.functions import forbidden
 from Common.functions import borderpoint8
@@ -15,7 +15,7 @@ for x in range(20):
     if matrix[2][2] == 0 or not borderpoint8(matrix, 2, 2):
         numtotext('test', 0)
         continue
-    if simple(matrix, 2, 2):
+    if oneobject(matrix, 2, 2):
         numtotext('test', 0)
         continue
     if not simpleafterremove(matrix, 2, 2):
