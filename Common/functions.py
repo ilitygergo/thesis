@@ -685,6 +685,14 @@ def borderpoint8(img, row, col):
     return False
 
 
+# If one of the 8 neighbours has a value smaller than the middle point, it returns true
+def borderpoint8modified(img, row, col):
+    if img[row + 1][col] < img[row][col] or img[row + 1][col + 1] < img[row][col] or img[row][col + 1] < img[row][col] or img[row - 1][col + 1] < img[row][col] or \
+      img[row - 1][col] < img[row][col] or img[row - 1][col - 1] < img[row][col] or img[row][col - 1] < img[row][col] or img[row + 1][col - 1] == 0:
+        return True
+    return False
+
+
 # Checks the neighbourhood of a point and returns the number of objects in the neighbourhood
 def oneobject(img, row, col):
     objects = 0
@@ -716,21 +724,21 @@ def notendpoint2(img, row, col):
 
 
 # Returns true if neighbour remains simple after img[row][col] is deleted
-def simpleafterremove(img, row, col, border):
-    if simpleafterhelper(img, row, col, row, col - 1, border) and \
-       simpleafterhelper(img, row, col, row + 1, col,  border) and \
-       simpleafterhelper(img, row, col, row - 1, col, border) and \
-       simpleafterhelper(img, row, col, row, col + 1,  border):
+def simpleafterremove(img, row, col):
+    if simpleafterhelper(img, row, col, row, col - 1) and \
+       simpleafterhelper(img, row, col, row + 1, col) and \
+       simpleafterhelper(img, row, col, row - 1, col) and \
+       simpleafterhelper(img, row, col, row, col + 1):
         return True
     return False
 
 
 # Returns True if the neighbour can be deleted
-def simpleafterhelper(img, x, y, row, col, border):
+def simpleafterhelper(img, x, y, row, col):
     default = copy.deepcopy(img[x][y])
-    if oneobject(img, row, col) <= 1 and border[row][col] == 1 and img[row][col] != 0:
+    if oneobject(img, row, col) <= 1 and img[row][col] != 0:
         img[x][y] = 0
-        if oneobject(img, row, col) <= 1 and border[row][col] == 1 and img[row][col] != 0:
+        if oneobject(img, row, col) <= 1 and img[row][col] != 0:
             img[x][y] = default
             return True
         else:
@@ -975,3 +983,13 @@ def numtotext(filename, number):
     with open(filename + '.txt', 'a') as file:
         file.write(str(number))
         file.write('\n')
+
+
+# Creates a 5x5 binary matrix
+def binmatrix(img, row, col):
+    matrix = np.array([[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]])
+    for x in range(5):
+        for y in range(5):
+            if img[x + row - 2][y + col - 2] < img[row][col]:
+                matrix[x][y] = 0
+    return matrix
