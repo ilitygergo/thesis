@@ -18,6 +18,9 @@ megtartja azokat a képpontokat, melyeknek egy 4-szomszédjuk van, vagy egy 8-sz
 
 # Eredmények
 
+A fekete-fehér kép alatt azt értem, hogy minden 0-nál nagyobb pontot 1-nek vettem, szürkeárnyalatoson pedig
+ a már korábban említett küszöbölési módszert.
+
 * Fekete-fehér képen:
 
 ![alt text](issue/2.png "Példa2")
