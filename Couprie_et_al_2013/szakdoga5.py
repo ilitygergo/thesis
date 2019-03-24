@@ -4,11 +4,7 @@ from Common.functions import imreadgray
 from Common.functions import flip
 from Common.functions import equalmatrix
 from Common.functions import makeequalmatrix
-from Common.functions import oneobject
 from Common.functions import borderpoint8
-from Common.functions import simpleafterremove
-from Common.functions import forbidden
-from Common.functions import endpointmodified
 from Common.functions import binmatrix
 from Common.functions import lowneighbour
 from Common.functions import converttoarray
@@ -69,17 +65,10 @@ while True:
     for row in range(2, size[0] - 2):
         for col in range(2, size[1] - 2):
             binmatrixhelper = binmatrix(img, row, col, size)
-            if border[row][col] == 'O':
-                continue
-            if endpointmodified(binmatrixhelper, 2, 2):
-                continue
-            if not oneobject(binmatrixhelper, 2, 2) <= 1:
-                continue
-            if not simpleafterremove(binmatrixhelper, 2, 2):
-                continue
-            if forbidden(binmatrixhelper, 2, 2):
-                continue
-            helper[row][col] = 1
+            binmatrixhelper = converttoarray(binmatrixhelper, 2, 2)
+            binmatrixhelper = arraytonum(binmatrixhelper)
+            print(binmatrixhelper)
+            helper[row][col] = table[binmatrixhelper]
 
     for row in range(0, size[0]):
         for col in range(0, size[1]):

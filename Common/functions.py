@@ -963,10 +963,10 @@ def converttoarray(img, row, col):
 # Converts the picture into an array
 def arraytonum(array):
     num = array[0]*(2**24) + array[1]*(2**23) + array[2]*(2**22) + array[3]*(2**21) + array[4]*(2**20) + \
-          array[5] * (2**19) + array[6]*(2**18) + array[7]*(2**17) + array[8]*(2**16) + array[9]*(2**15) + \
-          array[10] * (2**14) + array[11]*(2**13) + array[12]*(2**12) + array[13]*(2**11) + array[14]*(2**10) + \
-          array[15] * (2 ** 9) + array[16]*(2**8) + array[17]*(2**7) + array[18]*(2**6) + array[19]*(2**5) + \
-          array[20] * (2 ** 4) + array[21]*(2**3) + array[22]*(2**2) + array[23]*(2**1) + array[24]
+          array[5]*(2**19) + array[6]*(2**18) + array[7]*(2**17) + array[8]*(2**16) + array[9]*(2**15) + \
+          array[10]*(2**14) + array[11]*(2**13) + array[12]*(2**12) + array[13]*(2**11) + array[14]*(2**10) + \
+          array[15]*(2 ** 9) + array[16]*(2**8) + array[17]*(2**7) + array[18]*(2**6) + array[19]*(2**5) + \
+          array[20]*(2 ** 4) + array[21]*(2**3) + array[22]*(2**2) + array[23]*(2**1) + array[24]
     return num
 
 
