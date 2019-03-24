@@ -10,6 +10,9 @@ from Common.functions import simpleafterremove
 from Common.functions import forbidden
 from Common.functions import endpointmodified
 from Common.functions import binmatrix
+from Common.functions import lowneighbour
+from Common.functions import converttoarray
+from Common.functions import arraytonum
 
 print(bcolors.OK, "  _____                       _             _           _ ")
 print("  / ____|                     (_)           | |         | |")
@@ -21,16 +24,18 @@ print("                   | |                                     ")
 print("                   |_|                                     ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = '1'
+picture = 'sima'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
 helper = imreadgray('../Common/' + picture + '.png')
+lowest = imreadgray('../Common/' + picture + '.png')
 
 # Converting values 0-255
 img = flip(img)
 img2 = flip(img2)
 helper = flip(helper)
+lowest = flip(lowest)
 
 # Initialization
 lepes = 0
@@ -42,24 +47,28 @@ for x in range(n):
     border[x] = ['O'] * m
 binmatrixhelper = 0
 
+with open('lookup.txt') as file:
+    table = file.read().splitlines()
+
 print(img, '\n')
 
 while True:
     for row in range(0, size[0]):
         for col in range(0, size[1]):
             border[row][col] = 'O'
+            lowest[row][col] = 0
 
     for row in range(2, size[0] - 2):
         for col in range(2, size[1] - 2):
             if img[row][col] == 0:
                 continue
             if borderpoint8(img, row, col):
+                lowest[row][col] = lowneighbour(img, row, col)
                 border[row][col] = 'X'
 
     for row in range(2, size[0] - 2):
         for col in range(2, size[1] - 2):
-            binmatrixhelper = binmatrix(img, row, col)
-            print(binmatrixhelper)
+            binmatrixhelper = binmatrix(img, row, col, size)
             if border[row][col] == 'O':
                 continue
             if endpointmodified(binmatrixhelper, 2, 2):
@@ -75,7 +84,7 @@ while True:
     for row in range(0, size[0]):
         for col in range(0, size[1]):
             if helper[row][col] == 1:
-                img[row][col] = 0
+                img[row][col] = lowest[row][col]
 
     makeequalmatrix(helper, img, size)
 

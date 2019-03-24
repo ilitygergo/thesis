@@ -11,7 +11,7 @@ kisebb intánzitású és a törölt pont által összekötött objektum közöt
 
 ![alt text](issue/4.png "Leszakadás")
 
-Az ilyen szakadások ellen nem véd egyik feltételünk sem, mivel a feltételek a küszöbölés után jönnek szóba.
+Az ilyen szakadások ellen nem véd egyik feltételünk sem, mivel a feltételek a küszöbölés után hajtódnak végre.
 
 Az eddig megírt algoritmus jól működik fekete-fehér képeken, egy saját végpontfeltétellel, aminek lényege, hogy 
 megtartja azokat a képpontokat, melyeknek egy 4-szomszédjuk van, vagy egy 8-szomszédjuk.

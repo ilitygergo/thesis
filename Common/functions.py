@@ -952,12 +952,22 @@ def forbidden(img, row, col):
 
 # Converts the picture into an array
 def converttoarray(img, row, col):
-    array = [img[row - 2][col - 2], img[row - 2][col - 1], img[row - 2][col], img[row - 2][col + 1], img[row - 2][col + 2],
-             img[row - 1][col - 2], img[row - 1][col - 1], img[row - 1][col], img[row - 1][col + 1], img[row - 1][col + 2],
-             img[row][col - 2], img[row][col - 1], img[row][col + 1], img[row][col + 2],
-             img[row + 1][col - 2], img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1], img[row + 1][col + 2],
-             img[row + 2][col- 2], img[row + 2][col - 1], img[row + 2][col], img[row + 2][col + 1], img[row + 2][col + 2]]
+    array = [img[row + 2][col + 2], img[row + 2][col + 1], img[row + 2][col], img[row + 2][col - 1],img[row + 2][col- 2],
+             img[row + 1][col + 2], img[row + 1][col + 1], img[row + 1][col], img[row + 1][col - 1], img[row + 1][col - 2],
+             img[row][col + 2], img[row][col + 1], img[row][col], img[row][col - 1], img[row][col - 2],
+             img[row - 1][col + 2], img[row - 1][col + 1], img[row - 1][col], img[row - 1][col - 1], img[row - 1][col - 2],
+             img[row - 2][col + 2], img[row - 2][col + 1], img[row - 2][col], img[row - 2][col - 1], img[row - 2][col - 2]]
     return array
+
+
+# Converts the picture into an array
+def arraytonum(array):
+    num = array[0]*(2**24) + array[1]*(2**23) + array[2]*(2**22) + array[3]*(2**21) + array[4]*(2**20) + \
+          array[5] * (2**19) + array[6]*(2**18) + array[7]*(2**17) + array[8]*(2**16) + array[9]*(2**15) + \
+          array[10] * (2**14) + array[11]*(2**13) + array[12]*(2**12) + array[13]*(2**11) + array[14]*(2**10) + \
+          array[15] * (2 ** 9) + array[16]*(2**8) + array[17]*(2**7) + array[18]*(2**6) + array[19]*(2**5) + \
+          array[20] * (2 ** 4) + array[21]*(2**3) + array[22]*(2**2) + array[23]*(2**1) + array[24]
+    return num
 
 
 # Converts an array to a picture matrix
@@ -986,10 +996,32 @@ def numtotext(filename, number):
 
 
 # Creates a 5x5 binary matrix
-def binmatrix(img, row, col):
+def binmatrix(img, row, col, size):
     matrix = np.array([[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]])
     for x in range(5):
         for y in range(5):
+            if (size[0] - 4) > row > 2 and (size[1] - 4) > col > 2:
+                if not simpleafterremove(img, x + row - 2, y + col - 2) <= 1:
+                    continue
             if img[x + row - 2][y + col - 2] < img[row][col]:
                 matrix[x][y] = 0
     return matrix
+
+
+# Returns the biggest 8 neighbour whit a lower intensity than the examined point
+def lowneighbour(img, row, col):
+    stack = [img[row - 1][col - 1], img[row - 1][col], img[row - 1][col + 1],
+             img[row][col - 1], img[row][col + 1],
+             img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1]]
+    values = []
+
+    for x in stack:
+        if x < img[row][col]:
+            values.append(x)
+
+    highest = values[0]
+    for x in values:
+        if x > highest:
+            highest = x
+
+    return highest
