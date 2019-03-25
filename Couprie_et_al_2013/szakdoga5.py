@@ -1,4 +1,5 @@
 import cv2
+import time
 import bcolors
 from Common.functions import imreadgray
 from Common.functions import flip
@@ -10,6 +11,7 @@ from Common.functions import lowneighbour
 from Common.functions import converttoarray
 from Common.functions import arraytonum
 
+start_time = time.time()
 print(bcolors.OK, "  _____                       _             _           _ ")
 print("  / ____|                     (_)           | |         | |")
 print(" | |     ___  _   _ _ __  _ __ _  ___    ___| |_    __ _| |")
@@ -20,7 +22,7 @@ print("                   | |                                     ")
 print("                   |_|                                     ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'sima'
+picture = 'dragon'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -42,9 +44,13 @@ border = [0] * n
 for x in range(n):
     border[x] = ['O'] * m
 binmatrixhelper = 0
+table = []
 
-with open('lookup.txt') as file:
-    table = file.read().splitlines()
+with open("lookup", "rb") as f:
+    byte = f.read(1)
+    while byte:
+        table.append(int.from_bytes(byte, "little"))
+        byte = f.read(1)
 
 print(img, '\n')
 
@@ -65,9 +71,10 @@ while True:
     for row in range(2, size[0] - 2):
         for col in range(2, size[1] - 2):
             binmatrixhelper = binmatrix(img, row, col, size)
+            if border[row][col] == 'O':
+                continue
             binmatrixhelper = converttoarray(binmatrixhelper, 2, 2)
             binmatrixhelper = arraytonum(binmatrixhelper)
-            print(binmatrixhelper)
             helper[row][col] = table[binmatrixhelper]
 
     for row in range(0, size[0]):
@@ -90,3 +97,5 @@ flip(img)
 
 # Saving
 cv2.imwrite('results/' + picture + '.png', img)
+
+print("My program took", time.time() - start_time, "to run")

@@ -1,31 +1,39 @@
-# Szürke árnyalatosra konvertálás
-
-A konvertálás során minden egyes ponthoz külön alakítjuk ki a bináris képet. A küszöbértékünk ehhez a pont intenzitása.
-A nála kisebb pontokat 0-ra, a nagyobbakat, vagy egyenlőket 1-re állítjuk, majd ezeken a kissebb mátrixokon hajtjuk 
-végre a törölhetőség vizsgálatát (akár keresőtáblával).
-
-![alt text](issue/5.png "Konvertálás")
-
-Ezzel az a probléma, hogy amikor egy a mátrixon látszólag törölhető pontot eltávolítunk, az szakadást eredményez a 
-kisebb intánzitású és a törölt pont által összekötött objektum között.
-
-![alt text](issue/4.png "Leszakadás")
-
-Az ilyen szakadások ellen nem véd egyik feltételünk sem, mivel a feltételek a küszöbölés után hajtódnak végre.
-
-Az eddig megírt algoritmus jól működik fekete-fehér képeken, egy saját végpontfeltétellel, aminek lényege, hogy 
-megtartja azokat a képpontokat, melyeknek egy 4-szomszédjuk van, vagy egy 8-szomszédjuk.
-
 # Eredmények
-
-A fekete-fehér kép alatt azt értem, hogy minden 0-nál nagyobb pontot 1-nek vettem, szürkeárnyalatoson pedig
- a már korábban említett küszöbölési módszert.
+A legnagyobb középpontnál kisebb szomszédra állítást követően az eredmények a következők lettek:
 
 * Fekete-fehér képen:
 
 ![alt text](issue/2.png "Példa2")
 
-* Fekete-fehér összehasonlítása a szürkeárnyalatos képpel:
+* Fekete-fehér képen, a módosított törléssel:
 
-![alt text](issue/3.png "Példa")
-![alt text](issue/1.png "Példa2")
+![alt text](issue/6.png "Példa")
+
+# Lookup table
+A szöveges dokumentum alkalmatlannak bizonyult ilyen sok új sort használó algoritmushoz, így inkább bináris
+fileokat hoztam létre.
+
+* A bináris fileban(lookup) végigmentem az összes lehetséges eseten, amikor a a bináris tesztmátrixokon a
+középpont törölhető 1-et, ha nem törölhető 0-t raktam a file-ba. Minden egyes
+ilyen cimkézést 1 byte-on tároltam. Ennek a mérete 32 MB lett.
+
+![alt text](issue/bytes.png "Byte")
+
+* Egy másik megvalósításban csupán azoknak a pontoknak a 10-es számrendszerbeli értékét mentettem el, melyek
+törölhetőek. Ezeket 4 byte-on mentettem el. Ez a file 4.98 MB lett.
+
+![alt text](issue/4bytes.png "Bytes")
+
+A Vékonyítások eredménye megegyezik, az időbeli különbségek pedig a következők:
+
+![alt text](issue/eredmeny1.png "Bytes")
+
+`Eredeti: 1.57s`    `Lookup: 22.14s`    `Lookup_index: 73.74s`
+
+![alt text](issue/eredmeny2.png "Bytes")
+
+`Eredeti: 15.06m`     `Lookup: 14.70m`    `Lookup_index:123.48m`
+
+![alt text](issue/eredmeny3.png "Bytes")
+
+`Eredeti: 27.54m`    `Lookup:27.55`    `Lookup_index:?`
