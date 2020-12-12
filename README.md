@@ -1,6 +1,8 @@
 # Thesis
 
-In this project my task was to implement 5 different thinning  algorithms on greyscale pictures, from academic papers.
+In this project my task was to implement and compare 5 different thinning  algorithms on greyscale pictures, from academic papers.
+
+The 
 * 
 *
 
@@ -12,5 +14,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1OTc4ODU3OTRdfQ==
+eyJoaXN0b3J5IjpbLTgzMjgwMzI4M119
 -->
