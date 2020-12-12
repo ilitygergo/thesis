@@ -15,18 +15,14 @@ The papers in chronological order:
 
 # First steps
 
-Requirements
+### Requirements
 * [python](https://www.python.org/) 3.7+
 * [pip](https://pypi.org/project/pip/) (comes with python)
 
-Usage
-Use the following command 
+### Usage
+The following command installs the dependencies
 > pip install -r requirements.txt
-
-# What I learned
-
-* Python syntax
-* opencv
+> 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM0MzU1NTA0N119
+eyJoaXN0b3J5IjpbLTE1MTE3MjM0OV19
 -->
