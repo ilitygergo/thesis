@@ -7,9 +7,11 @@ The common method up until these attempts was to convert the greyscale images to
 These algorithms provide a different approach.
 
 The papers in chronological order:
-* Dyer Rosenfeld 1997
-* Salari Siy 1984
-* Kang 1998
+* 1997 (Dyer Rosenfeld)
+* 1984 (Salari Siy)
+* 1998 (Kang Et Al)
+*  2006 ()
+* 2013 ()
 
 To use these functions, you have to install the requirements first from the requirements.txt file with the command: 
 > pip install -r requirements.txt
@@ -19,5 +21,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4OTE0Mjk5Ml19
+eyJoaXN0b3J5IjpbLTEyODQxMTc3OTVdfQ==
 -->
