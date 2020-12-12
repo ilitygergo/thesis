@@ -2,13 +2,13 @@
 
 In this project, my task was to read, implement and compare 5 different thinning algorithms on greyscale pictures.
 
-The common method up until these attemts was to convert the greyscale image to black and white pictures and thin there.
+The common method up until these attemts was to convert the greyscale images to black and white pictures and thin the result.
 
-These algorithms are attempting to create a better solution.
+These algorithms provide a different approach.
 
-The 
+The thinning 
 * 
-*
+* 
 
 To use these functions, you have to install the requirements first from the requirements.txt file with the command: 
 > pip install -r requirements.txt
@@ -18,5 +18,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjM0Njc0NzMwXX0=
+eyJoaXN0b3J5IjpbLTE5MzE1MTA1ODNdfQ==
 -->
