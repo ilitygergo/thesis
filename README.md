@@ -1,13 +1,13 @@
 # Thesis
 
-In this project, my task was to implement, and compare 5 different thinning algorithms on greyscale images.
+In this project, my task was to implement, and compare 5 different thinning algorithms for grayscale pictures.
 
-The common method up until these attempts was to convert the greyscale images to black and white pictures and thin the result.
+The common method up until these attempts was to convert the grayscale images to binary pictures and thin the result.
 
 These algorithms provide a different approach.
 
 The papers in chronological order:
-* 1997 (Dyer Rosenfeld)
+* Thinning algorithms for grayscale pictures 1997 (Dyer Rosenfeld)
 * 1984 (Salari Siy)
 * 1998 (Kang Et Al)
 *  2006 (Kim)
@@ -21,5 +21,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTU3NjMyNjA1XX0=
+eyJoaXN0b3J5IjpbMTM1OTUzNzE5NF19
 -->
