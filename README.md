@@ -10,8 +10,8 @@ The papers in chronological order:
 * 1997 (Dyer Rosenfeld)
 * 1984 (Salari Siy)
 * 1998 (Kang Et Al)
-*  2006 ()
-* 2013 ()
+*  2006 (Kim)
+* 2013 (Couprie Et Al)
 
 To use these functions, you have to install the requirements first from the requirements.txt file with the command: 
 > pip install -r requirements.txt
@@ -21,5 +21,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyODQxMTc3OTVdfQ==
+eyJoaXN0b3J5IjpbNTU3NjMyNjA1XX0=
 -->
