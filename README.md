@@ -9,7 +9,7 @@ These algorithms provide a different approach.
 The papers in chronological order:
 * Dyer Rosenfeld 1997
 * Salari Siy 1984
-* 
+* Kang 1998
 
 To use these functions, you have to install the requirements first from the requirements.txt file with the command: 
 > pip install -r requirements.txt
@@ -19,5 +19,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwMzQ0NTA1MF19
+eyJoaXN0b3J5IjpbLTE4OTE0Mjk5Ml19
 -->
