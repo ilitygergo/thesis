@@ -10,8 +10,8 @@ The papers in chronological order:
 * Thinning algorithms for grayscale pictures 1997 (Dyer Rosenfeld)
 * The ridge-seeking method for obtaining the skeleton of digital images 1984 (Salari Siy)
 * Skeletonization for grayscale character images using pixel superiority index 1998 (Kang Et Al)
-*  Gray-scale thinning algorithm 2006 (Kim)
-* 2013 (Couprie Et Al)
+*  Gray-scale thinning algorithm using local min/max operations 2006 (Kim)
+* A parallel thinning algorithm for grayscale images 2013 (Couprie Et Al)
 
 # First steps
 
@@ -23,5 +23,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUxMzk3MzI0XX0=
+eyJoaXN0b3J5IjpbOTEwODk2ODkyXX0=
 -->
