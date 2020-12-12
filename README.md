@@ -15,10 +15,12 @@ The papers in chronological order:
 
 # First steps
 
-Requirements:
+Requirements
 * [python](https://www.python.org/) 3.7+
+* [pip](https://pypi.org/project/pip/) (comes with python)
 
-To use these functions, you have to install the requirements first from the requirements.txt file with the command: 
+Usage
+Use the following command 
 > pip install -r requirements.txt
 
 # What I learned
@@ -26,5 +28,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUwMzY0OTkyOV19
+eyJoaXN0b3J5IjpbLTM0MzU1NTA0N119
 -->
