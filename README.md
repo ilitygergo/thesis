@@ -1,8 +1,8 @@
 # Thesis
 
-In this project, my task was to  implement and compare 5 different thinning algorithms on greyscale pictures.
+In this project, my task was to read, implement and compare 5 different thinning algorithms on greyscale pictures.
 
-The common method for thi
+The common method up until these attemts was to convert the greyscale image to black and white pictures and thin there.
 
 These algorithms are attempting to create a better solution.
 
@@ -18,5 +18,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwMTUxMTgxOTNdfQ==
+eyJoaXN0b3J5IjpbNjM0Njc0NzMwXX0=
 -->
