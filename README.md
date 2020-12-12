@@ -8,8 +8,8 @@ These algorithms provide a different approach.
 
 The papers in chronological order:
 * Thinning algorithms for grayscale pictures 1997 (Dyer Rosenfeld)
-* The Ridge seeking method 1984 (Salari Siy)
-* 1998 (Kang Et Al)
+* The ridge-seeking method for obtaining the skeleton of digital images 1984 (Salari Siy)
+* Skeletonization for grayscale character images using pixel supe1998 (Kang Et Al)
 *  2006 (Kim)
 * 2013 (Couprie Et Al)
 
@@ -21,5 +21,5 @@ To use these functions, you have to install the requirements first from the requ
 * Python syntax
 * opencv
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTczOTYzMTY0M119
+eyJoaXN0b3J5IjpbMTU3NTE4MDE5NF19
 -->
