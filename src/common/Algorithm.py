@@ -1,4 +1,4 @@
 class Algorithm:
 
-    def something(self):
-        return 1
+    def printName(self):
+        pass
