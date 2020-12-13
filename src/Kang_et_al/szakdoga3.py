@@ -1,15 +1,15 @@
 import cv2
 import bcolors
-from src.Common.functions import imreadgray
-from src.Common.functions import flip
-from src.Common.functions import localmaximum
-from src.Common.functions import endpoint
-from src.Common.functions import connectedcorner
-from src.Common.functions import connectedpath
-from src.Common.functions import borderpoint
-from src.Common.functions import equalmatrix
-from src.Common.functions import makeequalmatrix
-from src.Common.functions import countnotzero
+from src.common.functions import imreadgray
+from src.common.functions import flip
+from src.common.functions import localmaximum
+from src.common.functions import endpoint
+from src.common.functions import connectedcorner
+from src.common.functions import connectedpath
+from src.common.functions import borderpoint
+from src.common.functions import equalmatrix
+from src.common.functions import makeequalmatrix
+from src.common.functions import countnotzero
 
 print(bcolors.OK, " _  __                    _____       _       _  ___           ")
 print(" | |/ /                   / ____|     | |     | |/ (_)          ")
@@ -21,18 +21,18 @@ print("                   __/ |                                        ")
 print("                  |___/                                         ", bcolors.ENDC, '\n')
 
 # Beolvasás szürkeárnyalatos képként
-picture = 'fingerprintmini'
+picture = 'text'
 
-img = imreadgray('../Common/' + picture + '.png')
-img2 = imreadgray('../Common/' + picture + '.png')
-helper = imreadgray('../Common/' + picture + '.png')
-psi = imreadgray('../Common/' + picture + '.png')
-psis = imreadgray('../Common/' + picture + '.png')
-skeleton = imreadgray('../Common/' + picture + '.png')
-matrix = imreadgray('../Common/' + picture + '.png')
-matrix2 = imreadgray('../Common/' + picture + '.png')
-help = imreadgray('../Common/' + picture + '.png')
-borders = imreadgray('../Common/' + picture + '.png')
+img = imreadgray('../common/files/input/' + picture + '.png')
+img2 = imreadgray('../common/files/input/' + picture + '.png')
+helper = imreadgray('../common/files/input/' + picture + '.png')
+psi = imreadgray('../common/files/input/' + picture + '.png')
+psis = imreadgray('../common/files/input/' + picture + '.png')
+skeleton = imreadgray('../common/files/input/' + picture + '.png')
+matrix = imreadgray('../common/files/input/' + picture + '.png')
+matrix2 = imreadgray('../common/files/input/' + picture + '.png')
+help = imreadgray('../common/files/input/' + picture + '.png')
+borders = imreadgray('../common/files/input/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
 flip(psis)

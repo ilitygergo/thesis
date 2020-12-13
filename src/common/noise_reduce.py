@@ -1,6 +1,6 @@
 import cv2
-from src.Common.functions import imreadgray
-from src.Common.functions import flip
+from src.common.functions import imreadgray
+from src.common.functions import flip
 
 picture = 'chromosomemini'
 

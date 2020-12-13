@@ -1,17 +1,17 @@
 import cv2
 import time
 import bcolors
-from src.Common.functions import imreadgray
-from src.Common.functions import flip
-from src.Common.functions import equalmatrix
-from src.Common.functions import makeequalmatrix
-from src.Common.functions import borderpoint8
-from src.Common.functions import binmatrix
-from src.Common.functions import lowneighbour
-from src.Common.functions import endpointmodified
-from src.Common.functions import oneobject
-from src.Common.functions import forbidden
-from src.Common.functions import simpleafterremove
+from src.common.functions import imreadgray
+from src.common.functions import flip
+from src.common.functions import equalmatrix
+from src.common.functions import makeequalmatrix
+from src.common.functions import borderpoint8
+from src.common.functions import binmatrix
+from src.common.functions import lowneighbour
+from src.common.functions import endpointmodified
+from src.common.functions import oneobject
+from src.common.functions import forbidden
+from src.common.functions import simpleafterremove
 
 start_time = time.time()
 print(bcolors.OK, "  _____                       _             _           _ ")
@@ -24,12 +24,12 @@ print("                   | |                                     ")
 print("                   |_|                                     ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'test'
+picture = 'text'
 
-img = imreadgray('../Common/' + picture + '.png')
-img2 = imreadgray('../Common/' + picture + '.png')
-helper = imreadgray('../Common/' + picture + '.png')
-lowest = imreadgray('../Common/' + picture + '.png')
+img = imreadgray('../common/files/input/' + picture + '.png')
+img2 = imreadgray('../common/files/input/' + picture + '.png')
+helper = imreadgray('../common/files/input/' + picture + '.png')
+lowest = imreadgray('../common/files/input/' + picture + '.png')
 
 # Converting values 0-255
 img = flip(img)

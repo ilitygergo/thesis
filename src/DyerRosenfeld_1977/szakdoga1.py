@@ -1,14 +1,14 @@
 import cv2
 import bcolors
-from src.Common.functions import printmatrix
-from src.Common.functions import rvalue
-from src.Common.functions import minimize
-from src.Common.functions import imreadgray
-from src.Common.functions import notendpoint
-from src.Common.functions import flip
-from src.Common.functions import connected
-from src.Common.functions import equalmatrix
-from src.Common.functions import makeequalmatrix
+from src.common.functions import printmatrix
+from src.common.functions import rvalue
+from src.common.functions import minimize
+from src.common.functions import imreadgray
+from src.common.functions import notendpoint
+from src.common.functions import flip
+from src.common.functions import connected
+from src.common.functions import equalmatrix
+from src.common.functions import makeequalmatrix
 
 print(bcolors.OK, " _____                    _____                       __     _     _ ")
 print(" |  __ \                  |  __ \                     / _|   | |   | |")
@@ -20,10 +20,10 @@ print("          __/ |                                                       ")
 print("         |___/                                                        ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'dragon'
+picture = 'text'
 
-img = imreadgray('../Common/' + picture + '.png')
-img2 = imreadgray('../Common/' + picture + '.png')
+img = imreadgray('../common/files/input/' + picture + '.png')
+img2 = imreadgray('../common/files/input/' + picture + '.png')
 
 # Converting values 0-255
 img = flip(img)

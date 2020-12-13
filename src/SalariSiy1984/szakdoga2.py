@@ -1,14 +1,14 @@
 import cv2
 import bcolors
-from src.Common.functions import imreadgray
-from src.Common.functions import flip
-from src.Common.functions import localmaximum
-from src.Common.functions import endpoint
-from src.Common.functions import connectedcorner
-from src.Common.functions import connectedpath
-from src.Common.functions import equalmatrix
-from src.Common.functions import makeequalmatrix
-from src.Common.functions import borderpoint
+from src.common.functions import imreadgray
+from src.common.functions import flip
+from src.common.functions import localmaximum
+from src.common.functions import endpoint
+from src.common.functions import connectedcorner
+from src.common.functions import connectedpath
+from src.common.functions import equalmatrix
+from src.common.functions import makeequalmatrix
+from src.common.functions import borderpoint
 
 print(bcolors.OK, "  _____       _            _        _____ _       ")
 print("  / ____|     | |          (_)      / ____(_)      ")
@@ -20,13 +20,13 @@ print("                                              __/ |")
 print("                                             |___/ ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'dragon'
+picture = 'text'
 
-img = imreadgray('../Common/' + picture + '.png')
-img2 = imreadgray('../Common/' + picture + '.png')
-g1 = imreadgray('../Common/' + picture + '.png')
-g2 = imreadgray('../Common/' + picture + '.png')
-borders = imreadgray('../Common/' + picture + '.png')
+img = imreadgray('../common/files/input/' + picture + '.png')
+img2 = imreadgray('../common/files/input/' + picture + '.png')
+g1 = imreadgray('../common/files/input/' + picture + '.png')
+g2 = imreadgray('../common/files/input/' + picture + '.png')
+borders = imreadgray('../common/files/input/' + picture + '.png')
 
 # Converting the values 0-255
 flip(img)

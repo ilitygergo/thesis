@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
 import bcolors
-from src.Common.functions import imreadgray
-from src.Common.functions import flip
-from src.Common.functions import equalmatrix
-from src.Common.functions import makeequalmatrix
-from src.Common.functions import countf
+from src.common.functions import imreadgray
+from src.common.functions import flip
+from src.common.functions import equalmatrix
+from src.common.functions import makeequalmatrix
+from src.common.functions import countf
 
 print(bcolors.OK, " _  ___             _                  _____ _           _ ")
 print(" | |/ (_)           | |                / ____| |         (_)")
@@ -15,19 +15,19 @@ print(" | . \| | | | | | | | |___|  __/  __/ | |____| | | | (_) | |")
 print(" |_|\_\_|_| |_| |_| |______\___|\___|  \_____|_| |_|\___/|_|", bcolors.ENDC)
 
 # Reading in the image as a gray image
-picture = 'fingerprintmini'
+picture = 'text'
 
-img = imreadgray('../Common/' + picture + '.png')
-img2 = imreadgray('../Common/' + picture + '.png')
-comp = imreadgray('../Common/' + picture + '.png')
-compstar = imreadgray('../Common/' + picture + '.png')
-c8 = imreadgray('../Common/' + picture + '.png')
-E = imreadgray('../Common/' + picture + '.png')
-R = imreadgray('../Common/' + picture + '.png')
-O1 = imreadgray('../Common/' + picture + '.png')
-O2 = imreadgray('../Common/' + picture + '.png')
-helper1 = imreadgray('../Common/' + picture + '.png')
-helper2 = imreadgray('../Common/' + picture + '.png')
+img = imreadgray('../common/files/input/' + picture + '.png')
+img2 = imreadgray('../common/files/input/' + picture + '.png')
+comp = imreadgray('../common/files/input/' + picture + '.png')
+compstar = imreadgray('../common/files/input/' + picture + '.png')
+c8 = imreadgray('../common/files/input/' + picture + '.png')
+E = imreadgray('../common/files/input/' + picture + '.png')
+R = imreadgray('../common/files/input/' + picture + '.png')
+O1 = imreadgray('../common/files/input/' + picture + '.png')
+O2 = imreadgray('../common/files/input/' + picture + '.png')
+helper1 = imreadgray('../common/files/input/' + picture + '.png')
+helper2 = imreadgray('../common/files/input/' + picture + '.png')
 
 # Converting values 0-255
 flip(img)
