@@ -1,15 +1,15 @@
 import cv2
 import bcolors
-from Common.functions import imreadgray
-from Common.functions import flip
-from Common.functions import localmaximum
-from Common.functions import endpoint
-from Common.functions import connectedcorner
-from Common.functions import connectedpath
-from Common.functions import borderpoint
-from Common.functions import equalmatrix
-from Common.functions import makeequalmatrix
-from Common.functions import countnotzero
+from src.Common.functions import imreadgray
+from src.Common.functions import flip
+from src.Common.functions import localmaximum
+from src.Common.functions import endpoint
+from src.Common.functions import connectedcorner
+from src.Common.functions import connectedpath
+from src.Common.functions import borderpoint
+from src.Common.functions import equalmatrix
+from src.Common.functions import makeequalmatrix
+from src.Common.functions import countnotzero
 
 print(bcolors.OK, " _  __                    _____       _       _  ___           ")
 print(" | |/ /                   / ____|     | |     | |/ (_)          ")

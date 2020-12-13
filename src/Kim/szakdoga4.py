@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
 import bcolors
-from Common.functions import imreadgray
-from Common.functions import flip
-from Common.functions import equalmatrix
-from Common.functions import makeequalmatrix
-from Common.functions import countf
+from src.Common.functions import imreadgray
+from src.Common.functions import flip
+from src.Common.functions import equalmatrix
+from src.Common.functions import makeequalmatrix
+from src.Common.functions import countf
 
 print(bcolors.OK, " _  ___             _                  _____ _           _ ")
 print(" | |/ (_)           | |                / ____| |         (_)")

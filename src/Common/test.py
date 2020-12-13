@@ -1,10 +1,10 @@
 import struct
-from Common.functions import converttopicture
-from Common.functions import borderpoint8
-from Common.functions import endpointmodified
-from Common.functions import oneobject
-from Common.functions import simpleafterremove
-from Common.functions import forbidden
+from src.Common.functions import converttopicture
+from src.Common.functions import borderpoint8
+from src.Common.functions import endpointmodified
+from src.Common.functions import oneobject
+from src.Common.functions import simpleafterremove
+from src.Common.functions import forbidden
 
 binary = 0
 matrix = 0

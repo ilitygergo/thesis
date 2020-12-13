@@ -1,14 +1,14 @@
 import cv2
 import bcolors
-import numpy as np
-from Common.functions import rvalue
-from Common.functions import minimize
-from Common.functions import imreadgray
-from Common.functions import notendpoint
-from Common.functions import flip
-from Common.functions import connected
-from Common.functions import equalmatrix
-from Common.functions import makeequalmatrix
+from src.Common.functions import printmatrix
+from src.Common.functions import rvalue
+from src.Common.functions import minimize
+from src.Common.functions import imreadgray
+from src.Common.functions import notendpoint
+from src.Common.functions import flip
+from src.Common.functions import connected
+from src.Common.functions import equalmatrix
+from src.Common.functions import makeequalmatrix
 
 print(bcolors.OK, " _____                    _____                       __     _     _ ")
 print(" |  __ \                  |  __ \                     / _|   | |   | |")
@@ -25,10 +25,10 @@ picture = 'dragon'
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
 
-# Értékek átkonvertálása 0-255
+# Converting values 0-255
 img = flip(img)
 
-# Lépésszámláló és inicializálás
+# Counter and initialization
 lepes = 1
 size = img.shape
 nemegyenlo = True
@@ -38,7 +38,7 @@ for row in range(0, size[0]):
 
 while nemegyenlo:
 
-    # Folyton ismétlődő inicializálás
+    # Initialization that occurs continuously
     percent = 0
     grayness = 0
     a = 0
@@ -51,7 +51,7 @@ while nemegyenlo:
     h = 0
     i = 0
 
-    # Mátrixok
+    # Matrixes
     n = size[0]-2
     m = size[1]-2
     matrix = [0] * n
@@ -74,17 +74,17 @@ while nemegyenlo:
     print(bcolors.BOLD, img, bcolors.ENDC,  '\n')
     print('\n')
 
-    # Határpontok megkeresése
+    # Finding the border points
 
     for oldal in range(0, 4):
         if oldal == 0:
-            print(bcolors.OK, 'Északi határpontok:', bcolors.ENDC)
+            print(bcolors.OK, 'North borders:', bcolors.ENDC)
         elif oldal == 1:
-            print(bcolors.OK, 'Nyugati határpontok:', bcolors.ENDC)
+            print(bcolors.OK, 'West borders:', bcolors.ENDC)
         elif oldal == 2:
-            print(bcolors.OK, 'Déli határpontok:', bcolors.ENDC)
+            print(bcolors.OK, 'South borders:', bcolors.ENDC)
         elif oldal == 3:
-            print(bcolors.OK, 'Keleti határpontok:', bcolors.ENDC)
+            print(bcolors.OK, 'East borders:', bcolors.ENDC)
         hatar = 0
         for row in range(1, size[0] - 1):
             for col in range(1, (size[1] - 1)):
@@ -98,28 +98,28 @@ while nemegyenlo:
                 h = img[row + 1, col]
                 i = img[row + 1, col + 1]
                 grayness = rvalue(b, d, e, f, h) * percent
-                if oldal == 0 or oldal == 1:
+                if oldal == 0:
                     if b < e - grayness:
                         hatar += 1
                         matrix[row - 1][col - 1] = e
                         matrix2[row][col] = 'X'
                     else:
                         matrix2[row][col] = ' '
-                if oldal == 0 or oldal == 1:
+                if oldal == 1:
                     if d < e - grayness:
                         hatar += 1
                         matrix[row - 1][col - 1] = e
                         matrix2[row][col] = 'X'
                     else:
                         matrix2[row][col] = ' '
-                if oldal == 2 or oldal == 3:
+                if oldal == 2:
                     if h < e - grayness:
                         hatar += 1
                         matrix[row - 1][col - 1] = e
                         matrix2[row][col] = 'X'
                     else:
                         matrix2[row][col] = ' '
-                if oldal == 2 or oldal == 3:
+                if oldal == 3:
                     if f < e - grayness:
                         hatar += 1
                         matrix[row - 1][col - 1] = e
@@ -127,11 +127,11 @@ while nemegyenlo:
                     else:
                         matrix2[row][col] = ' '
 
-        print(np.matrix(matrix2))
+        printmatrix(matrix2)
         print('\n')
         print('Összesen:', hatar)
 
-        # Minimalizálás végpont és összefüggőség alapján
+        # Minimize by endpoint and connectedness
         a = 0
         b = 0
         c = 0
@@ -157,7 +157,8 @@ while nemegyenlo:
                     i = img[row + 1, col + 1]
                     grayness = rvalue(b, d, e, f, h) * percent
                     # print(img[row][col])
-                    if notendpoint(b, d, h, f, e - grayness) and connected(a, b, c, d, e, f, g, h, i, grayness) and img[row][col] != 0:
+                    if notendpoint(b, d, h, f, e - grayness) and connected(a, b, c, d, e, f, g, h, i, grayness)\
+                            and img[row][col] != 0:
                         # print(row, col, ' - ', img[row][col])
                         igen += 1
                         matrix3[row][col] = 'X'
@@ -176,22 +177,23 @@ while nemegyenlo:
                 if matrix3[row][col] == 'X':
                     img[row][col] = minimize(b, d, h, f, e)
 
-        print('Törölhető:', bcolors.ERR, igen, bcolors.ENDC)
-        print('Nem törölhető:', bcolors.OK, nem, bcolors.ENDC, '\n')
+        print('Delete:', bcolors.ERR, igen, bcolors.ENDC)
+        print('Cannot delete:', bcolors.OK, nem, bcolors.ENDC, '\n')
         print(bcolors.OK, 'Output:', bcolors.ENDC)
         print(bcolors.BOLD, img, bcolors.ENDC)
-    print(bcolors.BLUE, '\n', lepes, '. lépés eredménye:')
-    print(img, '\n', bcolors.ENDC)
 
     # Making sure that the function runs until the image has no points left to remove
+    print(bcolors.BLUE, '\n', lepes, '. run:')
+    print(img, '\n', bcolors.ENDC)
+
     lepes += 1
     if equalmatrix(img, img2, size):
         break
     else:
         makeequalmatrix(img2, img, size)
 
-# Értékek visszakonvertálása
-img = flip(img)
+# Converting the values back to normal
+flip(img)
 
-# Kiíratás vagy mentés
-cv2.imwrite('results/two_sides/' + picture + '.png', img)
+# Saving
+cv2.imwrite('results/' + picture + '.png', img)

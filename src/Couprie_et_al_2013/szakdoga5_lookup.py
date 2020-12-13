@@ -1,17 +1,15 @@
 import cv2
 import time
 import bcolors
-from Common.functions import imreadgray
-from Common.functions import flip
-from Common.functions import equalmatrix
-from Common.functions import makeequalmatrix
-from Common.functions import borderpoint8
-from Common.functions import binmatrix
-from Common.functions import lowneighbour
-from Common.functions import endpointmodified
-from Common.functions import oneobject
-from Common.functions import forbidden
-from Common.functions import simpleafterremove
+from src.Common.functions import imreadgray
+from src.Common.functions import flip
+from src.Common.functions import equalmatrix
+from src.Common.functions import makeequalmatrix
+from src.Common.functions import borderpoint8
+from src.Common.functions import binmatrix
+from src.Common.functions import lowneighbour
+from src.Common.functions import converttoarray
+from src.Common.functions import arraytonum
 
 start_time = time.time()
 print(bcolors.OK, "  _____                       _             _           _ ")
@@ -24,7 +22,7 @@ print("                   | |                                     ")
 print("                   |_|                                     ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'test'
+picture = 'dragon'
 
 img = imreadgray('../Common/' + picture + '.png')
 img2 = imreadgray('../Common/' + picture + '.png')
@@ -46,6 +44,14 @@ border = [0] * n
 for x in range(n):
     border[x] = ['O'] * m
 binmatrixhelper = 0
+table = []
+
+with open("lookup", "rb") as f:
+    byte = f.read(1)
+    while byte:
+        table.append(int.from_bytes(byte, "little"))
+        byte = f.read(1)
+
 print(img, '\n')
 
 while True:
@@ -67,15 +73,9 @@ while True:
             binmatrixhelper = binmatrix(img, row, col, size)
             if border[row][col] == 'O':
                 continue
-            if endpointmodified(binmatrixhelper, 2, 2):
-                continue
-            if not oneobject(binmatrixhelper, 2, 2) <= 1:
-                continue
-            if not simpleafterremove(binmatrixhelper, 2, 2):
-                continue
-            if forbidden(binmatrixhelper, 2, 2):
-                continue
-            helper[row][col] = 1
+            binmatrixhelper = converttoarray(binmatrixhelper, 2, 2)
+            binmatrixhelper = arraytonum(binmatrixhelper)
+            helper[row][col] = table[binmatrixhelper]
 
     for row in range(0, size[0]):
         for col in range(0, size[1]):
@@ -96,6 +96,6 @@ while True:
 flip(img)
 
 # Saving
-cv2.imwrite('results/' + picture + '.png', img)
+cv2.imwrite('results_lookup/' + picture + '.png', img)
 
 print("My program took", time.time() - start_time, "to run")
