@@ -1,15 +1,12 @@
 import cv2
-import bcolors
 import copy
-import numpy as np
-
+import numpy
 
 # Reads a colored picture in gray
 def imreadgray(img):
     image = cv2.imread(img)
     img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     return img
-
 
 # Flips the values of a gray image to have 0 as white and 255 as black
 def flip(img):
@@ -18,7 +15,6 @@ def flip(img):
         for col in range(0, (size[1])):
             img[row, col] = 255 - img[row, col]
     return img
-
 
 # Calculates the value of R'
 def rvalue(b, d, e, f, h):
@@ -38,7 +34,6 @@ def rvalue(b, d, e, f, h):
     r = maximum - minimum + 1
     return r
 
-
 # Minimizes the given e point by itself and its neighbours
 def minimize(b, d, h, f, e):
     ret = b
@@ -49,7 +44,6 @@ def minimize(b, d, h, f, e):
             ret = neighbour[index+1]
         index += 1
     return ret
-
 
 # Minimize the given e point by itself and its neighbours if they are not zero
 def minimizenotnull(b, d, h, f, e):
@@ -62,7 +56,6 @@ def minimizenotnull(b, d, h, f, e):
         index += 1
     return ret
 
-
 # Maximize the given e point by itself and its neighbours if they are not zero
 def maximizenotnull(a, b, c, d, e, f, g, h, i):
     ret = a
@@ -73,7 +66,6 @@ def maximizenotnull(a, b, c, d, e, f, g, h, i):
             ret = neighbour[index+1]
         index += 1
     return ret
-
 
 # For the given e point check the neighbours if they have a value bigger than (e-R')
 def notendpoint(b, d, h, f, r):
@@ -90,7 +82,6 @@ def notendpoint(b, d, h, f, r):
         return True
     else:
         return False
-
 
 def connected(a, b, c, d, e, f, g, h, i, r):
     connect = [b, d, f, h]
@@ -145,7 +136,6 @@ def connected(a, b, c, d, e, f, g, h, i, r):
         # print('False')
         return False
 
-
 def findpath(a, b, c, d, f, g, h, i, m, x, y, r):
     if x == 0 and y == 1:
         if (b >= (m - r) and a >= (m - r) and d >= (m - r)) or (b >= (m - r) and c >= (m - r) and f >= (m - r) and i >= (m - r) and h >= (m - r) and g >= (m - r) and d >= (m - r)):
@@ -192,7 +182,6 @@ def findpath(a, b, c, d, f, g, h, i, m, x, y, r):
     else:
         return False
 
-
 # Checks wether a matrix is equal to another one
 def equalmatrix(mat1, mat2, size):
     for row in range(1, size[0] - 1):
@@ -201,13 +190,11 @@ def equalmatrix(mat1, mat2, size):
                 return False
     return True
 
-
 # Makes matrix1 equal to matrix2
 def makeequalmatrix(mat1, mat2, size):
     for row in range(0, size[0]):
         for col in range(0, size[1]):
             mat1[row][col] = mat2[row][col]
-
 
 # Makes a matrix values 0
 def matrixzero(mat, size):
@@ -215,13 +202,11 @@ def matrixzero(mat, size):
         for col in range(0, size[1]):
             mat[row][col] = 0
 
-
 # Prints out the matrix
 def printmatrix(matrix):
     if len(matrix) < 15:
         print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in matrix]))
         print('\n')
-
 
 # Finds pixels with same value and returns a matrix
 def nearestneighbour(matrix, img, r, c, index):
@@ -294,7 +279,6 @@ def nearestneighbour(matrix, img, r, c, index):
 
     return matrix
 
-
 # Finds the connected components in a picture
 def connectedcomponents(matrix, img, size):
     n = size[0]
@@ -319,13 +303,11 @@ def connectedcomponents(matrix, img, size):
                 index += 1
     return matrix2
 
-
 # If one of the neighbours of point has a value 0 than it is true
 def borderpoint(img, row, col):
     if img[row + 1][col] == 0 or img[row - 1][col] == 0 or img[row][col + 1] == 0 or img[row][col - 1] == 0:
         return True
     return False
-
 
 # The middle point has the highest grayness
 def localmaximum(n0, n1, n2, n3, n4, n5, n6, n7, n8):
@@ -333,37 +315,36 @@ def localmaximum(n0, n1, n2, n3, n4, n5, n6, n7, n8):
         return True
     return False
 
-
 # Returns true if the img[row][col] has only one 4 neighbour with nonzero value
 def endpoint(img, row, col):
     array = []
     array.extend([img[row - 1][col], img[row][col - 1], img[row + 1][col], img[row][col + 1]])
 
-    if np.count_nonzero(array) == 1:
+    if numpy.count_nonzero(array) == 1:
         del array[:]
 
         if img[row - 1][col] != 0:
             array.extend([img[row - 2][col], img[row - 1][col - 1], img[row - 1][col + 1]])
 
-            if np.count_nonzero(array) == 1:
+            if numpy.count_nonzero(array) == 1:
                 return True
 
         if img[row][col - 1] != 0:
             array.extend([img[row - 1][col - 1], img[row][col - 2], img[row + 1][col - 1]])
 
-            if np.count_nonzero(array) == 1:
+            if numpy.count_nonzero(array) == 1:
                 return True
 
         if img[row + 1][col] != 0:
             array.extend([img[row + 1][col - 1], img[row + 2][col], img[row + 1][col + 1]])
 
-            if np.count_nonzero(array) == 1:
+            if numpy.count_nonzero(array) == 1:
                 return True
 
         if img[row][col + 1] != 0:
             array.extend([img[row - 1][col + 1], img[row][col + 2], img[row + 1][col + 1]])
 
-            if np.count_nonzero(array) == 1:
+            if numpy.count_nonzero(array) == 1:
                 return True
 
     return False
@@ -372,10 +353,9 @@ def endpoint(img, row, col):
 def endpointmodified(img, row, col):
     four = [img[row - 1][col], img[row][col - 1], img[row][col + 1], img[row + 1][col]]
     eight = [img[row - 1][col - 1], img[row - 1][col + 1], img[row + 1][col - 1], img[row + 1][col + 1]]
-    if np.count_nonzero(four) == 1 or np.count_nonzero(eight) == 1:
+    if numpy.count_nonzero(four) == 1 or numpy.count_nonzero(eight) == 1:
         return True
     return False
-
 
 # Returns True if the point can be deleted so the path is not weakened in the corner
 def connectedcorner(img, row, col):
@@ -392,7 +372,6 @@ def connectedcorner(img, row, col):
         return True
     return False
 
-
 # Returns True if the point can be deleted so tha path is not weakened
 def connectedpath(img, row, col):
     if min(img[row][col + 1], img[row][col - 1]) > 0:
@@ -402,7 +381,6 @@ def connectedpath(img, row, col):
         if img[row][col - 1] < img[row][col] and img[row][col + 1] < img[row][col]:
             return False
     return True
-
 
 # Returns the maximum neighbours value in the 3x3 neighbourhood
 def dilation(img, row, col):
@@ -425,7 +403,6 @@ def dilation(img, row, col):
         x = int(img[row + 1][col + 1])
     return x
 
-
 # Returns the minimum neighbours value in the 3x3 neighbourhood
 def erosion(img, row, col):
     x = int(img[row][col])
@@ -446,7 +423,6 @@ def erosion(img, row, col):
     if int(img[row + 1][col + 1]) < x:
         x = int(img[row + 1][col + 1])
     return x
-
 
 # Count the value differences in the 8 neighbourhood
 def countf(img, row, col):
@@ -515,7 +491,6 @@ def countf(img, row, col):
         last_sign = x
 
     return sign_changes
-
 
 # Finds the road trough a from b
 # Matrix shows the road
@@ -629,7 +604,6 @@ def findroad(matrix, matrix2, helper, img, img2, r, c, index):
 
     return False
 
-
 # Checks if the neighbour is a different component
 def neighbour(matrix2, x, y, index):
     if (matrix2[x - 1][y] != index and matrix2[x - 1][y] != 0) or (
@@ -643,14 +617,12 @@ def neighbour(matrix2, x, y, index):
         return True
     return False
 
-
 # The image2 values are replaced by the img values if the helper has 1
 def stop(img, img2, helper, size):
     for row in range(1, size[0] - 1):
         for col in range(1, size[1] - 1):
             if helper[row][col] == 1:
                 img2[row][col] = img[row][col]
-
 
 # If two neighbours has a value grater than 0 than returns true
 def countnotzero(img, row, col):
@@ -659,7 +631,6 @@ def countnotzero(img, row, col):
     if sum(x is not 0 for x in lst) == 2:
         return True
     return False
-
 
 # Counts the components in a picture
 def hilditch(img, row, col):
@@ -676,7 +647,6 @@ def hilditch(img, row, col):
         return False
     return True
 
-
 # If one of the 8 neighbours of point has a value 0 than it is true
 def borderpoint8(img, row, col):
     if img[row + 1][col] == 0 or img[row + 1][col + 1] == 0 or img[row][col + 1] == 0 or img[row - 1][col + 1] == 0 or \
@@ -684,14 +654,12 @@ def borderpoint8(img, row, col):
         return True
     return False
 
-
 # If one of the 8 neighbours has a value smaller than the middle point, it returns true
 def borderpoint8modified(img, row, col):
     if img[row + 1][col] < img[row][col] or img[row + 1][col + 1] < img[row][col] or img[row][col + 1] < img[row][col] or img[row - 1][col + 1] < img[row][col] or \
       img[row - 1][col] < img[row][col] or img[row - 1][col - 1] < img[row][col] or img[row][col - 1] < img[row][col] or img[row + 1][col - 1] == 0:
         return True
     return False
-
 
 # Checks the neighbourhood of a point and returns the number of objects in the neighbourhood
 def oneobject(img, row, col):
@@ -705,7 +673,6 @@ def oneobject(img, row, col):
     if img[row][col - 1] == 0 and (img[row - 1][col - 1] != 0 or img[row - 1][col] != 0):
         objects += 1
     return objects
-
 
 # Returns False if it has 1 or 2 neighbours
 def notendpoint2(img, row, col):
@@ -722,7 +689,6 @@ def notendpoint2(img, row, col):
         return True
     return False
 
-
 # Returns true if neighbour remains simple after img[row][col] is deleted
 def simpleafterremove(img, row, col):
     if simpleafterhelper(img, row, col, row, col - 1) and \
@@ -731,7 +697,6 @@ def simpleafterremove(img, row, col):
        simpleafterhelper(img, row, col, row, col + 1):
         return True
     return False
-
 
 # Returns True if the neighbour can be deleted
 def simpleafterhelper(img, x, y, row, col):
@@ -745,7 +710,6 @@ def simpleafterhelper(img, x, y, row, col):
             img[x][y] = default
             return False
     return True
-
 
 # Returns True if the field equals any of the forbidden shapes
 def forbidden(img, row, col):
@@ -949,7 +913,6 @@ def forbidden(img, row, col):
         return True
     return False
 
-
 # Converts the picture into an array
 def converttoarray(img, row, col):
     array = [img[row + 2][col + 2], img[row + 2][col + 1], img[row + 2][col], img[row + 2][col - 1],img[row + 2][col- 2],
@@ -958,7 +921,6 @@ def converttoarray(img, row, col):
              img[row - 1][col + 2], img[row - 1][col + 1], img[row - 1][col], img[row - 1][col - 1], img[row - 1][col - 2],
              img[row - 2][col + 2], img[row - 2][col + 1], img[row - 2][col], img[row - 2][col - 1], img[row - 2][col - 2]]
     return array
-
 
 # Converts the picture into an array
 def arraytonum(array):
@@ -969,24 +931,21 @@ def arraytonum(array):
           array[20]*(2 ** 4) + array[21]*(2**3) + array[22]*(2**2) + array[23]*(2**1) + array[24]
     return num
 
-
 # Converts an array to a picture matrix
 def converttopicture(binary):
-    picture = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    picture = numpy.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     for x in range(len(binary)):
         picture[x] = int(binary[x])
     return picture.reshape(5, 5)
 
-
 # binary to matrix
 def binarytomatrix(binary):
-    matrix = np.ones((5, 5), np.uint8)
+    matrix = numpy.ones((5, 5), numpy.uint8)
 
     for r in range(0, 5):
         for c in range(0, 5):
             matrix[r][c] = 0
     return True
-
 
 # Writes a number into a file adds a new line
 def numtotext(filename, number):
@@ -994,10 +953,9 @@ def numtotext(filename, number):
         file.write(str(number))
         file.write('\n')
 
-
 # Creates a 5x5 binary matrix
 def binmatrix(img, row, col, size):
-    matrix = np.array([[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]])
+    matrix = numpy.array([[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]])
     for x in range(5):
         for y in range(5):
             if (size[0] - 4) > row > 2 and (size[1] - 4) > col > 2:
@@ -1006,7 +964,6 @@ def binmatrix(img, row, col, size):
             if img[x + row - 2][y + col - 2] < img[row][col]:
                 matrix[x][y] = 0
     return matrix
-
 
 # Returns the biggest 8 neighbour whit a lower intensity than the examined point
 def lowneighbour(img, row, col):
