@@ -4,9 +4,7 @@ from src.common.functions import flip
 
 picture = 'chromosomemini'
 
-# img = imreadgray('../DyerRosenfeld_1977/results/' + picture + '.png')
-img = imreadgray('../Kang_et_al/results/' + picture + '.png')
-img = imreadgray(picture + '.png')
+img = imreadgray('../kang_et_al/results/' + picture + '.png')
 img = flip(img)
 size = img.shape
 
