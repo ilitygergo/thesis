@@ -2,6 +2,7 @@ import cv2
 import copy
 import numpy
 
+# IMAGE FUNCTIONS
 
 # Reads a colored picture in gray
 def imreadgray(img):
@@ -18,6 +19,8 @@ def flip(img):
             img[row, col] = 255 - img[row, col]
     return img
 
+
+# DYER ROSENFELD SPECIFIC FUNCTIONS
 
 # Calculates the value of R'
 def rvalue(b, d, e, f, h):
@@ -168,6 +171,16 @@ def findpath(a, b, c, d, f, g, h, i, m, x, y, r):
         return False
 
 
+# ALGORITHM FUNCTIONS
+
+
+# Prints out the matrix
+def printmatrix(matrix):
+    if len(matrix) < 15:
+        print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in matrix]))
+        print('\n')
+
+
 # Checks wether a matrix is equal to another one
 def equalmatrix(mat1, mat2, size):
     for row in range(1, size[0] - 1):
@@ -184,115 +197,7 @@ def makeequalmatrix(mat1, mat2, size):
             mat1[row][col] = mat2[row][col]
 
 
-# Makes a matrix values 0
-def matrixzero(mat, size):
-    for row in range(0, size[0]):
-        for col in range(0, size[1]):
-            mat[row][col] = 0
-
-
-# Prints out the matrix
-def printmatrix(matrix):
-    if len(matrix) < 15:
-        print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in matrix]))
-        print('\n')
-
-
-# Finds pixels with same value and returns a matrix
-def nearestneighbour(matrix, img, r, c, index):
-    stack = []
-    x = copy.deepcopy(r)
-    y = copy.deepcopy(c)
-
-    while True:
-        if img[x][y] == img[x - 1][y] and matrix[x - 1][y] == 0:
-            # print(bcolors.WARN, 'up', bcolors.ENDC)
-            stack.append([x, y])
-            matrix[x][y] = index
-            x -= 1
-            # printmatrix(matrix)
-        elif img[x][y] == img[x - 1][y + 1] and matrix[x - 1][y + 1] == 0:
-            # print(bcolors.WARN, 'up and right', bcolors.ENDC)
-            stack.append([x, y])
-            matrix[x][y] = index
-            x -= 1
-            y += 1
-            # printmatrix(matrix)
-        elif img[x][y] == img[x][y + 1] and matrix[x][y + 1] == 0:
-            # print(bcolors.WARN, 'right', bcolors.ENDC)
-            stack.append([x, y])
-            matrix[x][y] = index
-            y += 1
-            # printmatrix(matrix)
-        elif img[x][y] == img[x + 1][y + 1] and matrix[x + 1][y + 1] == 0:
-            # print(bcolors.WARN, 'right and down', bcolors.ENDC)
-            stack.append([x, y])
-            matrix[x][y] = index
-            x += 1
-            y += 1
-            # printmatrix(matrix)
-        elif img[x][y] == img[x + 1][y] and matrix[x + 1][y] == 0:
-            # print(bcolors.WARN, 'down', bcolors.ENDC)
-            stack.append([x, y])
-            matrix[x][y] = index
-            x += 1
-            # printmatrix(matrix)
-        elif img[x][y] == img[x + 1][y - 1] and matrix[x + 1][y - 1] == 0:
-            # print(bcolors.WARN, 'down and left', bcolors.ENDC)
-            stack.append([x, y])
-            matrix[x][y] = index
-            x += 1
-            y -= 1
-            # printmatrix(matrix)
-        elif img[x][y] == img[x][y - 1] and matrix[x][y - 1] == 0:
-            # print(bcolors.WARN, 'left', bcolors.ENDC)
-            stack.append([x, y])
-            matrix[x][y] = index
-            y -= 1
-            # printmatrix(matrix)
-        elif img[x][y] == img[x - 1][y - 1] and matrix[x - 1][y - 1] == 0:
-            # print(bcolors.WARN, 'left and up', bcolors.ENDC)
-            stack.append([x, y])
-            matrix[x][y] = index
-            x -= 1
-            y -= 1
-            # printmatrix(matrix)
-        elif len(stack) > 0:
-            # print(bcolors.WARN, 'pop', bcolors.ENDC)
-            value = stack.pop()
-            matrix[x][y] = index
-            x = value[0]
-            y = value[1]
-        elif len(stack) == 0:
-            matrix[x][y] = index
-            break
-
-    return matrix
-
-
-# Finds the connected components in a picture
-def connectedcomponents(matrix, img, size):
-    n = size[0]
-    m = size[1]
-    matrix2 = [0] * n
-    for x in range(n):
-        matrix2[x] = [0] * m
-
-    components = []
-    index = 1
-
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            if img[row][col] != 0:
-                matrix[row][col] = 1
-
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            if matrix[row][col] != 0 and matrix2[row][col] not in components:
-                nearestneighbour(matrix2, img, row, col, index)
-                components.append(index)
-                index += 1
-    return matrix2
+# SALARI_SIY AND KANG_ET_AL SPECIFIC
 
 
 # If one of the neighbours of point has a value 0 than it is true
@@ -344,15 +249,6 @@ def endpoint(img, row, col):
     return False
 
 
-# Returns true if the img[row][col] has only one 4 neighbour with nonzero value or only one 8 neighbour with zero value
-def endpointmodified(img, row, col):
-    four = [img[row - 1][col], img[row][col - 1], img[row][col + 1], img[row + 1][col]]
-    eight = [img[row - 1][col - 1], img[row - 1][col + 1], img[row + 1][col - 1], img[row + 1][col + 1]]
-    if numpy.count_nonzero(four) == 1 or numpy.count_nonzero(eight) == 1:
-        return True
-    return False
-
-
 # Returns True if the point can be deleted so the path is not weakened in the corner
 def connectedcorner(img, row, col):
     num = 0
@@ -380,48 +276,31 @@ def connectedpath(img, row, col):
     return True
 
 
-# Returns the maximum neighbours value in the 3x3 neighbourhood
-def dilation(img, row, col):
-    x = int(img[row][col])
-    if int(img[row][col + 1]) > x:
-        x = int(img[row][col + 1])
-    if int(img[row - 1][col + 1]) > x:
-        x = int(img[row - 1][col + 1])
-    if int(img[row - 1][col]) > x:
-        x = int(img[row - 1][col])
-    if int(img[row - 1][col - 1]) > x:
-        x = int(img[row - 1][col - 1])
-    if int(img[row][col - 1]) > x:
-        x = int(img[row][col - 1])
-    if int(img[row + 1][col - 1]) > x:
-        x = int(img[row + 1][col - 1])
-    if int(img[row + 1][col]) > x:
-        x = int(img[row + 1][col])
-    if int(img[row + 1][col + 1]) > x:
-        x = int(img[row + 1][col + 1])
-    return x
+# KANG_ET_AL SPECIFIC
 
 
-# Returns the minimum neighbours value in the 3x3 neighbourhood
-def erosion(img, row, col):
-    x = int(img[row][col])
-    if int(img[row][col + 1]) < x:
-        x = int(img[row][col + 1])
-    if int(img[row - 1][col + 1]) < x:
-        x = int(img[row - 1][col + 1])
-    if int(img[row - 1][col]) < x:
-        x = int(img[row - 1][col])
-    if int(img[row - 1][col - 1]) < x:
-        x = int(img[row - 1][col - 1])
-    if int(img[row][col - 1]) < x:
-        x = int(img[row][col - 1])
-    if int(img[row + 1][col - 1]) < x:
-        x = int(img[row + 1][col - 1])
-    if int(img[row + 1][col]) < x:
-        x = int(img[row + 1][col])
-    if int(img[row + 1][col + 1]) < x:
-        x = int(img[row + 1][col + 1])
-    return x
+# If two neighbours has a value grater than 0 than returns true
+def countnotzero(img, row, col):
+    lst = [int(img[row][col + 1]), int(img[row - 1][col + 1]), int(img[row - 1][col]), int(img[row - 1][col - 1]),
+           int(img[row][col - 1]), int(img[row + 1][col - 1]), int(img[row + 1][col]), int(img[row + 1][col + 1])]
+    if sum(x is not 0 for x in lst) == 2:
+        return True
+    return False
+
+
+# SALARI_SIY AND KANG_ET_AL AND COUPRIE_ET_AL SPECIFIC
+
+
+# Returns true if the img[row][col] has only one 4 neighbour with nonzero value or only one 8 neighbour with zero value
+def endpointmodified(img, row, col):
+    four = [img[row - 1][col], img[row][col - 1], img[row][col + 1], img[row + 1][col]]
+    eight = [img[row - 1][col - 1], img[row - 1][col + 1], img[row + 1][col - 1], img[row + 1][col + 1]]
+    if numpy.count_nonzero(four) == 1 or numpy.count_nonzero(eight) == 1:
+        return True
+    return False
+
+
+# KIM SPECIFIC FUNCTIONS
 
 
 # Count the value differences in the 8 neighbourhood
@@ -493,178 +372,13 @@ def countf(img, row, col):
     return sign_changes
 
 
-# Finds the road trough a from b
-# Matrix shows the road
-# Matrix 2 has the objects
-# Helper is a plain matrix
-# Img is the original image
-# Img2 is the thinned matrix
-# r - row, c - column, index -
-def findroad(matrix, matrix2, helper, img, img2, r, c, index):
-    size = img.shape
-    stack = []
-    x = copy.deepcopy(r)
-    y = copy.deepcopy(c)
-
-    while True:
-
-        if matrix[x][y] == matrix[x - 1][y] and helper[x - 1][y] == 0:
-            stack.append([x, y])
-            helper[x][y] = 1
-            if neighbour(matrix2, x, y, index):
-                stop(img, img2, helper, size)
-                print(True)
-                return True
-            x -= 1
-            print(1)
-
-        elif matrix[x][y] == matrix[x - 1][y + 1] and helper[x - 1][y + 1] == 0:
-            stack.append([x, y])
-            helper[x][y] = 1
-            if neighbour(matrix2, x, y, index):
-                stop(img, img2, helper, size)
-                print(True)
-                return True
-            x -= 1
-            y += 1
-            print(2)
-
-        elif matrix[x][y] == matrix[x][y + 1] and helper[x][y + 1] == 0:
-            stack.append([x, y])
-            helper[x][y] = 1
-            if neighbour(matrix2, x, y, index):
-                stop(img, img2, helper, size)
-                print(True)
-                return True
-            y += 1
-            print(3)
-
-        elif matrix[x][y] == matrix[x + 1][y + 1] and helper[x + 1][y + 1] == 0:
-            stack.append([x, y])
-            helper[x][y] = 1
-            if neighbour(matrix2, x, y, index):
-                stop(img, img2, helper, size)
-                print(True)
-                return True
-            x += 1
-            y += 1
-            print(4)
-
-        elif matrix[x][y] == matrix[x + 1][y] and helper[x + 1][y] == 0:
-            stack.append([x, y])
-            helper[x][y] = 1
-            if neighbour(matrix2, x, y, index):
-                stop(img, img2, helper, size)
-                print(True)
-                return True
-            x += 1
-            print(5)
-
-        elif matrix[x][y] == matrix[x + 1][y - 1] and helper[x + 1][y - 1] == 0:
-            stack.append([x, y])
-            helper[x][y] = 1
-            if neighbour(matrix2, x, y, index):
-                stop(img, img2, helper, size)
-                print(True)
-                return True
-            x += 1
-            y -= 1
-            print(6)
-
-        elif matrix[x][y] == matrix[x][y - 1] and helper[x][y - 1] == 0:
-            stack.append([x, y])
-            helper[x][y] = 1
-            if neighbour(matrix2, x, y, index):
-                stop(img, img2, helper, size)
-                print(True)
-                return True
-            y -= 1
-            print(7)
-
-        elif matrix[x][y] == matrix[x - 1][y - 1] and helper[x - 1][y - 1] == 0:
-            stack.append([x, y])
-            helper[x][y] = 1
-            if neighbour(matrix2, x, y, index):
-                stop(img, img2, helper, size)
-                print(True)
-                return True
-            x -= 1
-            y -= 1
-            print(8)
-
-        elif len(stack) > 0:
-            value = stack.pop()
-            helper[x][y] = 1
-            x = value[0]
-            y = value[1]
-            print('>0')
-
-        elif len(stack) == 0:
-            print('=0')
-            break
-
-    return False
-
-
-# Checks if the neighbour is a different component
-def neighbour(matrix2, x, y, index):
-    if (matrix2[x - 1][y] != index and matrix2[x - 1][y] != 0) or (
-            matrix2[x - 1][y - 1] != index and matrix2[x - 1][y - 1] != 0) or (
-            matrix2[x][y - 1] != index and matrix2[x][y - 1] != 0) or (
-            matrix2[x + 1][y - 1] != index and matrix2[x + 1][y - 1] != 0) or (
-            matrix2[x + 1][y] != index and matrix2[x + 1][y] != 0) or (
-            matrix2[x + 1][y + 1] != index and matrix2[x + 1][y + 1] != 0) or (
-            matrix2[x][y + 1] != index and matrix2[x][y + 1] != 0) or (
-            matrix2[x - 1][y + 1] != index and matrix2[x - 1][y + 1] != 0):
-        return True
-    return False
-
-
-# The image2 values are replaced by the img values if the helper has 1
-def stop(img, img2, helper, size):
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            if helper[row][col] == 1:
-                img2[row][col] = img[row][col]
-
-
-# If two neighbours has a value grater than 0 than returns true
-def countnotzero(img, row, col):
-    lst = [int(img[row][col + 1]), int(img[row - 1][col + 1]), int(img[row - 1][col]), int(img[row - 1][col - 1]),
-           int(img[row][col - 1]), int(img[row + 1][col - 1]), int(img[row + 1][col]), int(img[row + 1][col + 1])]
-    if sum(x is not 0 for x in lst) == 2:
-        return True
-    return False
-
-
-# Counts the components in a picture
-def hilditch(img, row, col):
-    c = 0
-    if img[row - 1][col] == 0 and (img[row - 1][col + 1] or img[row][col + 1]):
-        c += 1
-    if img[row][col + 1] == 0 and (img[row + 1][col + 1] or img[row + 1][col]):
-        c += 1
-    if img[row + 1][col] == 0 and (img[row + 1][col - 1] or img[row][col - 1]):
-        c += 1
-    if img[row][col - 1] == 0 and (img[row - 1][col - 1] or img[row - 1][col]):
-        c += 1
-    if c != 1:
-        return False
-    return True
+#COUPRIE_ET_AL SPECIFIC
 
 
 # If one of the 8 neighbours of point has a value 0 than it is true
 def borderpoint8(img, row, col):
     if img[row + 1][col] == 0 or img[row + 1][col + 1] == 0 or img[row][col + 1] == 0 or img[row - 1][col + 1] == 0 or \
       img[row - 1][col] == 0 or img[row - 1][col - 1] == 0 or img[row][col - 1] == 0 or img[row + 1][col - 1] == 0:
-        return True
-    return False
-
-
-# If one of the 8 neighbours has a value smaller than the middle point, it returns true
-def borderpoint8modified(img, row, col):
-    if img[row + 1][col] < img[row][col] or img[row + 1][col + 1] < img[row][col] or img[row][col + 1] < img[row][col] or img[row - 1][col + 1] < img[row][col] or \
-      img[row - 1][col] < img[row][col] or img[row - 1][col - 1] < img[row][col] or img[row][col - 1] < img[row][col] or img[row + 1][col - 1] == 0:
         return True
     return False
 
@@ -681,46 +395,6 @@ def oneobject(img, row, col):
     if img[row][col - 1] == 0 and (img[row - 1][col - 1] != 0 or img[row - 1][col] != 0):
         objects += 1
     return objects
-
-
-# Returns False if it has 1 or 2 neighbours
-def notendpoint2(img, row, col):
-    neighbour = 0
-    if img[row - 1][col] != 0:
-        neighbour += 1
-    if img[row][col - 1] != 0:
-        neighbour += 1
-    if img[row + 1][col] != 0:
-        neighbour += 1
-    if img[row][col + 1] != 0:
-        neighbour += 1
-    if neighbour >= 3:
-        return True
-    return False
-
-
-# Returns true if neighbour remains simple after img[row][col] is deleted
-def simpleafterremove(img, row, col):
-    if simpleafterhelper(img, row, col, row, col - 1) and \
-       simpleafterhelper(img, row, col, row + 1, col) and \
-       simpleafterhelper(img, row, col, row - 1, col) and \
-       simpleafterhelper(img, row, col, row, col + 1):
-        return True
-    return False
-
-
-# Returns True if the neighbour can be deleted
-def simpleafterhelper(img, x, y, row, col):
-    default = copy.deepcopy(img[x][y])
-    if oneobject(img, row, col) <= 1 and img[row][col] != 0:
-        img[x][y] = 0
-        if oneobject(img, row, col) <= 1 and img[row][col] != 0:
-            img[x][y] = default
-            return True
-        else:
-            img[x][y] = default
-            return False
-    return True
 
 
 # Returns True if the field equals any of the forbidden shapes
@@ -926,6 +600,65 @@ def forbidden(img, row, col):
     return False
 
 
+# Creates a 5x5 binary matrix
+def binmatrix(img, row, col, size):
+    matrix = numpy.array([[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]])
+    for x in range(5):
+        for y in range(5):
+            if (size[0] - 4) > row > 2 and (size[1] - 4) > col > 2:
+                if not simpleafterremove(img, x + row - 2, y + col - 2) <= 1:
+                    continue
+            if img[x + row - 2][y + col - 2] < img[row][col]:
+                matrix[x][y] = 0
+    return matrix
+
+
+# Returns true if neighbour remains simple after img[row][col] is deleted
+def simpleafterremove(img, row, col):
+    if simpleafterhelper(img, row, col, row, col - 1) and \
+       simpleafterhelper(img, row, col, row + 1, col) and \
+       simpleafterhelper(img, row, col, row - 1, col) and \
+       simpleafterhelper(img, row, col, row, col + 1):
+        return True
+    return False
+
+
+# Returns True if the neighbour can be deleted
+def simpleafterhelper(img, x, y, row, col):
+    default = copy.deepcopy(img[x][y])
+    if oneobject(img, row, col) <= 1 and img[row][col] != 0:
+        img[x][y] = 0
+        if oneobject(img, row, col) <= 1 and img[row][col] != 0:
+            img[x][y] = default
+            return True
+        else:
+            img[x][y] = default
+            return False
+    return True
+
+
+# Returns the biggest 8 neighbour whit a lower intensity than the examined point
+def lowneighbour(img, row, col):
+    stack = [img[row - 1][col - 1], img[row - 1][col], img[row - 1][col + 1],
+             img[row][col - 1], img[row][col + 1],
+             img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1]]
+    values = []
+
+    for x in stack:
+        if x < img[row][col]:
+            values.append(x)
+
+    highest = values[0]
+    for x in values:
+        if x > highest:
+            highest = x
+
+    return highest
+
+
+# COUPRIE_ET_AL LOOKUP SPECIFIC
+
+
 # Converts the picture into an array
 def converttoarray(img, row, col):
     array = [img[row + 2][col + 2], img[row + 2][col + 1], img[row + 2][col], img[row + 2][col - 1],img[row + 2][col- 2],
@@ -952,52 +685,3 @@ def converttopicture(binary):
     for x in range(len(binary)):
         picture[x] = int(binary[x])
     return picture.reshape(5, 5)
-
-
-# binary to matrix
-def binarytomatrix(binary):
-    matrix = numpy.ones((5, 5), numpy.uint8)
-
-    for r in range(0, 5):
-        for c in range(0, 5):
-            matrix[r][c] = 0
-    return True
-
-
-# Writes a number into a file adds a new line
-def numtotext(filename, number):
-    with open(filename + '.txt', 'a') as file:
-        file.write(str(number))
-        file.write('\n')
-
-
-# Creates a 5x5 binary matrix
-def binmatrix(img, row, col, size):
-    matrix = numpy.array([[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]])
-    for x in range(5):
-        for y in range(5):
-            if (size[0] - 4) > row > 2 and (size[1] - 4) > col > 2:
-                if not simpleafterremove(img, x + row - 2, y + col - 2) <= 1:
-                    continue
-            if img[x + row - 2][y + col - 2] < img[row][col]:
-                matrix[x][y] = 0
-    return matrix
-
-
-# Returns the biggest 8 neighbour whit a lower intensity than the examined point
-def lowneighbour(img, row, col):
-    stack = [img[row - 1][col - 1], img[row - 1][col], img[row - 1][col + 1],
-             img[row][col - 1], img[row][col + 1],
-             img[row + 1][col - 1], img[row + 1][col], img[row + 1][col + 1]]
-    values = []
-
-    for x in stack:
-        if x < img[row][col]:
-            values.append(x)
-
-    highest = values[0]
-    for x in values:
-        if x > highest:
-            highest = x
-
-    return highest
