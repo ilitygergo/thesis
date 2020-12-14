@@ -4,6 +4,7 @@ import numpy
 
 # IMAGE FUNCTIONS
 
+
 # Reads a colored picture in gray
 def imreadgray(img):
     image = cv2.imread(img)
@@ -18,6 +19,22 @@ def flip(img):
         for col in range(0, (size[1])):
             img[row, col] = 255 - img[row, col]
     return img
+
+
+# Checks wether a matrix is equal to another one
+def equalmatrix(mat1, mat2, size):
+    for row in range(1, size[0] - 1):
+        for col in range(1, size[1] - 1):
+            if mat1[row][col] != mat2[row][col]:
+                return False
+    return True
+
+
+# Makes matrix1 equal to matrix2
+def makeequalmatrix(mat1, mat2, size):
+    for row in range(0, size[0]):
+        for col in range(0, size[1]):
+            mat1[row][col] = mat2[row][col]
 
 
 # DYER ROSENFELD SPECIFIC FUNCTIONS
@@ -179,22 +196,6 @@ def printmatrix(matrix):
     if len(matrix) < 15:
         print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in matrix]))
         print('\n')
-
-
-# Checks wether a matrix is equal to another one
-def equalmatrix(mat1, mat2, size):
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            if mat1[row][col] != mat2[row][col]:
-                return False
-    return True
-
-
-# Makes matrix1 equal to matrix2
-def makeequalmatrix(mat1, mat2, size):
-    for row in range(0, size[0]):
-        for col in range(0, size[1]):
-            mat1[row][col] = mat2[row][col]
 
 
 # SALARI_SIY AND KANG_ET_AL SPECIFIC
