@@ -50,30 +50,6 @@ def minimize(b, d, h, f, e):
     return ret
 
 
-# Minimize the given e point by itself and its neighbours if they are not zero
-def minimizenotnull(b, d, h, f, e):
-    ret = b
-    index = 0
-    neighbour = [b, d, h, f, e]
-    while index < 4:
-        if ret > neighbour[index+1] != 0:
-            ret = neighbour[index+1]
-        index += 1
-    return ret
-
-
-# Maximize the given e point by itself and its neighbours if they are not zero
-def maximizenotnull(a, b, c, d, e, f, g, h, i):
-    ret = a
-    index = 0
-    neighbour = [a, b, c, d, e, f, g, h, i]
-    while index < 4:
-        if ret < neighbour[index+1] != 0:
-            ret = neighbour[index+1]
-        index += 1
-    return ret
-
-
 # For the given e point check the neighbours if they have a value bigger than (e-R')
 def notendpoint(b, d, h, f, r):
     szam = 0
