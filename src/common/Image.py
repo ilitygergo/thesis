@@ -1,6 +1,13 @@
+import cv2
+import numpy
+
+
 class Image:
-    import cv2
-    import numpy
+    name = ''
+    path = ''
+    extension = ''
+    pixels = []
+    rowSize = 0
     lookUpTable = []
 
     def __init__(self, file_name):
@@ -12,8 +19,8 @@ class Image:
         self.convertPixelValuesToOpposite()
 
     def readGrayImage(self):
-        image = self.cv2.imread(self.path)
-        return self.cv2.cvtColor(image, self.cv2.COLOR_BGR2GRAY)
+        image = cv2.imread(self.path)
+        return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     def convertPixelValuesToOpposite(self):
         for i in range(256):
@@ -22,10 +29,23 @@ class Image:
         self.setPixelValuesByLookUpTable()
 
     def setPixelValuesByLookUpTable(self):
-        lookUpTable = self.numpy.array(self.lookUpTable, dtype=self.numpy.uint8)
+        lookUpTable = numpy.array(self.lookUpTable, dtype=numpy.uint8)
         self.pixels = lookUpTable[self.pixels]
         self.lookUpTable = []
 
+    def isEqualTo(self, image):
+        if not self.isEqualInSize(image):
+            raise Exception('Image sizes are not equal!')
+
+        if numpy.bitwise_xor(self.pixels, image.pixels).any():
+            return False
+        return True
+
+    def isEqualInSize(self, image):
+        if self.pixels.shape != image.pixels.shape:
+            return False
+        return True
+
     def save(self):
         self.convertPixelValuesToOpposite()
-        self.cv2.imwrite('common/files/output/' + self.name, self.pixels)
+        cv2.imwrite('common/files/output/' + self.name, self.pixels)
