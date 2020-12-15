@@ -1,16 +1,16 @@
 import time
+import tkinter as tk
+from common import Application
 from common import Image
 
-startTime = time.time()
+# startTime = time.time()
 
 try:
-    image = Image.Image('fingerprint_mini.png')
-    image2 = Image.Image('fingerprint_mini.png')
-    # image.save()
-    if image.isEqualTo(image2):
-        image = image2
+    root = tk.Tk()
+    app = Application.Application(master=root)
+    app.mainloop()
 except Exception as e:
     print(e)
 
-endTime = time.time()
-print(endTime - startTime)
+# endTime = time.time()
+# print(endTime - startTime)
