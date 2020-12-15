@@ -1,5 +1,5 @@
 import cv2
-import numpy
+import numpy as np
 
 
 class Image:
@@ -29,7 +29,7 @@ class Image:
         self.setPixelValuesByLookUpTable()
 
     def setPixelValuesByLookUpTable(self):
-        lookUpTable = numpy.array(self.lookUpTable, dtype=numpy.uint8)
+        lookUpTable = np.array(self.lookUpTable, dtype=np.uint8)
         self.pixels = lookUpTable[self.pixels]
         self.lookUpTable = []
 
@@ -37,7 +37,7 @@ class Image:
         if not self.isEqualInSize(image):
             raise Exception('Image sizes are not equal!')
 
-        if numpy.bitwise_xor(self.pixels, image.pixels).any():
+        if np.bitwise_xor(self.pixels, image.pixels).any():
             return False
         return True
 
