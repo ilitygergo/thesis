@@ -16,7 +16,7 @@ The papers in chronological order:
 # First steps
 
 ### Requirements
-* [python](https://www.python.org/) 3.7+
+* [python](https://www.python.org/) 3.7
 * [pip](https://pypi.org/project/pip/) (comes with python)
 
 ### Usage
