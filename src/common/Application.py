@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import messagebox
 from .Image import Image
 
 
@@ -25,12 +26,27 @@ class Application(tk.Frame):
         selectImage.pack(side='bottom')
 
     def selectImage(self):
-        image = Image(self.getImageNameFromDialog())
+        imagePath = self.getImagePathFromDialog()
+
+        if self.isValidImagePath(imagePath):
+            image = Image(imagePath)
+        else:
+            messagebox.showerror('Error', 'Image extension is not supported')
 
     @staticmethod
-    def getImageNameFromDialog():
+    def getImagePathFromDialog():
         return filedialog.askopenfilename(
             initialdir='./common/files/input',
             title='Select A File',
             filetype=(('image files', '*.jpg *.png'), ('all files', '*.*'))
         )
+
+    @staticmethod
+    def isValidImagePath(path):
+        if '.' not in path:
+            return False
+
+        if path.split('.')[1] not in ['jpg', 'png']:
+            return False
+
+        return True
