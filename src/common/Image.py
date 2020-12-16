@@ -10,9 +10,9 @@ class Image:
     rowSize = 0
     lookUpTable = []
 
-    def __init__(self, file_name):
-        self.name = file_name
-        self.path = 'common/files/input/' + file_name
+    def __init__(self, file_path):
+        self.name = file_path.split('/').pop()
+        self.path = file_path
         self.extension = self.path.split('.')[1]
         self.pixels = self.readGrayImage()
         self.rowSize, self.colSize = self.pixels.shape
