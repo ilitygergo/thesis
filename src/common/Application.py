@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import filedialog
+from .Image import Image
 
 
 class Application(tk.Frame):
@@ -14,14 +16,21 @@ class Application(tk.Frame):
         master.grid_rowconfigure(0, weight=1)
         master.grid_columnconfigure(0, weight=1)
         self.pack()
-        self.addSelectImageButton()
+        self.addImageSelectButton()
 
-    def addSelectImageButton(self):
+    def addImageSelectButton(self):
         selectImage = tk.Button(self)
-        selectImage["text"] = 'Select image'
-        selectImage["command"] = self.helloWorld
-        selectImage.pack(side="bottom")
+        selectImage['text'] = 'Select image'
+        selectImage['command'] = self.selectImage
+        selectImage.pack(side='bottom')
+
+    def selectImage(self):
+        image = Image(self.getImageNameFromDialog())
 
     @staticmethod
-    def helloWorld():
-        print('Hello World!')
+    def getImageNameFromDialog():
+        return filedialog.askopenfilename(
+            initialdir='./common/files/input',
+            title='Select A File',
+            filetype=(('image files', '*.jpg *.png'), ('all files', '*.*'))
+        )
