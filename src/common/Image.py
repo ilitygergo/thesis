@@ -8,14 +8,25 @@ class Image:
     extension = ''
     pixels = []
     rowSize = 0
+    colSize = 0
     lookUpTable = []
     __instance = None
 
     @staticmethod
     def getInstance(path=''):
-        if Image.__instance is None and path != '':
+        if path != '':
             Image.__instance = Image(path)
         return Image.__instance
+
+    @staticmethod
+    def isValidImagePath(path):
+        if '.' not in path:
+            return False
+
+        if path.split('.')[1] not in ['jpg', 'png']:
+            return False
+
+        return True
 
     def __init__(self, file_path):
         self.name = file_path.split('/').pop()
