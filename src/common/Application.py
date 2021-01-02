@@ -8,6 +8,9 @@ class Application(tk.Frame):
     title = 'Thesis - Grayscale image thinning'
     width = 1000
     height = 600
+    imageSrcLabel = tk.Label
+    canvas = tk.Canvas
+    photo = tk.PhotoImage
 
     def __init__(self, master=None):
         super().__init__(master)
@@ -18,6 +21,25 @@ class Application(tk.Frame):
         master.grid_columnconfigure(0, weight=1)
         self.pack()
         self.addImageSelectButton()
+        self.displayImagePathLabel()
+        self.displayImage()
+
+    def displayImagePathLabel(self):
+        if Image.getInstance() is None:
+            self.imageSrcLabel = tk.Label()
+            self.imageSrcLabel.pack()
+        else:
+            self.imageSrcLabel.config(text=Image.getInstance().path)
+
+    def displayImage(self):
+        img = Image.getInstance()
+        if img is None:
+            self.canvas = tk.Canvas(self.master)
+            self.canvas.pack()
+        else:
+            self.photo = tk.PhotoImage(file=img.path)
+            self.canvas.config(width=img.colSize, height=img.rowSize)
+            self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)
 
     def addImageSelectButton(self):
         selectImage = tk.Button(self)
@@ -30,8 +52,9 @@ class Application(tk.Frame):
         if not imagePath:
             return
 
-        if self.isValidImagePath(imagePath):
+        if Image.isValidImagePath(imagePath):
             Image.getInstance(imagePath)
+            self.refresh()
         else:
             messagebox.showerror('Error', 'Image extension is not supported')
 
@@ -43,12 +66,6 @@ class Application(tk.Frame):
             filetype=(('image files', '*.jpg *.png'), ('all files', '*.*'))
         )
 
-    @staticmethod
-    def isValidImagePath(path):
-        if '.' not in path:
-            return False
-
-        if path.split('.')[1] not in ['jpg', 'png']:
-            return False
-
-        return True
+    def refresh(self):
+        self.destroy()
+        self.__init__(self.master)
