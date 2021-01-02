@@ -27,9 +27,11 @@ class Application(tk.Frame):
 
     def selectImage(self):
         imagePath = self.getImagePathFromDialog()
+        if not imagePath:
+            return
 
         if self.isValidImagePath(imagePath):
-            image = Image(imagePath)
+            Image.getInstance(imagePath)
         else:
             messagebox.showerror('Error', 'Image extension is not supported')
 

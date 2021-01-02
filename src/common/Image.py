@@ -9,6 +9,13 @@ class Image:
     pixels = []
     rowSize = 0
     lookUpTable = []
+    __instance = None
+
+    @staticmethod
+    def getInstance(path=''):
+        if Image.__instance is None and path != '':
+            Image.__instance = Image(path)
+        return Image.__instance
 
     def __init__(self, file_path):
         self.name = file_path.split('/').pop()
