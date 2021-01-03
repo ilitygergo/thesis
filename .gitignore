@@ -1,4 +1,4 @@
 __pycache__/
 venv/
 .idea/
-src/common/files/output
+src/files/output
