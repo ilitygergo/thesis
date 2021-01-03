@@ -22,11 +22,11 @@ print("                                             |___/ ", bcolors.ENDC)
 # Reading in the pictures as a gray picture
 picture = 'text'
 
-img = imreadgray('../common/files/input/' + picture + '.png')
-img2 = imreadgray('../common/files/input/' + picture + '.png')
-g1 = imreadgray('../common/files/input/' + picture + '.png')
-g2 = imreadgray('../common/files/input/' + picture + '.png')
-borders = imreadgray('../common/files/input/' + picture + '.png')
+img = imreadgray('../files/input/' + picture + '.png')
+img2 = imreadgray('../files/input/' + picture + '.png')
+g1 = imreadgray('../files/input/' + picture + '.png')
+g2 = imreadgray('../files/input/' + picture + '.png')
+borders = imreadgray('../files/input/' + picture + '.png')
 
 # Converting the values 0-255
 flip(img)

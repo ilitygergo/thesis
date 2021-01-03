@@ -22,8 +22,8 @@ print("         |___/                                                        ", 
 # Reading in the pictures as a gray picture
 picture = 'text'
 
-img = imreadgray('../common/files/input/' + picture + '.png')
-img2 = imreadgray('../common/files/input/' + picture + '.png')
+img = imreadgray('../files/input/' + picture + '.png')
+img2 = imreadgray('../files/input/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
 img = flip(img)

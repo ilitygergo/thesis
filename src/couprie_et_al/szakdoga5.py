@@ -26,10 +26,10 @@ print("                   |_|                                     ", bcolors.END
 # Reading in the pictures as a gray picture
 picture = 'text'
 
-img = imreadgray('../common/files/input/' + picture + '.png')
-img2 = imreadgray('../common/files/input/' + picture + '.png')
-helper = imreadgray('../common/files/input/' + picture + '.png')
-lowest = imreadgray('../common/files/input/' + picture + '.png')
+img = imreadgray('../files/input/' + picture + '.png')
+img2 = imreadgray('../files/input/' + picture + '.png')
+helper = imreadgray('../files/input/' + picture + '.png')
+lowest = imreadgray('../files/input/' + picture + '.png')
 
 # Converting values 0-255
 img = flip(img)

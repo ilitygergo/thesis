@@ -23,16 +23,16 @@ print("                  |___/                                         ", bcolor
 # Beolvasás szürkeárnyalatos képként
 picture = 'text'
 
-img = imreadgray('../common/files/input/' + picture + '.png')
-img2 = imreadgray('../common/files/input/' + picture + '.png')
-helper = imreadgray('../common/files/input/' + picture + '.png')
-psi = imreadgray('../common/files/input/' + picture + '.png')
-psis = imreadgray('../common/files/input/' + picture + '.png')
-skeleton = imreadgray('../common/files/input/' + picture + '.png')
-matrix = imreadgray('../common/files/input/' + picture + '.png')
-matrix2 = imreadgray('../common/files/input/' + picture + '.png')
-help = imreadgray('../common/files/input/' + picture + '.png')
-borders = imreadgray('../common/files/input/' + picture + '.png')
+img = imreadgray('../files/input/' + picture + '.png')
+img2 = imreadgray('../files/input/' + picture + '.png')
+helper = imreadgray('../files/input/' + picture + '.png')
+psi = imreadgray('../files/input/' + picture + '.png')
+psis = imreadgray('../files/input/' + picture + '.png')
+skeleton = imreadgray('../files/input/' + picture + '.png')
+matrix = imreadgray('../files/input/' + picture + '.png')
+matrix2 = imreadgray('../files/input/' + picture + '.png')
+help = imreadgray('../files/input/' + picture + '.png')
+borders = imreadgray('../files/input/' + picture + '.png')
 
 # Értékek átkonvertálása 0-255
 flip(psis)

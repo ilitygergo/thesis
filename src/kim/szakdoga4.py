@@ -17,17 +17,17 @@ print(" |_|\_\_|_| |_| |_| |______\___|\___|  \_____|_| |_|\___/|_|", bcolors.EN
 # Reading in the image as a gray image
 picture = 'text'
 
-img = imreadgray('../common/files/input/' + picture + '.png')
-img2 = imreadgray('../common/files/input/' + picture + '.png')
-comp = imreadgray('../common/files/input/' + picture + '.png')
-compstar = imreadgray('../common/files/input/' + picture + '.png')
-c8 = imreadgray('../common/files/input/' + picture + '.png')
-E = imreadgray('../common/files/input/' + picture + '.png')
-R = imreadgray('../common/files/input/' + picture + '.png')
-O1 = imreadgray('../common/files/input/' + picture + '.png')
-O2 = imreadgray('../common/files/input/' + picture + '.png')
-helper1 = imreadgray('../common/files/input/' + picture + '.png')
-helper2 = imreadgray('../common/files/input/' + picture + '.png')
+img = imreadgray('../files/input/' + picture + '.png')
+img2 = imreadgray('../files/input/' + picture + '.png')
+comp = imreadgray('../files/input/' + picture + '.png')
+compstar = imreadgray('../files/input/' + picture + '.png')
+c8 = imreadgray('../files/input/' + picture + '.png')
+E = imreadgray('../files/input/' + picture + '.png')
+R = imreadgray('../files/input/' + picture + '.png')
+O1 = imreadgray('../files/input/' + picture + '.png')
+O2 = imreadgray('../files/input/' + picture + '.png')
+helper1 = imreadgray('../files/input/' + picture + '.png')
+helper2 = imreadgray('../files/input/' + picture + '.png')
 
 # Converting values 0-255
 flip(img)
