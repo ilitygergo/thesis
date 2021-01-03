@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 from .Image import Image
+from .Algorithm import Algorithm
 
 
 class Application(tk.Frame):
@@ -35,11 +36,11 @@ class Application(tk.Frame):
         self.menu.add_cascade(label='File', menu=fileMenu)
 
         algorithmMenu = tk.Menu(self.master)
-        algorithmMenu.add_command(label='Dyer Rosenfeld', command=self.selectImage)
-        algorithmMenu.add_command(label='Salari Siy', command=self.selectImage)
-        algorithmMenu.add_command(label='Kang Et Al', command=self.selectImage)
-        algorithmMenu.add_command(label='Kim', command=self.selectImage)
-        algorithmMenu.add_command(label='Couprie Et Al', command=self.selectImage)
+        algorithmMenu.add_command(label='Dyer Rosenfeld', command=self.selectAlgorithm)
+        algorithmMenu.add_command(label='Salari Siy', command=self.selectAlgorithm)
+        algorithmMenu.add_command(label='Kang Et Al', command=self.selectAlgorithm)
+        algorithmMenu.add_command(label='Kim', command=self.selectAlgorithm)
+        algorithmMenu.add_command(label='Couprie Et Al', command=self.selectAlgorithm)
         self.menu.add_cascade(label='Algorithm', menu=algorithmMenu)
 
     def displayImage(self):
@@ -85,6 +86,11 @@ class Application(tk.Frame):
             title='Select A File',
             filetype=(('image files', '*.jpg *.png'), ('all files', '*.*'))
         )
+
+    @staticmethod
+    def selectAlgorithm():
+        if Image.getInstance() is None:
+            messagebox.showerror('Error', 'Select an image first!')
 
     def refreshWindow(self):
         self.destroy()
