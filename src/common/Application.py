@@ -21,6 +21,7 @@ class Application(tk.Frame):
         master.maxsize(width=self.width, height=self.height)
         master.columnconfigure(0, weight=1)
         master.rowconfigure(0, weight=1)
+        master.configure(bg='#CECECE')
         self.displayMenu()
         self.displayImage()
         self.displayImageDetails()
@@ -45,6 +46,7 @@ class Application(tk.Frame):
         img = Image.getInstance()
         if img is None:
             self.canvas = tk.Canvas(self.master)
+            self.canvas.config(bg='#CECECE', highlightbackground='black')
             self.canvas.grid(row=0, column=0)
         else:
             self.photo = tk.PhotoImage(file=img.path)
@@ -55,8 +57,10 @@ class Application(tk.Frame):
         img = Image.getInstance()
         if img is None:
             self.imageSrcLabel = tk.Label()
+            self.imageSrcLabel.config(bg='#CECECE')
             self.imageSrcLabel.grid(row=1, column=0)
             self.imageSizeLabel = tk.Label()
+            self.imageSizeLabel.config(bg='#CECECE')
             self.imageSizeLabel.grid(row=2, column=0)
         else:
             self.imageSrcLabel.config(text=img.name)
