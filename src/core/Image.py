@@ -66,10 +66,10 @@ class Image:
 
     def reduceNoise(self):
         for i in range(256):
-            self.lookUpTable.append(i)
-
             if i < 50:
                 self.lookUpTable.append(0)
+            else:
+                self.lookUpTable.append(i)
 
         self.setPixelValuesByLookUpTable()
 
