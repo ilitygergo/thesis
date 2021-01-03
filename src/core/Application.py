@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
-from .Image import Image
-from .Algorithm import Algorithm
+from src.core.Image import Image
+from src.core.AlgorithmFactory import *
 
 
 class Application(tk.Frame):
@@ -37,11 +37,11 @@ class Application(tk.Frame):
         self.menu.add_cascade(label='File', menu=fileMenu)
 
         algorithmMenu = tk.Menu(self.master, tearoff=0)
-        algorithmMenu.add_command(label='Dyer Rosenfeld', command=lambda: self.selectAlgorithm('DyerRosenfeld'))
-        algorithmMenu.add_command(label='Salari Siy', command=lambda: self.selectAlgorithm('SalariSiy'))
-        algorithmMenu.add_command(label='Kang Et Al', command=lambda: self.selectAlgorithm('KangEtAl'))
-        algorithmMenu.add_command(label='Kim', command=lambda: self.selectAlgorithm('Kim'))
-        algorithmMenu.add_command(label='Couprie Et Al', command=lambda: self.selectAlgorithm('CouprieEtAl'))
+        algorithmMenu.add_command(label='Dyer Rosenfeld', command=lambda: self.runAlgorithm(DyerRosenfeldFactory()))
+        algorithmMenu.add_command(label='Salari Siy', command=lambda: self.runAlgorithm(SalariSiyFactory()))
+        algorithmMenu.add_command(label='Kang Et Al', command=lambda: self.runAlgorithm(KangFactory()))
+        algorithmMenu.add_command(label='Kim', command=lambda: self.runAlgorithm(KimFactory()))
+        algorithmMenu.add_command(label='Couprie Et Al', command=lambda: self.runAlgorithm(CouprieFactory()))
         self.menu.add_cascade(label='Algorithm', menu=algorithmMenu)
 
     def displayImage(self):
@@ -89,13 +89,13 @@ class Application(tk.Frame):
         )
 
     @staticmethod
-    def selectAlgorithm(class_name=''):
+    def runAlgorithm(factory: AlgorithmFactory):
         if Image.getInstance() is None:
             messagebox.showerror('Error', 'Select an image first!')
-        if class_name is '':
-            raise Exception('Wrong class name!')
+        if not factory:
+            raise Exception('Wrong algorithm!')
 
-        print(class_name)
+        factory.runAlgorithm()
 
     def refreshWindow(self):
         self.destroy()
