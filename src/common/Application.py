@@ -6,9 +6,11 @@ from .Image import Image
 
 class Application(tk.Frame):
     title = 'Thesis - Grayscale image thinning'
-    width = 1000
-    height = 600
+    width = 700
+    height = 400
+    menu = tk.Menu
     imageSrcLabel = tk.Label
+    imageSizeLabel = tk.Label
     canvas = tk.Canvas
     photo = tk.PhotoImage
 
@@ -17,19 +19,25 @@ class Application(tk.Frame):
         master.title(self.title)
         master.minsize(width=self.width, height=self.height)
         master.maxsize(width=self.width, height=self.height)
-        master.grid_rowconfigure(0, weight=1)
-        master.grid_columnconfigure(0, weight=1)
-        self.pack()
-        self.addImageSelectButton()
-        self.displayImagePathLabel()
+        self.displayMenu()
         self.displayImage()
+        self.displayImageDetails()
 
-    def displayImagePathLabel(self):
-        if Image.getInstance() is None:
-            self.imageSrcLabel = tk.Label()
-            self.imageSrcLabel.pack()
-        else:
-            self.imageSrcLabel.config(text=Image.getInstance().path)
+    def displayMenu(self):
+        self.menu = tk.Menu(self.master)
+        self.master.config(menu=self.menu)
+
+        fileMenu = tk.Menu(self.master)
+        fileMenu.add_command(label='Select image', command=self.selectImage)
+        self.menu.add_cascade(label='File', menu=fileMenu)
+
+        algorithmMenu = tk.Menu(self.master)
+        algorithmMenu.add_command(label='Dyer Rosenfeld', command=self.selectImage)
+        algorithmMenu.add_command(label='Salari Siy', command=self.selectImage)
+        algorithmMenu.add_command(label='Kang Et Al', command=self.selectImage)
+        algorithmMenu.add_command(label='Kim', command=self.selectImage)
+        algorithmMenu.add_command(label='Couprie Et Al', command=self.selectImage)
+        self.menu.add_cascade(label='Algorithm', menu=algorithmMenu)
 
     def displayImage(self):
         img = Image.getInstance()
@@ -39,13 +47,19 @@ class Application(tk.Frame):
         else:
             self.photo = tk.PhotoImage(file=img.path)
             self.canvas.config(width=img.colSize, height=img.rowSize)
-            self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)
+            self.canvas.create_image(0, 0, image=self.photo)
 
-    def addImageSelectButton(self):
-        selectImage = tk.Button(self)
-        selectImage['text'] = 'Select image'
-        selectImage['command'] = self.selectImage
-        selectImage.pack(side='bottom')
+    def displayImageDetails(self):
+        img = Image.getInstance()
+        if img is None:
+            self.imageSrcLabel = tk.Label()
+            self.imageSrcLabel.pack()
+            self.imageSizeLabel = tk.Label()
+            self.imageSizeLabel.pack()
+        else:
+            self.imageSrcLabel.config(text=img.name)
+            sizeString = str(img.rowSize) + ' x ' + str(img.colSize)
+            self.imageSizeLabel.config(text=sizeString)
 
     def selectImage(self):
         imagePath = self.getImagePathFromDialog()
@@ -54,7 +68,7 @@ class Application(tk.Frame):
 
         if Image.isValidImagePath(imagePath):
             Image.getInstance(imagePath)
-            self.refresh()
+            self.refreshWindow()
         else:
             messagebox.showerror('Error', 'Image extension is not supported')
 
@@ -66,6 +80,6 @@ class Application(tk.Frame):
             filetype=(('image files', '*.jpg *.png'), ('all files', '*.*'))
         )
 
-    def refresh(self):
+    def refreshWindow(self):
         self.destroy()
         self.__init__(self.master)
