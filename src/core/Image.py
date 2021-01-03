@@ -51,7 +51,7 @@ class Image:
         self.pixels = lookUpTable[self.pixels]
         self.lookUpTable = []
 
-    def isEqualTo(self, image):
+    def isEqualTo(self, image: 'Image'):
         if not self.isEqualInSize(image):
             raise Exception('Image sizes are not equal!')
 
@@ -59,10 +59,19 @@ class Image:
             return False
         return True
 
-    def isEqualInSize(self, image):
+    def isEqualInSize(self, image: 'Image'):
         if self.pixels.shape != image.pixels.shape:
             return False
         return True
+
+    def reduceNoise(self):
+        for i in range(256):
+            self.lookUpTable.append(i)
+
+            if i < 50:
+                self.lookUpTable.append(0)
+
+        self.setPixelValuesByLookUpTable()
 
     def save(self):
         self.convertPixelValuesToOpposite()
