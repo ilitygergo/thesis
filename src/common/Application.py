@@ -62,7 +62,7 @@ class Application(tk.Frame):
             self.imageSizeLabel.config(text=sizeString)
 
     def selectImage(self):
-        imagePath = self.getImagePathFromDialog()
+        imagePath = self.getImagePath()
         if not imagePath:
             return
 
@@ -73,7 +73,7 @@ class Application(tk.Frame):
             messagebox.showerror('Error', 'Image extension is not supported')
 
     @staticmethod
-    def getImagePathFromDialog():
+    def getImagePath():
         return filedialog.askopenfilename(
             initialdir='./common/files/input',
             title='Select A File',
