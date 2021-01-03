@@ -73,7 +73,7 @@ class Application(tk.Frame):
         if not imagePath:
             return
 
-        if Image.isValidImagePath(imagePath):
+        if Image.isValidImageExtension(imagePath):
             Image.getInstance(imagePath)
             self.refreshWindow()
         else:

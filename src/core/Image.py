@@ -19,7 +19,7 @@ class Image:
         return Image.__instance
 
     @staticmethod
-    def isValidImagePath(path):
+    def isValidImageExtension(path):
         if '.' not in path:
             return False
 
