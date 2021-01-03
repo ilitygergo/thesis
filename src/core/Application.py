@@ -7,8 +7,9 @@ from .Algorithm import Algorithm
 
 class Application(tk.Frame):
     title = 'Thesis - Grayscale image thinning'
-    width = 600
-    height = 350
+    width = 800
+    height = 400
+    font = 'Courier'
     menu = tk.Menu
     imageSrcLabel = tk.Label
     imageSizeLabel = tk.Label
@@ -31,16 +32,16 @@ class Application(tk.Frame):
         self.menu = tk.Menu(self.master)
         self.master.config(menu=self.menu)
 
-        fileMenu = tk.Menu(self.master)
+        fileMenu = tk.Menu(self.master, tearoff=0)
         fileMenu.add_command(label='Select image', command=self.selectImage)
         self.menu.add_cascade(label='File', menu=fileMenu)
 
-        algorithmMenu = tk.Menu(self.master)
-        algorithmMenu.add_command(label='Dyer Rosenfeld', command=self.selectAlgorithm)
-        algorithmMenu.add_command(label='Salari Siy', command=self.selectAlgorithm)
-        algorithmMenu.add_command(label='Kang Et Al', command=self.selectAlgorithm)
-        algorithmMenu.add_command(label='Kim', command=self.selectAlgorithm)
-        algorithmMenu.add_command(label='Couprie Et Al', command=self.selectAlgorithm)
+        algorithmMenu = tk.Menu(self.master, tearoff=0)
+        algorithmMenu.add_command(label='Dyer Rosenfeld', command=lambda: self.selectAlgorithm('DyerRosenfeld'))
+        algorithmMenu.add_command(label='Salari Siy', command=lambda: self.selectAlgorithm('SalariSiy'))
+        algorithmMenu.add_command(label='Kang Et Al', command=lambda: self.selectAlgorithm('KangEtAl'))
+        algorithmMenu.add_command(label='Kim', command=lambda: self.selectAlgorithm('Kim'))
+        algorithmMenu.add_command(label='Couprie Et Al', command=lambda: self.selectAlgorithm('CouprieEtAl'))
         self.menu.add_cascade(label='Algorithm', menu=algorithmMenu)
 
     def displayImage(self):
@@ -58,10 +59,10 @@ class Application(tk.Frame):
         img = Image.getInstance()
         if img is None:
             self.imageSrcLabel = tk.Label()
-            self.imageSrcLabel.config(bg='#CECECE')
+            self.imageSrcLabel.config(bg='#CECECE', font=(self.font, 28))
             self.imageSrcLabel.grid(row=1, column=0)
             self.imageSizeLabel = tk.Label()
-            self.imageSizeLabel.config(bg='#CECECE')
+            self.imageSizeLabel.config(bg='#CECECE', font=(self.font, 32))
             self.imageSizeLabel.grid(row=2, column=0)
         else:
             self.imageSrcLabel.config(text=img.name)
@@ -88,9 +89,13 @@ class Application(tk.Frame):
         )
 
     @staticmethod
-    def selectAlgorithm():
+    def selectAlgorithm(class_name=''):
         if Image.getInstance() is None:
             messagebox.showerror('Error', 'Select an image first!')
+        if class_name is '':
+            raise Exception('Wrong class name!')
+
+        print(class_name)
 
     def refreshWindow(self):
         self.destroy()
