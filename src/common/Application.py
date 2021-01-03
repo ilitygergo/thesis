@@ -46,11 +46,11 @@ class Application(tk.Frame):
         img = Image.getInstance()
         if img is None:
             self.canvas = tk.Canvas(self.master)
-            self.canvas.config(bg='#CECECE', highlightbackground='black')
+            self.canvas.config(bg='#CECECE', highlightbackground='#CECECE')
             self.canvas.grid(row=0, column=0)
         else:
             self.photo = tk.PhotoImage(file=img.path)
-            self.canvas.config(width=img.colSize, height=img.rowSize)
+            self.canvas.config(width=img.colSize, height=img.rowSize, highlightbackground='black')
             self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)
 
     def displayImageDetails(self):
