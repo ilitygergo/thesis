@@ -1,11 +1,11 @@
 import bcolors
 from abc import ABC, abstractmethod
-from src.classes.Algorithm import Algorithm
-from src.classes.DyerRosenfeld import DyerRosenfeld
-from src.classes.SalariSiy import SalariSiy
-from src.classes.Kang import Kang
-from src.classes.Kim import Kim
-from src.classes.Couprie import Couprie
+from classes.Algorithm import Algorithm
+from classes.DyerRosenfeld import DyerRosenfeld
+from classes.SalariSiy import SalariSiy
+from classes.Kang import Kang
+from classes.Kim import Kim
+from classes.Couprie import Couprie
 
 
 class AlgorithmFactory(ABC):

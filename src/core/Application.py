@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
-from src.core.Image import Image
-from src.core.AlgorithmFactory import *
+from core.Image import Image
+from core.AlgorithmFactory import *
 
 
 class Application(tk.Frame):

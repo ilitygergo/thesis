@@ -1,14 +1,19 @@
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+
 import cv2
 import bcolors
-from src.common.functions import printmatrix
-from src.common.functions import rvalue
-from src.common.functions import minimize
-from src.common.functions import imreadgray
-from src.common.functions import notendpoint
-from src.common.functions import flip
-from src.common.functions import connected
-from src.common.functions import equalmatrix
-from src.common.functions import makeequalmatrix
+from common.functions import printmatrix
+from common.functions import rvalue
+from common.functions import minimize
+from common.functions import imreadgray
+from common.functions import notendpoint
+from common.functions import flip
+from common.functions import connected
+from common.functions import equalmatrix
+from common.functions import makeequalmatrix
 
 print(bcolors.OK, " _____                    _____                       __     _     _ ")
 print(" |  __ \                  |  __ \                     / _|   | |   | |")
@@ -22,8 +27,8 @@ print("         |___/                                                        ", 
 # Reading in the pictures as a gray picture
 picture = 'text'
 
-img = imreadgray('../files/input/' + picture + '.png')
-img2 = imreadgray('../files/input/' + picture + '.png')
+img = imreadgray('src/files/input/' + picture + '.png')
+img2 = imreadgray('src/files/input/' + picture + '.png')
 
 # Converting values 0-255
 img = flip(img)
@@ -196,4 +201,4 @@ while nemegyenlo:
 flip(img)
 
 # Saving
-cv2.imwrite('results/' + picture + '.png', img)
+cv2.imwrite(picture + '.png', img)

@@ -1,4 +1,4 @@
-from src.classes.Algorithm import Algorithm
+from classes.Algorithm import Algorithm
 
 
 class Kang(Algorithm):
