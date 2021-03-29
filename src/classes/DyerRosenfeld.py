@@ -15,7 +15,11 @@ class DyerRosenfeld(Algorithm):
         """
 
     def step(self, img):
-        print(img)
-        img2 = Image(img.path)
-        print(img2)
-        return None
+        self.previousStep = Image(img.path)
+
+
+
+        return img
+
+    def findBorderPoints:
+        
