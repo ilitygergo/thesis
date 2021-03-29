@@ -1,5 +1,5 @@
 from classes.Algorithm import Algorithm
-
+from core.Image import Image
 
 class DyerRosenfeld(Algorithm):
     def getName(self) -> str:
@@ -13,3 +13,9 @@ class DyerRosenfeld(Algorithm):
                  __/ |
                 |___/
         """
+
+    def step(self, img):
+        print(img)
+        img2 = Image(img.path)
+        print(img2)
+        return None

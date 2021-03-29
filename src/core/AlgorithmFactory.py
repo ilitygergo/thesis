@@ -6,6 +6,7 @@ from classes.SalariSiy import SalariSiy
 from classes.Kang import Kang
 from classes.Kim import Kim
 from classes.Couprie import Couprie
+from core.Image import Image
 
 
 class AlgorithmFactory(ABC):
@@ -14,8 +15,11 @@ class AlgorithmFactory(ABC):
         pass
 
     def runAlgorithm(self):
+        img = Image.getInstance()
         algorithm = self.factory()
-        print(bcolors.OK, algorithm.getName(), bcolors.ENDC)
+
+        while algorithm.step(img) != algorithm.previousStep:
+            pass
 
 
 class DyerRosenfeldFactory(AlgorithmFactory):

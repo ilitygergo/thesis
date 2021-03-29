@@ -34,7 +34,7 @@ img2 = imreadgray('src/files/input/' + picture + '.png')
 img = flip(img)
 
 # Counter and initialization
-lepes = 1
+stepCount = 1
 size = img.shape
 nemegyenlo = True
 for row in range(0, size[0]):
@@ -191,7 +191,7 @@ while nemegyenlo:
     print(bcolors.BLUE, '\n', lepes, '. run:')
     print(img, '\n', bcolors.ENDC)
 
-    lepes += 1
+    stepCount += 1
     if equalmatrix(img, img2, size):
         break
     else:
