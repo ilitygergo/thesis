@@ -1,3 +1,12 @@
+'''
+Has to implement:
+    from common.functions import rvalue
+    from common.functions import minimize
+    from common.functions import notendpoint
+    from common.functions import connected
+    findBorderPoints
+'''
+
 from classes.Algorithm import Algorithm
 from core.Image import Image
 
