@@ -14,12 +14,12 @@ class DyerRosenfeld(Algorithm):
                 |___/
         """
 
-    def step(self, img):
+    def processStepOnImage(self, img):
         self.previousStep = Image(img.path)
 
 
 
         return img
 
-    def findBorderPoints:
-        
+    def findBorderPoints(self):
+        pass

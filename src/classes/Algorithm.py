@@ -10,5 +10,5 @@ class Algorithm(ABC):
         pass
 
     @abstractmethod
-    def step(self, img):
+    def processStepOnImage(self, img):
         pass

@@ -18,7 +18,7 @@ class AlgorithmFactory(ABC):
         img = Image.getInstance()
         algorithm = self.factory()
 
-        while not algorithm.step(img).isEqualTo(algorithm.previousStep):
+        while not algorithm.processStepOnImage(img).isEqualTo(algorithm.previousStep):
             pass
 
 
