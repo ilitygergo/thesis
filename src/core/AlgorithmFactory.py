@@ -1,12 +1,12 @@
 import bcolors
 from abc import ABC, abstractmethod
-from thinning.interface.IAlgorithm import IAlgorithm
-from thinning.DyerRosenfeld import DyerRosenfeld
-from thinning.SalariSiy import SalariSiy
-from thinning.Kang import Kang
-from thinning.Kim import Kim
-from thinning.Couprie import Couprie
-from thinning.Image import Image
+from src.thinning.interface.IAlgorithm import IAlgorithm
+from src.thinning.DyerRosenfeld import DyerRosenfeld
+from src.thinning.SalariSiy import SalariSiy
+from src.thinning.Kang import Kang
+from src.thinning.Kim import Kim
+from src.thinning.Couprie import Couprie
+from src.thinning.Image import Image
 
 
 class AlgorithmFactory(ABC):

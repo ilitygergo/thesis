@@ -1,5 +1,5 @@
 import tkinter as tk
-from core import Application
+from src.core import Application
 
 try:
     root = tk.Tk()

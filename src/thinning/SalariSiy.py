@@ -1,4 +1,4 @@
-from thinning.interface.IAlgorithm import IAlgorithm
+from src.thinning.interface.IAlgorithm import IAlgorithm
 
 
 class SalariSiy(IAlgorithm):
