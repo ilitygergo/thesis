@@ -1,7 +1,7 @@
-from classes.Algorithm import Algorithm
+from thinning.interface.IAlgorithm import IAlgorithm
 
 
-class Kang(Algorithm):
+class Kang(IAlgorithm):
     def getName(self) -> str:
         return """
          _  __                    _____       _       _  ___

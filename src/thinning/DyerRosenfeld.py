@@ -7,10 +7,10 @@ Has to implement:
     findBorderPoints
 '''
 
-from classes.Algorithm import Algorithm
-from core.Image import Image
+from thinning.interface.IAlgorithm import IAlgorithm
+from thinning.Image import Image
 
-class DyerRosenfeld(Algorithm):
+class DyerRosenfeld(IAlgorithm):
     def getName(self) -> str:
         return """
          _____                    _____                       __     _     _

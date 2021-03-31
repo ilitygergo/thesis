@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Algorithm(ABC):
+class IAlgorithm(ABC):
     step = 0
     previousStep = None
 

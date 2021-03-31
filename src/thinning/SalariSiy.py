@@ -1,7 +1,7 @@
-from classes.Algorithm import Algorithm
+from thinning.interface.IAlgorithm import IAlgorithm
 
 
-class SalariSiy(Algorithm):
+class SalariSiy(IAlgorithm):
     def getName(self) -> str:
         return """
           _____       _            _        _____ _       
