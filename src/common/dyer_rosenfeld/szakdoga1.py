@@ -184,11 +184,12 @@ class DyerRosenfeldAlgorithm:
 dyer = DyerRosenfeldAlgorithm('shapes.png')
 
 while True:
-    dyer.reset_neighbour_points()
-    dyer.init_values()
     print(bcolors.OK, 'Input:', bcolors.ENDC)
     print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
     print('\n')
+
+    dyer.reset_neighbour_points()
+    dyer.init_values()
 
     # Finding the border points
     for sideValue in range(0, 4):
