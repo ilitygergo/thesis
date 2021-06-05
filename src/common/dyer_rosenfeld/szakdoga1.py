@@ -164,6 +164,22 @@ class DyerRosenfeldAlgorithm:
                         self.cantDeleteCount += 1
                         continue
 
+    def minimize_marked_points(self):
+        for rowIndex in range(1, self.img.shape[0] - 1):
+            for colIndex in range(1, self.img.shape[1] - 1):
+                b = self.img[rowIndex - 1, colIndex]
+                d = self.img[rowIndex, colIndex - 1]
+                e = self.img[rowIndex, colIndex]
+                f = self.img[rowIndex, colIndex + 1]
+                h = self.img[rowIndex + 1, colIndex]
+                if self.matrix3[rowIndex][colIndex] == 'X':
+                    self.img[rowIndex][colIndex] = minimize(b, d, h, f, e)
+
+        print('Delete:', bcolors.ERR, self.deleteCount, bcolors.ENDC)
+        print('Cannot delete:', bcolors.OK, self.cantDeleteCount, bcolors.ENDC, '\n')
+        print(bcolors.OK, 'Output:', bcolors.ENDC)
+        print(bcolors.BOLD, self.img, bcolors.ENDC)
+
 
 dyer = DyerRosenfeldAlgorithm('shapes.png')
 
@@ -178,28 +194,14 @@ while True:
     for sideValue in range(0, 4):
         dyer.find_border_points(sideValue)
         printmatrix(dyer.matrix2)
+
         print('\n')
         print('Összesen:', dyer.borderPointCount)
 
         # Minimize by endpoint and connectedness
         dyer.mark_pixels_to_delete()
+        dyer.minimize_marked_points()
 
-        for row in range(1, dyer.img.shape[0] - 1):
-            for col in range(1, dyer.img.shape[1] - 1):
-                b = dyer.img[row - 1, col]
-                d = dyer.img[row, col - 1]
-                e = dyer.img[row, col]
-                f = dyer.img[row, col + 1]
-                h = dyer.img[row + 1, col]
-                if dyer.matrix3[row][col] == 'X':
-                    dyer.img[row][col] = minimize(b, d, h, f, e)
-
-        print('Delete:', bcolors.ERR, dyer.deleteCount, bcolors.ENDC)
-        print('Cannot delete:', bcolors.OK, dyer.cantDeleteCount, bcolors.ENDC, '\n')
-        print(bcolors.OK, 'Output:', bcolors.ENDC)
-        print(bcolors.BOLD, dyer.img, bcolors.ENDC)
-
-    # Making sure that the function runs until the image has no points left to remove
     print(bcolors.BLUE, '\n', dyer.stepCounter, '. run:')
     print(dyer.img, '\n', bcolors.ENDC)
 
