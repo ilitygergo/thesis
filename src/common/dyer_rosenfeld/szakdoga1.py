@@ -30,17 +30,19 @@ def get_image_by_name(name):
 
 
 class DyerRosenfeldAlgorithm:
+    percent = 0
+    grayness = 0
+
     def __init__(self, picture_name):
         self.img = get_image_by_name(picture_name)
         self.img_after_step = np.zeros((self.img.shape[0], self.img.shape[1]))
         self.stepCounter = 1
 
 
-dyer = DyerRosenfeldAlgorithm('test.jpg')
+dyer = DyerRosenfeldAlgorithm('shapes.png')
 
 while True:
-    percent = 0
-    grayness = 0
+    dyer.grayness = 0
     a = 0
     b = 0
     c = 0
@@ -75,7 +77,6 @@ while True:
     print('\n')
 
     # Finding the border points
-
     for oldal in range(0, 4):
         if oldal == 0:
             print(bcolors.OK, 'North borders:', bcolors.ENDC)
@@ -97,30 +98,30 @@ while True:
                 g = dyer.img[row + 1, col - 1]
                 h = dyer.img[row + 1, col]
                 i = dyer.img[row + 1, col + 1]
-                grayness = rvalue(b, d, e, f, h) * percent
+                dyer.grayness = rvalue(b, d, e, f, h) * dyer.percent
                 if oldal == 0:
-                    if b < e - grayness:
+                    if b < e - dyer.grayness:
                         hatar += 1
                         matrix[row - 1][col - 1] = e
                         matrix2[row][col] = 'X'
                     else:
                         matrix2[row][col] = ' '
                 if oldal == 1:
-                    if d < e - grayness:
+                    if d < e - dyer.grayness:
                         hatar += 1
                         matrix[row - 1][col - 1] = e
                         matrix2[row][col] = 'X'
                     else:
                         matrix2[row][col] = ' '
                 if oldal == 2:
-                    if h < e - grayness:
+                    if h < e - dyer.grayness:
                         hatar += 1
                         matrix[row - 1][col - 1] = e
                         matrix2[row][col] = 'X'
                     else:
                         matrix2[row][col] = ' '
                 if oldal == 3:
-                    if f < e - grayness:
+                    if f < e - dyer.grayness:
                         hatar += 1
                         matrix[row - 1][col - 1] = e
                         matrix2[row][col] = 'X'
@@ -141,8 +142,8 @@ while True:
         g = 0
         h = 0
         i = 0
-        nem = 0
-        igen = 0
+        cantDeleteCount = 0
+        deleteCount = 0
         for row in range(1, dyer.img.shape[0] - 1):
             for col in range(1, dyer.img.shape[1] - 1):
                 if matrix[row - 1][col - 1] != 0:
@@ -155,13 +156,13 @@ while True:
                     g = dyer.img[row + 1, col - 1]
                     h = dyer.img[row + 1, col]
                     i = dyer.img[row + 1, col + 1]
-                    grayness = rvalue(b, d, e, f, h) * percent
-                    if notendpoint(b, d, h, f, e - grayness) and connected(a, b, c, d, e, f, g, h, i, grayness) \
+                    dyer.grayness = rvalue(b, d, e, f, h) * dyer.percent
+                    if notendpoint(b, d, h, f, e - dyer.grayness) and connected(a, b, c, d, e, f, g, h, i, dyer.grayness) \
                             and dyer.img[row][col] != 0:
-                        igen += 1
+                        deleteCount += 1
                         matrix3[row][col] = 'X'
                     else:
-                        nem += 1
+                        cantDeleteCount += 1
                         continue
 
         for row in range(1, dyer.img.shape[0] - 1):
@@ -174,8 +175,8 @@ while True:
                 if matrix3[row][col] == 'X':
                     dyer.img[row][col] = minimize(b, d, h, f, e)
 
-        print('Delete:', bcolors.ERR, igen, bcolors.ENDC)
-        print('Cannot delete:', bcolors.OK, nem, bcolors.ENDC, '\n')
+        print('Delete:', bcolors.ERR, deleteCount, bcolors.ENDC)
+        print('Cannot delete:', bcolors.OK, cantDeleteCount, bcolors.ENDC, '\n')
         print(bcolors.OK, 'Output:', bcolors.ENDC)
         print(bcolors.BOLD, dyer.img, bcolors.ENDC)
 
