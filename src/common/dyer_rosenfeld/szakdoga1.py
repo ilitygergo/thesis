@@ -1,17 +1,9 @@
 import os
 import numpy as np
-import cv2
 import bcolors
 import files.input as pic_folder
-from common.functions import printmatrix
-from common.functions import rvalue
-from common.functions import minimize
-from common.functions import imreadgray
-from common.functions import notendpoint
-from common.functions import flip
-from common.functions import connected
-from common.functions import equalmatrix
-from common.functions import makeequalmatrix
+from collections import deque
+from common.functions import *
 
 print(bcolors.OK, " _____                    _____                       __     _     _ ")
 print(" |  __ \                  |  __ \                     / _|   | |   | |")
@@ -51,16 +43,14 @@ class DyerRosenfeldAlgorithm:
         self.img_after_step = np.zeros((self.img.shape[0], self.img.shape[1]))
         self.stepCounter = 1
         self.borderPointCount = 0
-        self.deleteCount = 0
         self.cantDeleteCount = 0
         self.matrix = [0] * (self.img.shape[0] - 2)
         for index in range(self.img.shape[0] - 2):
             self.matrix[index] = [0] * (self.img.shape[1] - 2)
         self.matrix2 = [0] * (self.img.shape[0])
-        self.matrix3 = [0] * (self.img.shape[0])
+        self.pixelsToBeDeletedQueue = deque()
         for index in range(self.img.shape[0]):
             self.matrix2[index] = [' '] * (self.img.shape[1])
-            self.matrix3[index] = [' '] * (self.img.shape[1])
 
     def reset_neighbour_points(self):
         self.a = 0
@@ -80,10 +70,9 @@ class DyerRosenfeldAlgorithm:
             self.matrix[index] = [0] * (self.img.shape[1] - 2)
 
         self.matrix2 = [0] * (self.img.shape[0])
-        self.matrix3 = [0] * (self.img.shape[0])
+        self.pixelsToBeDeletedQueue.clear()
         for index in range(self.img.shape[0]):
             self.matrix2[index] = [' '] * (self.img.shape[1])
-            self.matrix3[index] = [' '] * (self.img.shape[1])
 
     def find_border_points(self, side):
         self.borderPointCount = 0
@@ -140,7 +129,6 @@ class DyerRosenfeldAlgorithm:
     def mark_pixels_to_delete(self):
         self.reset_neighbour_points()
         self.cantDeleteCount = 0
-        self.deleteCount = 0
 
         for rowIndex in range(1, self.img.shape[0] - 1):
             for colIndex in range(1, self.img.shape[1] - 1):
@@ -156,26 +144,25 @@ class DyerRosenfeldAlgorithm:
                     self.i = self.img[rowIndex + 1, colIndex + 1]
                     self.grayness = rvalue(self.b, self.d, self.e, self.f, self.h) * self.percent
                     if notendpoint(self.b, self.d, self.h, self.f, self.e - self.grayness) \
-                            and connected(self.a, self.b, self.c, self.d, self.e, self.f, self.g, self.h, self.i, self.grayness) \
+                            and connected(self.a, self.b, self.c, self.d, self.e, self.f, self.g, self.h, self.i,
+                                          self.grayness) \
                             and self.img[rowIndex][colIndex] != 0:
-                        self.deleteCount += 1
-                        self.matrix3[rowIndex][colIndex] = 'X'
+                        self.pixelsToBeDeletedQueue.append([rowIndex, colIndex])
                     else:
                         self.cantDeleteCount += 1
                         continue
 
     def minimize_marked_points(self):
-        for rowIndex in range(1, self.img.shape[0] - 1):
-            for colIndex in range(1, self.img.shape[1] - 1):
-                b = self.img[rowIndex - 1, colIndex]
-                d = self.img[rowIndex, colIndex - 1]
-                e = self.img[rowIndex, colIndex]
-                f = self.img[rowIndex, colIndex + 1]
-                h = self.img[rowIndex + 1, colIndex]
-                if self.matrix3[rowIndex][colIndex] == 'X':
-                    self.img[rowIndex][colIndex] = minimize(b, d, h, f, e)
+        deleteCount = len(self.pixelsToBeDeletedQueue)
+        for row, col in self.pixelsToBeDeletedQueue:
+            b = self.img[row - 1, col]
+            d = self.img[row, col - 1]
+            e = self.img[row, col]
+            f = self.img[row, col + 1]
+            h = self.img[row + 1, col]
+            self.img[row][col] = minimize(b, d, h, f, e)
 
-        print('Delete:', bcolors.ERR, self.deleteCount, bcolors.ENDC)
+        print('Delete:', bcolors.ERR, deleteCount, bcolors.ENDC)
         print('Cannot delete:', bcolors.OK, self.cantDeleteCount, bcolors.ENDC, '\n')
         print(bcolors.OK, 'Output:', bcolors.ENDC)
         print(bcolors.BOLD, self.img, bcolors.ENDC)
@@ -184,9 +171,7 @@ class DyerRosenfeldAlgorithm:
 dyer = DyerRosenfeldAlgorithm('shapes.png')
 
 while True:
-    print(bcolors.OK, 'Input:', bcolors.ENDC)
     print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
-    print('\n')
 
     dyer.reset_neighbour_points()
     dyer.init_values()
