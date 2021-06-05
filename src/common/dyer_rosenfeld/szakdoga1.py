@@ -30,19 +30,12 @@ def get_image_by_name(name):
 
 
 class DyerRosenfeldAlgorithm:
+    NORTH_BORDER = 0
+    WEST_BORDER = 1
+    SOUTH_BORDER = 2
+    EAST_BORDER = 3
     percent = 0
     grayness = 0
-
-    def __init__(self, picture_name):
-        self.img = get_image_by_name(picture_name)
-        self.img_after_step = np.zeros((self.img.shape[0], self.img.shape[1]))
-        self.stepCounter = 1
-
-
-dyer = DyerRosenfeldAlgorithm('shapes.png')
-
-while True:
-    dyer.grayness = 0
     a = 0
     b = 0
     c = 0
@@ -53,84 +46,108 @@ while True:
     h = 0
     i = 0
 
-    # Matrixes
-    n = dyer.img.shape[0] - 2
-    m = dyer.img.shape[1] - 2
-    matrix = [0] * n
-    for x in range(n):
-        matrix[x] = [0] * m
+    def __init__(self, picture_name):
+        self.img = get_image_by_name(picture_name)
+        self.img_after_step = np.zeros((self.img.shape[0], self.img.shape[1]))
+        self.stepCounter = 1
+        self.borderPointCount = 0
+        self.matrix = [0] * (self.img.shape[0] - 2)
+        for index in range(self.img.shape[0] - 2):
+            self.matrix[index] = [0] * (self.img.shape[1] - 2)
+        self.matrix2 = [0] * (self.img.shape[0])
+        self.matrix3 = [0] * (self.img.shape[0])
+        for index in range(self.img.shape[0]):
+            self.matrix2[index] = [' '] * (self.img.shape[1])
+            self.matrix3[index] = [' '] * (self.img.shape[1])
 
-    n = dyer.img.shape[0]
-    m = dyer.img.shape[1]
-    matrix2 = [0] * n
-    for x in range(n):
-        matrix2[x] = [' '] * m
+    def init_values(self):
+        self.grayness = 0
+        self.a = 0
+        self.b = 0
+        self.c = 0
+        self.d = 0
+        self.e = 0
+        self.f = 0
+        self.g = 0
+        self.h = 0
+        self.i = 0
+        self.matrix = [0] * (self.img.shape[0] - 2)
+        for index in range(self.img.shape[0] - 2):
+            self.matrix[index] = [0] * (self.img.shape[1] - 2)
 
-    n = dyer.img.shape[0]
-    m = dyer.img.shape[1]
-    matrix3 = [0] * n
-    for x in range(n):
-        matrix3[x] = [' '] * m
+        self.matrix2 = [0] * (self.img.shape[0])
+        self.matrix3 = [0] * (self.img.shape[0])
+        for index in range(self.img.shape[0]):
+            self.matrix2[index] = [' '] * (self.img.shape[1])
+            self.matrix3[index] = [' '] * (self.img.shape[1])
 
+    def find_border_points(self, side):
+        self.borderPointCount = 0
+        if side == self.NORTH_BORDER:
+            print(bcolors.OK, 'North borders:', bcolors.ENDC)
+        elif side == self.WEST_BORDER:
+            print(bcolors.OK, 'West borders:', bcolors.ENDC)
+        elif side == self.SOUTH_BORDER:
+            print(bcolors.OK, 'South borders:', bcolors.ENDC)
+        elif side == self.EAST_BORDER:
+            print(bcolors.OK, 'East borders:', bcolors.ENDC)
+
+        for rowIndex in range(1, self.img.shape[0] - 1):
+            for colIndex in range(1, (self.img.shape[1] - 1)):
+                self.a = self.img[rowIndex - 1, colIndex - 1]
+                self.b = self.img[rowIndex - 1, colIndex]
+                self.c = self.img[rowIndex - 1, colIndex + 1]
+                self.d = self.img[rowIndex, colIndex - 1]
+                self.e = self.img[rowIndex, colIndex]
+                self.f = self.img[rowIndex, colIndex + 1]
+                self.g = self.img[rowIndex + 1, colIndex - 1]
+                self.h = self.img[rowIndex + 1, colIndex]
+                self.i = self.img[rowIndex + 1, colIndex + 1]
+                self.grayness = rvalue(self.b, self.d, self.e, self.f, self.h) * self.percent
+                if side == self.NORTH_BORDER:
+                    if self.b < self.e - self.grayness:
+                        self.borderPointCount += 1
+                        self.matrix[rowIndex - 1][colIndex - 1] = self.e
+                        self.matrix2[rowIndex][colIndex] = 'X'
+                    else:
+                        self.matrix2[rowIndex][colIndex] = ' '
+                if side == self.WEST_BORDER:
+                    if self.d < self.e - self.grayness:
+                        self.borderPointCount += 1
+                        self.matrix[rowIndex - 1][colIndex - 1] = self.e
+                        self.matrix2[rowIndex][colIndex] = 'X'
+                    else:
+                        self.matrix2[rowIndex][colIndex] = ' '
+                if side == self.SOUTH_BORDER:
+                    if self.h < self.e - self.grayness:
+                        self.borderPointCount += 1
+                        self.matrix[rowIndex - 1][colIndex - 1] = self.e
+                        self.matrix2[rowIndex][colIndex] = 'X'
+                    else:
+                        self.matrix2[rowIndex][colIndex] = ' '
+                if side == self.EAST_BORDER:
+                    if self.f < self.e - self.grayness:
+                        self.borderPointCount += 1
+                        self.matrix[rowIndex - 1][colIndex - 1] = self.e
+                        self.matrix2[rowIndex][colIndex] = 'X'
+                    else:
+                        self.matrix2[rowIndex][colIndex] = ' '
+
+
+dyer = DyerRosenfeldAlgorithm('shapes.png')
+
+while True:
+    dyer.init_values()
     print(bcolors.OK, 'Input:', bcolors.ENDC)
     print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
     print('\n')
 
     # Finding the border points
-    for oldal in range(0, 4):
-        if oldal == 0:
-            print(bcolors.OK, 'North borders:', bcolors.ENDC)
-        elif oldal == 1:
-            print(bcolors.OK, 'West borders:', bcolors.ENDC)
-        elif oldal == 2:
-            print(bcolors.OK, 'South borders:', bcolors.ENDC)
-        elif oldal == 3:
-            print(bcolors.OK, 'East borders:', bcolors.ENDC)
-        hatar = 0
-        for row in range(1, dyer.img.shape[0] - 1):
-            for col in range(1, (dyer.img.shape[1] - 1)):
-                a = dyer.img[row - 1, col - 1]
-                b = dyer.img[row - 1, col]
-                c = dyer.img[row - 1, col + 1]
-                d = dyer.img[row, col - 1]
-                e = dyer.img[row, col]
-                f = dyer.img[row, col + 1]
-                g = dyer.img[row + 1, col - 1]
-                h = dyer.img[row + 1, col]
-                i = dyer.img[row + 1, col + 1]
-                dyer.grayness = rvalue(b, d, e, f, h) * dyer.percent
-                if oldal == 0:
-                    if b < e - dyer.grayness:
-                        hatar += 1
-                        matrix[row - 1][col - 1] = e
-                        matrix2[row][col] = 'X'
-                    else:
-                        matrix2[row][col] = ' '
-                if oldal == 1:
-                    if d < e - dyer.grayness:
-                        hatar += 1
-                        matrix[row - 1][col - 1] = e
-                        matrix2[row][col] = 'X'
-                    else:
-                        matrix2[row][col] = ' '
-                if oldal == 2:
-                    if h < e - dyer.grayness:
-                        hatar += 1
-                        matrix[row - 1][col - 1] = e
-                        matrix2[row][col] = 'X'
-                    else:
-                        matrix2[row][col] = ' '
-                if oldal == 3:
-                    if f < e - dyer.grayness:
-                        hatar += 1
-                        matrix[row - 1][col - 1] = e
-                        matrix2[row][col] = 'X'
-                    else:
-                        matrix2[row][col] = ' '
-
-        printmatrix(matrix2)
+    for sideValue in range(0, 4):
+        dyer.find_border_points(sideValue)
+        printmatrix(dyer.matrix2)
         print('\n')
-        print('Összesen:', hatar)
+        print('Összesen:', dyer.borderPointCount)
 
         # Minimize by endpoint and connectedness
         a = 0
@@ -146,7 +163,7 @@ while True:
         deleteCount = 0
         for row in range(1, dyer.img.shape[0] - 1):
             for col in range(1, dyer.img.shape[1] - 1):
-                if matrix[row - 1][col - 1] != 0:
+                if dyer.matrix[row - 1][col - 1] != 0:
                     a = dyer.img[row - 1, col - 1]
                     b = dyer.img[row - 1, col]
                     c = dyer.img[row - 1, col + 1]
@@ -160,7 +177,7 @@ while True:
                     if notendpoint(b, d, h, f, e - dyer.grayness) and connected(a, b, c, d, e, f, g, h, i, dyer.grayness) \
                             and dyer.img[row][col] != 0:
                         deleteCount += 1
-                        matrix3[row][col] = 'X'
+                        dyer.matrix3[row][col] = 'X'
                     else:
                         cantDeleteCount += 1
                         continue
@@ -172,7 +189,7 @@ while True:
                 e = dyer.img[row, col]
                 f = dyer.img[row, col + 1]
                 h = dyer.img[row + 1, col]
-                if matrix3[row][col] == 'X':
+                if dyer.matrix3[row][col] == 'X':
                     dyer.img[row][col] = minimize(b, d, h, f, e)
 
         print('Delete:', bcolors.ERR, deleteCount, bcolors.ENDC)
