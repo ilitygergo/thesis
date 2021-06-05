@@ -5,15 +5,15 @@ sys.path.append(parentdir)
 
 import cv2
 import bcolors
-from common.functions import printmatrix
-from common.functions import rvalue
-from common.functions import minimize
-from common.functions import imreadgray
-from common.functions import notendpoint
-from common.functions import flip
-from common.functions import connected
-from common.functions import equalmatrix
-from common.functions import makeequalmatrix
+from functions import printmatrix
+from functions import rvalue
+from functions import minimize
+from functions import imreadgray
+from functions import notendpoint
+from functions import flip
+from functions import connected
+from functions import equalmatrix
+from functions import makeequalmatrix
 
 print(bcolors.OK, " _____                    _____                       __     _     _ ")
 print(" |  __ \                  |  __ \                     / _|   | |   | |")
@@ -25,13 +25,15 @@ print("          __/ |                                                       ")
 print("         |___/                                                        ", bcolors.ENDC)
 
 # Reading in the pictures as a gray picture
-picture = 'text'
+picture = 'test'
 
-img = imreadgray('src/files/input/' + picture + '.png')
-img2 = imreadgray('src/files/input/' + picture + '.png')
+img = imreadgray(f'{parentdir}/../files/input/{picture}.jpg')
+img2 = imreadgray(f'{parentdir}/../files/input/{picture}.jpg')
 
 # Converting values 0-255
 img = flip(img)
+
+print(img)
 
 # Counter and initialization
 stepCount = 1
@@ -188,7 +190,7 @@ while nemegyenlo:
         print(bcolors.BOLD, img, bcolors.ENDC)
 
     # Making sure that the function runs until the image has no points left to remove
-    print(bcolors.BLUE, '\n', lepes, '. run:')
+    print(bcolors.BLUE, '\n', stepCount, '. run:')
     print(img, '\n', bcolors.ENDC)
 
     stepCount += 1
