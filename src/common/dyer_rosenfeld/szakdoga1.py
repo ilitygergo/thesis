@@ -1,19 +1,17 @@
-import os, sys
-currentdir = os.path.dirname(os.path.realpath(__file__))
-parentdir = os.path.dirname(currentdir)
-sys.path.append(parentdir)
-
+import os
+import numpy as np
 import cv2
 import bcolors
-from functions import printmatrix
-from functions import rvalue
-from functions import minimize
-from functions import imreadgray
-from functions import notendpoint
-from functions import flip
-from functions import connected
-from functions import equalmatrix
-from functions import makeequalmatrix
+import files.input as pic_folder
+from common.functions import printmatrix
+from common.functions import rvalue
+from common.functions import minimize
+from common.functions import imreadgray
+from common.functions import notendpoint
+from common.functions import flip
+from common.functions import connected
+from common.functions import equalmatrix
+from common.functions import makeequalmatrix
 
 print(bcolors.OK, " _____                    _____                       __     _     _ ")
 print(" |  __ \                  |  __ \                     / _|   | |   | |")
@@ -24,24 +22,19 @@ print(" |_____/ \__, |\___|_|    |_|  \_\___/|___/\___|_| |_|_| \___|_|\__,_|")
 print("          __/ |                                                       ")
 print("         |___/                                                        ", bcolors.ENDC)
 
-# Reading in the pictures as a gray picture
-picture = 'test'
 
-img = imreadgray(f'{parentdir}/../files/input/{picture}.jpg')
-img2 = imreadgray(f'{parentdir}/../files/input/{picture}.jpg')
+def get_image_by_name(name):
+    return flip(imreadgray(
+        f'{os.path.dirname(pic_folder.__file__)}{os.path.sep}{name}'
+    ))
 
-# Converting values 0-255
-img = flip(img)
 
-print(img)
+img = get_image_by_name('test.jpg')
+img2 = np.zeros((img.shape[0], img.shape[1]))
 
 # Counter and initialization
 stepCount = 1
-size = img.shape
 nemegyenlo = True
-for row in range(0, size[0]):
-    for col in range(0, size[1]):
-        img2[row][col] = 0
 
 while nemegyenlo:
 
@@ -59,26 +52,26 @@ while nemegyenlo:
     i = 0
 
     # Matrixes
-    n = size[0]-2
-    m = size[1]-2
+    n = img.shape[0] - 2
+    m = img.shape[1] - 2
     matrix = [0] * n
     for x in range(n):
         matrix[x] = [0] * m
 
-    n = size[0]
-    m = size[1]
+    n = img.shape[0]
+    m = img.shape[1]
     matrix2 = [0] * n
     for x in range(n):
         matrix2[x] = [' '] * m
 
-    n = size[0]
-    m = size[1]
+    n = img.shape[0]
+    m = img.shape[1]
     matrix3 = [0] * n
     for x in range(n):
         matrix3[x] = [' '] * m
 
     print(bcolors.OK, 'Input:', bcolors.ENDC)
-    print(bcolors.BOLD, img, bcolors.ENDC,  '\n')
+    print(bcolors.BOLD, img, bcolors.ENDC, '\n')
     print('\n')
 
     # Finding the border points
@@ -93,8 +86,8 @@ while nemegyenlo:
         elif oldal == 3:
             print(bcolors.OK, 'East borders:', bcolors.ENDC)
         hatar = 0
-        for row in range(1, size[0] - 1):
-            for col in range(1, (size[1] - 1)):
+        for row in range(1, img.shape[0] - 1):
+            for col in range(1, (img.shape[1] - 1)):
                 a = img[row - 1, col - 1]
                 b = img[row - 1, col]
                 c = img[row - 1, col + 1]
@@ -150,8 +143,8 @@ while nemegyenlo:
         i = 0
         nem = 0
         igen = 0
-        for row in range(1, size[0] - 1):
-            for col in range(1, size[1] - 1):
+        for row in range(1, img.shape[0] - 1):
+            for col in range(1, img.shape[1] - 1):
                 if matrix[row - 1][col - 1] != 0:
                     a = img[row - 1, col - 1]
                     b = img[row - 1, col]
@@ -163,19 +156,16 @@ while nemegyenlo:
                     h = img[row + 1, col]
                     i = img[row + 1, col + 1]
                     grayness = rvalue(b, d, e, f, h) * percent
-                    # print(img[row][col])
-                    if notendpoint(b, d, h, f, e - grayness) and connected(a, b, c, d, e, f, g, h, i, grayness)\
+                    if notendpoint(b, d, h, f, e - grayness) and connected(a, b, c, d, e, f, g, h, i, grayness) \
                             and img[row][col] != 0:
-                        # print(row, col, ' - ', img[row][col])
                         igen += 1
                         matrix3[row][col] = 'X'
-                        # img[row][col] = minimize(b, d, h, f, e)
                     else:
                         nem += 1
                         continue
 
-        for row in range(1, size[0] - 1):
-            for col in range(1, size[1] - 1):
+        for row in range(1, img.shape[0] - 1):
+            for col in range(1, img.shape[1] - 1):
                 b = img[row - 1, col]
                 d = img[row, col - 1]
                 e = img[row, col]
@@ -194,13 +184,13 @@ while nemegyenlo:
     print(img, '\n', bcolors.ENDC)
 
     stepCount += 1
-    if equalmatrix(img, img2, size):
+    if equalmatrix(img, img2, img.shape):
         break
     else:
-        makeequalmatrix(img2, img, size)
+        makeequalmatrix(img2, img, img.shape)
 
 # Converting the values back to normal
 flip(img)
 
 # Saving
-cv2.imwrite(picture + '.png', img)
+cv2.imwrite('test.png', img)
