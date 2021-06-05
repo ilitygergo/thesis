@@ -1,5 +1,8 @@
 __pycache__/
 venv/
+
 .idea/
-src/files/output
 .vscode
+
+src/files/output
+*.swp

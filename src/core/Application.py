@@ -85,7 +85,7 @@ class Application(tk.Frame):
         return filedialog.askopenfilename(
             initialdir='./files/input',
             title='Select A File',
-            filetype=(('image files', '*.jpg *.png'), ('all files', '*.*'))
+            filetypes=[('image files', '*.jpg *.png'), ('all files', '*.*')]
         )
 
     @staticmethod
