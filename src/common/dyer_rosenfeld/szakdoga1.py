@@ -51,6 +51,8 @@ class DyerRosenfeldAlgorithm:
         self.img_after_step = np.zeros((self.img.shape[0], self.img.shape[1]))
         self.stepCounter = 1
         self.borderPointCount = 0
+        self.deleteCount = 0
+        self.cantDeleteCount = 0
         self.matrix = [0] * (self.img.shape[0] - 2)
         for index in range(self.img.shape[0] - 2):
             self.matrix[index] = [0] * (self.img.shape[1] - 2)
@@ -60,8 +62,7 @@ class DyerRosenfeldAlgorithm:
             self.matrix2[index] = [' '] * (self.img.shape[1])
             self.matrix3[index] = [' '] * (self.img.shape[1])
 
-    def init_values(self):
-        self.grayness = 0
+    def reset_neighbour_points(self):
         self.a = 0
         self.b = 0
         self.c = 0
@@ -71,6 +72,9 @@ class DyerRosenfeldAlgorithm:
         self.g = 0
         self.h = 0
         self.i = 0
+
+    def init_values(self):
+        self.grayness = 0
         self.matrix = [0] * (self.img.shape[0] - 2)
         for index in range(self.img.shape[0] - 2):
             self.matrix[index] = [0] * (self.img.shape[1] - 2)
@@ -133,10 +137,38 @@ class DyerRosenfeldAlgorithm:
                     else:
                         self.matrix2[rowIndex][colIndex] = ' '
 
+    def mark_pixels_to_delete(self):
+        self.reset_neighbour_points()
+        self.cantDeleteCount = 0
+        self.deleteCount = 0
+
+        for rowIndex in range(1, self.img.shape[0] - 1):
+            for colIndex in range(1, self.img.shape[1] - 1):
+                if self.matrix[rowIndex - 1][colIndex - 1] != 0:
+                    self.a = self.img[rowIndex - 1, colIndex - 1]
+                    self.b = self.img[rowIndex - 1, colIndex]
+                    self.c = self.img[rowIndex - 1, colIndex + 1]
+                    self.d = self.img[rowIndex, colIndex - 1]
+                    self.e = self.img[rowIndex, colIndex]
+                    self.f = self.img[rowIndex, colIndex + 1]
+                    self.g = self.img[rowIndex + 1, colIndex - 1]
+                    self.h = self.img[rowIndex + 1, colIndex]
+                    self.i = self.img[rowIndex + 1, colIndex + 1]
+                    self.grayness = rvalue(self.b, self.d, self.e, self.f, self.h) * self.percent
+                    if notendpoint(self.b, self.d, self.h, self.f, self.e - self.grayness) \
+                            and connected(self.a, self.b, self.c, self.d, self.e, self.f, self.g, self.h, self.i, self.grayness) \
+                            and self.img[rowIndex][colIndex] != 0:
+                        self.deleteCount += 1
+                        self.matrix3[rowIndex][colIndex] = 'X'
+                    else:
+                        self.cantDeleteCount += 1
+                        continue
+
 
 dyer = DyerRosenfeldAlgorithm('shapes.png')
 
 while True:
+    dyer.reset_neighbour_points()
     dyer.init_values()
     print(bcolors.OK, 'Input:', bcolors.ENDC)
     print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
@@ -150,37 +182,7 @@ while True:
         print('Összesen:', dyer.borderPointCount)
 
         # Minimize by endpoint and connectedness
-        a = 0
-        b = 0
-        c = 0
-        d = 0
-        e = 0
-        f = 0
-        g = 0
-        h = 0
-        i = 0
-        cantDeleteCount = 0
-        deleteCount = 0
-        for row in range(1, dyer.img.shape[0] - 1):
-            for col in range(1, dyer.img.shape[1] - 1):
-                if dyer.matrix[row - 1][col - 1] != 0:
-                    a = dyer.img[row - 1, col - 1]
-                    b = dyer.img[row - 1, col]
-                    c = dyer.img[row - 1, col + 1]
-                    d = dyer.img[row, col - 1]
-                    e = dyer.img[row, col]
-                    f = dyer.img[row, col + 1]
-                    g = dyer.img[row + 1, col - 1]
-                    h = dyer.img[row + 1, col]
-                    i = dyer.img[row + 1, col + 1]
-                    dyer.grayness = rvalue(b, d, e, f, h) * dyer.percent
-                    if notendpoint(b, d, h, f, e - dyer.grayness) and connected(a, b, c, d, e, f, g, h, i, dyer.grayness) \
-                            and dyer.img[row][col] != 0:
-                        deleteCount += 1
-                        dyer.matrix3[row][col] = 'X'
-                    else:
-                        cantDeleteCount += 1
-                        continue
+        dyer.mark_pixels_to_delete()
 
         for row in range(1, dyer.img.shape[0] - 1):
             for col in range(1, dyer.img.shape[1] - 1):
@@ -192,8 +194,8 @@ while True:
                 if dyer.matrix3[row][col] == 'X':
                     dyer.img[row][col] = minimize(b, d, h, f, e)
 
-        print('Delete:', bcolors.ERR, deleteCount, bcolors.ENDC)
-        print('Cannot delete:', bcolors.OK, cantDeleteCount, bcolors.ENDC, '\n')
+        print('Delete:', bcolors.ERR, dyer.deleteCount, bcolors.ENDC)
+        print('Cannot delete:', bcolors.OK, dyer.cantDeleteCount, bcolors.ENDC, '\n')
         print(bcolors.OK, 'Output:', bcolors.ENDC)
         print(bcolors.BOLD, dyer.img, bcolors.ENDC)
 
