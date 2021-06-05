@@ -29,16 +29,16 @@ def get_image_by_name(name):
     ))
 
 
-img = get_image_by_name('test.jpg')
-img2 = np.zeros((img.shape[0], img.shape[1]))
+class DyerRosenfeldAlgorithm:
+    def __init__(self, picture_name):
+        self.img = get_image_by_name(picture_name)
+        self.img_after_step = np.zeros((self.img.shape[0], self.img.shape[1]))
+        self.stepCounter = 1
 
-# Counter and initialization
-stepCount = 1
-nemegyenlo = True
 
-while nemegyenlo:
+dyer = DyerRosenfeldAlgorithm('test.jpg')
 
-    # Initialization that occurs continuously
+while True:
     percent = 0
     grayness = 0
     a = 0
@@ -52,26 +52,26 @@ while nemegyenlo:
     i = 0
 
     # Matrixes
-    n = img.shape[0] - 2
-    m = img.shape[1] - 2
+    n = dyer.img.shape[0] - 2
+    m = dyer.img.shape[1] - 2
     matrix = [0] * n
     for x in range(n):
         matrix[x] = [0] * m
 
-    n = img.shape[0]
-    m = img.shape[1]
+    n = dyer.img.shape[0]
+    m = dyer.img.shape[1]
     matrix2 = [0] * n
     for x in range(n):
         matrix2[x] = [' '] * m
 
-    n = img.shape[0]
-    m = img.shape[1]
+    n = dyer.img.shape[0]
+    m = dyer.img.shape[1]
     matrix3 = [0] * n
     for x in range(n):
         matrix3[x] = [' '] * m
 
     print(bcolors.OK, 'Input:', bcolors.ENDC)
-    print(bcolors.BOLD, img, bcolors.ENDC, '\n')
+    print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
     print('\n')
 
     # Finding the border points
@@ -86,17 +86,17 @@ while nemegyenlo:
         elif oldal == 3:
             print(bcolors.OK, 'East borders:', bcolors.ENDC)
         hatar = 0
-        for row in range(1, img.shape[0] - 1):
-            for col in range(1, (img.shape[1] - 1)):
-                a = img[row - 1, col - 1]
-                b = img[row - 1, col]
-                c = img[row - 1, col + 1]
-                d = img[row, col - 1]
-                e = img[row, col]
-                f = img[row, col + 1]
-                g = img[row + 1, col - 1]
-                h = img[row + 1, col]
-                i = img[row + 1, col + 1]
+        for row in range(1, dyer.img.shape[0] - 1):
+            for col in range(1, (dyer.img.shape[1] - 1)):
+                a = dyer.img[row - 1, col - 1]
+                b = dyer.img[row - 1, col]
+                c = dyer.img[row - 1, col + 1]
+                d = dyer.img[row, col - 1]
+                e = dyer.img[row, col]
+                f = dyer.img[row, col + 1]
+                g = dyer.img[row + 1, col - 1]
+                h = dyer.img[row + 1, col]
+                i = dyer.img[row + 1, col + 1]
                 grayness = rvalue(b, d, e, f, h) * percent
                 if oldal == 0:
                     if b < e - grayness:
@@ -143,54 +143,54 @@ while nemegyenlo:
         i = 0
         nem = 0
         igen = 0
-        for row in range(1, img.shape[0] - 1):
-            for col in range(1, img.shape[1] - 1):
+        for row in range(1, dyer.img.shape[0] - 1):
+            for col in range(1, dyer.img.shape[1] - 1):
                 if matrix[row - 1][col - 1] != 0:
-                    a = img[row - 1, col - 1]
-                    b = img[row - 1, col]
-                    c = img[row - 1, col + 1]
-                    d = img[row, col - 1]
-                    e = img[row, col]
-                    f = img[row, col + 1]
-                    g = img[row + 1, col - 1]
-                    h = img[row + 1, col]
-                    i = img[row + 1, col + 1]
+                    a = dyer.img[row - 1, col - 1]
+                    b = dyer.img[row - 1, col]
+                    c = dyer.img[row - 1, col + 1]
+                    d = dyer.img[row, col - 1]
+                    e = dyer.img[row, col]
+                    f = dyer.img[row, col + 1]
+                    g = dyer.img[row + 1, col - 1]
+                    h = dyer.img[row + 1, col]
+                    i = dyer.img[row + 1, col + 1]
                     grayness = rvalue(b, d, e, f, h) * percent
                     if notendpoint(b, d, h, f, e - grayness) and connected(a, b, c, d, e, f, g, h, i, grayness) \
-                            and img[row][col] != 0:
+                            and dyer.img[row][col] != 0:
                         igen += 1
                         matrix3[row][col] = 'X'
                     else:
                         nem += 1
                         continue
 
-        for row in range(1, img.shape[0] - 1):
-            for col in range(1, img.shape[1] - 1):
-                b = img[row - 1, col]
-                d = img[row, col - 1]
-                e = img[row, col]
-                f = img[row, col + 1]
-                h = img[row + 1, col]
+        for row in range(1, dyer.img.shape[0] - 1):
+            for col in range(1, dyer.img.shape[1] - 1):
+                b = dyer.img[row - 1, col]
+                d = dyer.img[row, col - 1]
+                e = dyer.img[row, col]
+                f = dyer.img[row, col + 1]
+                h = dyer.img[row + 1, col]
                 if matrix3[row][col] == 'X':
-                    img[row][col] = minimize(b, d, h, f, e)
+                    dyer.img[row][col] = minimize(b, d, h, f, e)
 
         print('Delete:', bcolors.ERR, igen, bcolors.ENDC)
         print('Cannot delete:', bcolors.OK, nem, bcolors.ENDC, '\n')
         print(bcolors.OK, 'Output:', bcolors.ENDC)
-        print(bcolors.BOLD, img, bcolors.ENDC)
+        print(bcolors.BOLD, dyer.img, bcolors.ENDC)
 
     # Making sure that the function runs until the image has no points left to remove
-    print(bcolors.BLUE, '\n', stepCount, '. run:')
-    print(img, '\n', bcolors.ENDC)
+    print(bcolors.BLUE, '\n', dyer.stepCounter, '. run:')
+    print(dyer.img, '\n', bcolors.ENDC)
 
-    stepCount += 1
-    if equalmatrix(img, img2, img.shape):
+    dyer.stepCounter += 1
+    if equalmatrix(dyer.img, dyer.img_after_step, dyer.img.shape):
         break
     else:
-        makeequalmatrix(img2, img, img.shape)
+        makeequalmatrix(dyer.img_after_step, dyer.img, dyer.img.shape)
 
 # Converting the values back to normal
-flip(img)
+flip(dyer.img)
 
 # Saving
-cv2.imwrite('test.png', img)
+cv2.imwrite('test.png', dyer.img)
