@@ -41,16 +41,10 @@ class DyerRosenfeldAlgorithm:
     def __init__(self, picture_name):
         self.img = get_image_by_name(picture_name)
         self.img_after_step = np.zeros((self.img.shape[0], self.img.shape[1]))
-        self.stepCounter = 1
-        self.borderPointCount = 0
-        self.cantDeleteCount = 0
-        self.matrix = [0] * (self.img.shape[0] - 2)
-        for index in range(self.img.shape[0] - 2):
-            self.matrix[index] = [0] * (self.img.shape[1] - 2)
-        self.matrix2 = [0] * (self.img.shape[0])
+        self.borderPointPixels = deque()
         self.pixelsToBeDeletedQueue = deque()
-        for index in range(self.img.shape[0]):
-            self.matrix2[index] = [' '] * (self.img.shape[1])
+        self.stepCounter = 1
+        self.cantDeleteCount = 0
 
     def reset_neighbour_points(self):
         self.a = 0
@@ -65,17 +59,10 @@ class DyerRosenfeldAlgorithm:
 
     def init_values(self):
         self.grayness = 0
-        self.matrix = [0] * (self.img.shape[0] - 2)
-        for index in range(self.img.shape[0] - 2):
-            self.matrix[index] = [0] * (self.img.shape[1] - 2)
-
-        self.matrix2 = [0] * (self.img.shape[0])
+        self.borderPointPixels.clear()
         self.pixelsToBeDeletedQueue.clear()
-        for index in range(self.img.shape[0]):
-            self.matrix2[index] = [' '] * (self.img.shape[1])
 
     def find_border_points(self, side):
-        self.borderPointCount = 0
         if side == self.NORTH_BORDER:
             print(bcolors.OK, 'North borders:', bcolors.ENDC)
         elif side == self.WEST_BORDER:
@@ -99,58 +86,39 @@ class DyerRosenfeldAlgorithm:
                 self.grayness = rvalue(self.b, self.d, self.e, self.f, self.h) * self.percent
                 if side == self.NORTH_BORDER:
                     if self.b < self.e - self.grayness:
-                        self.borderPointCount += 1
-                        self.matrix[rowIndex - 1][colIndex - 1] = self.e
-                        self.matrix2[rowIndex][colIndex] = 'X'
-                    else:
-                        self.matrix2[rowIndex][colIndex] = ' '
+                        self.borderPointPixels.append([rowIndex, colIndex, self.e])
                 if side == self.WEST_BORDER:
                     if self.d < self.e - self.grayness:
-                        self.borderPointCount += 1
-                        self.matrix[rowIndex - 1][colIndex - 1] = self.e
-                        self.matrix2[rowIndex][colIndex] = 'X'
-                    else:
-                        self.matrix2[rowIndex][colIndex] = ' '
+                        self.borderPointPixels.append([rowIndex, colIndex, self.e])
                 if side == self.SOUTH_BORDER:
                     if self.h < self.e - self.grayness:
-                        self.borderPointCount += 1
-                        self.matrix[rowIndex - 1][colIndex - 1] = self.e
-                        self.matrix2[rowIndex][colIndex] = 'X'
-                    else:
-                        self.matrix2[rowIndex][colIndex] = ' '
+                        self.borderPointPixels.append([rowIndex, colIndex, self.e])
                 if side == self.EAST_BORDER:
                     if self.f < self.e - self.grayness:
-                        self.borderPointCount += 1
-                        self.matrix[rowIndex - 1][colIndex - 1] = self.e
-                        self.matrix2[rowIndex][colIndex] = 'X'
-                    else:
-                        self.matrix2[rowIndex][colIndex] = ' '
+                        self.borderPointPixels.append([rowIndex, colIndex, self.e])
 
     def mark_pixels_to_delete(self):
         self.reset_neighbour_points()
         self.cantDeleteCount = 0
 
-        for rowIndex in range(1, self.img.shape[0] - 1):
-            for colIndex in range(1, self.img.shape[1] - 1):
-                if self.matrix[rowIndex - 1][colIndex - 1] != 0:
-                    self.a = self.img[rowIndex - 1, colIndex - 1]
-                    self.b = self.img[rowIndex - 1, colIndex]
-                    self.c = self.img[rowIndex - 1, colIndex + 1]
-                    self.d = self.img[rowIndex, colIndex - 1]
-                    self.e = self.img[rowIndex, colIndex]
-                    self.f = self.img[rowIndex, colIndex + 1]
-                    self.g = self.img[rowIndex + 1, colIndex - 1]
-                    self.h = self.img[rowIndex + 1, colIndex]
-                    self.i = self.img[rowIndex + 1, colIndex + 1]
-                    self.grayness = rvalue(self.b, self.d, self.e, self.f, self.h) * self.percent
-                    if notendpoint(self.b, self.d, self.h, self.f, self.e - self.grayness) \
-                            and connected(self.a, self.b, self.c, self.d, self.e, self.f, self.g, self.h, self.i,
-                                          self.grayness) \
-                            and self.img[rowIndex][colIndex] != 0:
-                        self.pixelsToBeDeletedQueue.append([rowIndex, colIndex])
-                    else:
-                        self.cantDeleteCount += 1
-                        continue
+        for rowIndex, colIndex, value in self.borderPointPixels:
+            a = self.img[rowIndex - 1, colIndex - 1]
+            b = self.img[rowIndex - 1, colIndex]
+            c = self.img[rowIndex - 1, colIndex + 1]
+            d = self.img[rowIndex, colIndex - 1]
+            e = self.img[rowIndex, colIndex]
+            f = self.img[rowIndex, colIndex + 1]
+            g = self.img[rowIndex + 1, colIndex - 1]
+            h = self.img[rowIndex + 1, colIndex]
+            i = self.img[rowIndex + 1, colIndex + 1]
+            self.grayness = rvalue(b, d, e, f, h) * self.percent
+
+            if notendpoint(b, d, h, f, e - self.grayness) \
+                    and connected(a, b, c, d, e, f, g, h, i, self.grayness):
+                self.pixelsToBeDeletedQueue.append([rowIndex, colIndex])
+            else:
+                self.cantDeleteCount += 1
+                continue
 
     def minimize_marked_points(self):
         deleteCount = len(self.pixelsToBeDeletedQueue)
@@ -179,10 +147,9 @@ while True:
     # Finding the border points
     for sideValue in range(0, 4):
         dyer.find_border_points(sideValue)
-        printmatrix(dyer.matrix2)
 
         print('\n')
-        print('Összesen:', dyer.borderPointCount)
+        print('Összesen:', len(dyer.borderPointPixels))
 
         # Minimize by endpoint and connectedness
         dyer.mark_pixels_to_delete()
