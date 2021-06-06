@@ -28,15 +28,6 @@ class DyerRosenfeldAlgorithm:
     EAST_BORDER = 3
     percent = 0
     grayness = 0
-    a = 0
-    b = 0
-    c = 0
-    d = 0
-    e = 0
-    f = 0
-    g = 0
-    h = 0
-    i = 0
 
     def __init__(self, picture_name):
         self.img = get_image_by_name(picture_name)
@@ -45,17 +36,6 @@ class DyerRosenfeldAlgorithm:
         self.pixelsToBeDeletedQueue = deque()
         self.stepCounter = 1
         self.cantDeleteCount = 0
-
-    def reset_neighbour_points(self):
-        self.a = 0
-        self.b = 0
-        self.c = 0
-        self.d = 0
-        self.e = 0
-        self.f = 0
-        self.g = 0
-        self.h = 0
-        self.i = 0
 
     def init_values(self):
         self.grayness = 0
@@ -74,31 +54,22 @@ class DyerRosenfeldAlgorithm:
 
         for rowIndex in range(1, self.img.shape[0] - 1):
             for colIndex in range(1, (self.img.shape[1] - 1)):
-                self.a = self.img[rowIndex - 1, colIndex - 1]
-                self.b = self.img[rowIndex - 1, colIndex]
-                self.c = self.img[rowIndex - 1, colIndex + 1]
-                self.d = self.img[rowIndex, colIndex - 1]
-                self.e = self.img[rowIndex, colIndex]
-                self.f = self.img[rowIndex, colIndex + 1]
-                self.g = self.img[rowIndex + 1, colIndex - 1]
-                self.h = self.img[rowIndex + 1, colIndex]
-                self.i = self.img[rowIndex + 1, colIndex + 1]
-                self.grayness = rvalue(self.b, self.d, self.e, self.f, self.h) * self.percent
-                if side == self.NORTH_BORDER:
-                    if self.b < self.e - self.grayness:
-                        self.borderPointPixels.append([rowIndex, colIndex, self.e])
-                if side == self.WEST_BORDER:
-                    if self.d < self.e - self.grayness:
-                        self.borderPointPixels.append([rowIndex, colIndex, self.e])
-                if side == self.SOUTH_BORDER:
-                    if self.h < self.e - self.grayness:
-                        self.borderPointPixels.append([rowIndex, colIndex, self.e])
-                if side == self.EAST_BORDER:
-                    if self.f < self.e - self.grayness:
-                        self.borderPointPixels.append([rowIndex, colIndex, self.e])
+                b = self.img[rowIndex - 1, colIndex]
+                d = self.img[rowIndex, colIndex - 1]
+                e = self.img[rowIndex, colIndex]
+                f = self.img[rowIndex, colIndex + 1]
+                h = self.img[rowIndex + 1, colIndex]
+                self.grayness = rvalue(b, d, e, f, h) * self.percent
+                if side == self.NORTH_BORDER and b < e - self.grayness:
+                    self.borderPointPixels.append([rowIndex, colIndex, e])
+                if side == self.WEST_BORDER and d < e - self.grayness:
+                    self.borderPointPixels.append([rowIndex, colIndex, e])
+                if side == self.SOUTH_BORDER and h < e - self.grayness:
+                    self.borderPointPixels.append([rowIndex, colIndex, e])
+                if side == self.EAST_BORDER and f < e - self.grayness:
+                    self.borderPointPixels.append([rowIndex, colIndex, e])
 
     def mark_pixels_to_delete(self):
-        self.reset_neighbour_points()
         self.cantDeleteCount = 0
 
         for rowIndex, colIndex, value in self.borderPointPixels:
@@ -140,8 +111,6 @@ dyer = DyerRosenfeldAlgorithm('shapes.png')
 
 while True:
     print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
-
-    dyer.reset_neighbour_points()
     dyer.init_values()
 
     # Finding the border points
@@ -164,8 +133,5 @@ while True:
     else:
         makeequalmatrix(dyer.img_after_step, dyer.img, dyer.img.shape)
 
-# Converting the values back to normal
 flip(dyer.img)
-
-# Saving
 cv2.imwrite('test.png', dyer.img)
