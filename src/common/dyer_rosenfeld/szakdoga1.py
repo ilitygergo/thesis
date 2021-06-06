@@ -27,31 +27,24 @@ class DyerRosenfeldAlgorithm:
     SOUTH_BORDER = 2
     EAST_BORDER = 3
     percent = 0
-    grayness = 0
 
     def __init__(self, picture_name):
         self.img = get_image_by_name(picture_name)
-        self.img_after_step = np.zeros((self.img.shape[0], self.img.shape[1]))
+        self.imgAfterStep = np.zeros((self.img.shape[0], self.img.shape[1]))
         self.borderPointPixels = deque()
         self.pixelsToBeDeletedQueue = deque()
-        self.stepCounter = 1
-        self.cantDeleteCount = 0
 
-    def init_values(self):
-        self.grayness = 0
+    def clear_helpers(self):
         self.borderPointPixels.clear()
         self.pixelsToBeDeletedQueue.clear()
 
-    def find_border_points(self, side):
-        if side == self.NORTH_BORDER:
-            print(bcolors.OK, 'North borders:', bcolors.ENDC)
-        elif side == self.WEST_BORDER:
-            print(bcolors.OK, 'West borders:', bcolors.ENDC)
-        elif side == self.SOUTH_BORDER:
-            print(bcolors.OK, 'South borders:', bcolors.ENDC)
-        elif side == self.EAST_BORDER:
-            print(bcolors.OK, 'East borders:', bcolors.ENDC)
+    def step(self):
+        for sideValue in range(0, 4):
+            self.find_border_points(sideValue)
+            self.mark_pixels_to_delete()
+            self.minimize_marked_points()
 
+    def find_border_points(self, side):
         for rowIndex in range(1, self.img.shape[0] - 1):
             for colIndex in range(1, (self.img.shape[1] - 1)):
                 b = self.img[rowIndex - 1, colIndex]
@@ -59,19 +52,17 @@ class DyerRosenfeldAlgorithm:
                 e = self.img[rowIndex, colIndex]
                 f = self.img[rowIndex, colIndex + 1]
                 h = self.img[rowIndex + 1, colIndex]
-                self.grayness = rvalue(b, d, e, f, h) * self.percent
-                if side == self.NORTH_BORDER and b < e - self.grayness:
+                grayness = rvalue(b, d, e, f, h) * self.percent
+                if side == self.NORTH_BORDER and b < e - grayness:
                     self.borderPointPixels.append([rowIndex, colIndex, e])
-                if side == self.WEST_BORDER and d < e - self.grayness:
+                if side == self.WEST_BORDER and d < e - grayness:
                     self.borderPointPixels.append([rowIndex, colIndex, e])
-                if side == self.SOUTH_BORDER and h < e - self.grayness:
+                if side == self.SOUTH_BORDER and h < e - grayness:
                     self.borderPointPixels.append([rowIndex, colIndex, e])
-                if side == self.EAST_BORDER and f < e - self.grayness:
+                if side == self.EAST_BORDER and f < e - grayness:
                     self.borderPointPixels.append([rowIndex, colIndex, e])
 
     def mark_pixels_to_delete(self):
-        self.cantDeleteCount = 0
-
         for rowIndex, colIndex, value in self.borderPointPixels:
             a = self.img[rowIndex - 1, colIndex - 1]
             b = self.img[rowIndex - 1, colIndex]
@@ -82,17 +73,15 @@ class DyerRosenfeldAlgorithm:
             g = self.img[rowIndex + 1, colIndex - 1]
             h = self.img[rowIndex + 1, colIndex]
             i = self.img[rowIndex + 1, colIndex + 1]
-            self.grayness = rvalue(b, d, e, f, h) * self.percent
+            grayness = rvalue(b, d, e, f, h) * self.percent
 
-            if notendpoint(b, d, h, f, e - self.grayness) \
-                    and connected(a, b, c, d, e, f, g, h, i, self.grayness):
+            if notendpoint(b, d, h, f, e - grayness) \
+                    and connected(a, b, c, d, e, f, g, h, i, grayness):
                 self.pixelsToBeDeletedQueue.append([rowIndex, colIndex])
             else:
-                self.cantDeleteCount += 1
                 continue
 
     def minimize_marked_points(self):
-        deleteCount = len(self.pixelsToBeDeletedQueue)
         for row, col in self.pixelsToBeDeletedQueue:
             b = self.img[row - 1, col]
             d = self.img[row, col - 1]
@@ -101,37 +90,18 @@ class DyerRosenfeldAlgorithm:
             h = self.img[row + 1, col]
             self.img[row][col] = minimize(b, d, h, f, e)
 
-        print('Delete:', bcolors.ERR, deleteCount, bcolors.ENDC)
-        print('Cannot delete:', bcolors.OK, self.cantDeleteCount, bcolors.ENDC, '\n')
-        print(bcolors.OK, 'Output:', bcolors.ENDC)
-        print(bcolors.BOLD, self.img, bcolors.ENDC)
-
 
 dyer = DyerRosenfeldAlgorithm('shapes.png')
 
 while True:
     print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
-    dyer.init_values()
+    dyer.step()
+    dyer.clear_helpers()
 
-    # Finding the border points
-    for sideValue in range(0, 4):
-        dyer.find_border_points(sideValue)
-
-        print('\n')
-        print('Összesen:', len(dyer.borderPointPixels))
-
-        # Minimize by endpoint and connectedness
-        dyer.mark_pixels_to_delete()
-        dyer.minimize_marked_points()
-
-    print(bcolors.BLUE, '\n', dyer.stepCounter, '. run:')
-    print(dyer.img, '\n', bcolors.ENDC)
-
-    dyer.stepCounter += 1
-    if equalmatrix(dyer.img, dyer.img_after_step, dyer.img.shape):
+    if equalmatrix(dyer.img, dyer.imgAfterStep, dyer.img.shape):
         break
     else:
-        makeequalmatrix(dyer.img_after_step, dyer.img, dyer.img.shape)
+        makeequalmatrix(dyer.imgAfterStep, dyer.img, dyer.img.shape)
 
 flip(dyer.img)
 cv2.imwrite('test.png', dyer.img)
