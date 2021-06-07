@@ -1,6 +1,14 @@
+import os
 import cv2
 import copy
 import numpy
+import files.input as pic_folder
+
+
+def get_image_by_name(name):
+    return flip(imreadgray(
+        f'{os.path.dirname(pic_folder.__file__)}{os.path.sep}{name}'
+    ))
 
 # IMAGE FUNCTIONS
 

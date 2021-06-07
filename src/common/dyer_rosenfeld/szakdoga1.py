@@ -1,24 +1,18 @@
-import os
 import numpy as np
 import bcolors
-import files.input as pic_folder
 from collections import deque
 from common.functions import *
 
-print(bcolors.OK, " _____                    _____                       __     _     _ ")
-print(" |  __ \                  |  __ \                     / _|   | |   | |")
-print(" | |  | |_   _  ___ _ __  | |__) |___  ___  ___ _ __ | |_ ___| | __| |")
-print(" | |  | | | | |/ _ \ '__| |  _  // _ \/ __|/ _ \ '_ \|  _/ _ \ |/ _` |")
-print(" | |__| | |_| |  __/ |    | | \ \ (_) \__ \  __/ | | | ||  __/ | (_| |")
-print(" |_____/ \__, |\___|_|    |_|  \_\___/|___/\___|_| |_|_| \___|_|\__,_|")
-print("          __/ |                                                       ")
-print("         |___/                                                        ", bcolors.ENDC)
-
-
-def get_image_by_name(name):
-    return flip(imreadgray(
-        f'{os.path.dirname(pic_folder.__file__)}{os.path.sep}{name}'
-    ))
+print(bcolors.OK, r"""
+  _____                    _____                       __     _     _ 
+ |  __ \                  |  __ \                     / _|   | |   | |
+ | |  | |_   _  ___ _ __  | |__) |___  ___  ___ _ __ | |_ ___| | __| |
+ | |  | | | | |/ _ \ '__| |  _  // _ \/ __|/ _ \ '_ \|  _/ _ \ |/ _` |
+ | |__| | |_| |  __/ |    | | \ \ (_) \__ \  __/ | | | ||  __/ | (_| |
+ |_____/ \__, |\___|_|    |_|  \_\___/|___/\___|_| |_|_| \___|_|\__,_|
+          __/ |                                                       
+         |___/                                                        
+    """, bcolors.ENDC)
 
 
 class DyerRosenfeldAlgorithm:
@@ -30,7 +24,7 @@ class DyerRosenfeldAlgorithm:
 
     def __init__(self, picture_name):
         self.img = get_image_by_name(picture_name)
-        self.imgAfterStep = np.zeros((self.img.shape[0], self.img.shape[1]))
+        self.imgBeforeStep = np.zeros((self.img.shape[0], self.img.shape[1]))
         self.borderPointPixels = deque()
         self.pixelsToBeDeletedQueue = deque()
 
@@ -75,11 +69,10 @@ class DyerRosenfeldAlgorithm:
             i = self.img[rowIndex + 1, colIndex + 1]
             grayness = rvalue(b, d, e, f, h) * self.percent
 
-            if notendpoint(b, d, h, f, e - grayness) \
-                    and connected(a, b, c, d, e, f, g, h, i, grayness):
-                self.pixelsToBeDeletedQueue.append([rowIndex, colIndex])
-            else:
+            if not notendpoint(b, d, h, f, e - grayness) or not connected(a, b, c, d, e, f, g, h, i, grayness):
                 continue
+            else:
+                self.pixelsToBeDeletedQueue.append([rowIndex, colIndex])
 
     def minimize_marked_points(self):
         for row, col in self.pixelsToBeDeletedQueue:
@@ -98,10 +91,10 @@ while True:
     dyer.step()
     dyer.clear_helpers()
 
-    if equalmatrix(dyer.img, dyer.imgAfterStep, dyer.img.shape):
+    if equalmatrix(dyer.img, dyer.imgBeforeStep, dyer.img.shape):
         break
     else:
-        makeequalmatrix(dyer.imgAfterStep, dyer.img, dyer.img.shape)
+        makeequalmatrix(dyer.imgBeforeStep, dyer.img, dyer.img.shape)
 
 flip(dyer.img)
 cv2.imwrite('test.png', dyer.img)
