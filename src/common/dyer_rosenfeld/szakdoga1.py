@@ -22,8 +22,8 @@ class DyerRosenfeldAlgorithm:
     EAST_BORDER = 3
     percent = 0
 
-    def __init__(self, picture_name):
-        self.img = get_image_by_name(picture_name)
+    def __init__(self, image):
+        self.img = image
         self.imgBeforeStep = np.zeros((self.img.shape[0], self.img.shape[1]))
         self.borderPointPixels = deque()
         self.pixelsToBeDeletedQueue = deque()
@@ -84,7 +84,7 @@ class DyerRosenfeldAlgorithm:
             self.img[row][col] = minimize(b, d, h, f, e)
 
 
-dyer = DyerRosenfeldAlgorithm('shapes.png')
+dyer = DyerRosenfeldAlgorithm(get_image_by_name('small.png'))
 
 while True:
     print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
