@@ -2,13 +2,16 @@ import os
 import cv2
 import copy
 import numpy
-import files.input as pic_folder
+import files.input as pic_folder_input
+import files.output as pic_folder_output
 
 
 def get_image_by_name(name):
-    return flip(imreadgray(
-        f'{os.path.dirname(pic_folder.__file__)}{os.path.sep}{name}'
-    ))
+    return flip(imreadgray(f'{os.path.dirname(pic_folder_input.__file__)}{os.path.sep}{name}'))
+
+
+def save_image_by_name(name, img):
+    return cv2.imwrite(f'{os.path.dirname(pic_folder_output.__file__)}{os.path.sep}{name}', flip(img))
 
 # IMAGE FUNCTIONS
 

@@ -1,29 +1,20 @@
-import numpy as np
 import bcolors
+import numpy as np
 from collections import deque
+from common.Algorithm import Algorithm
 from common.functions import *
 
-print(bcolors.OK, r"""
-  _____                    _____                       __     _     _ 
- |  __ \                  |  __ \                     / _|   | |   | |
- | |  | |_   _  ___ _ __  | |__) |___  ___  ___ _ __ | |_ ___| | __| |
- | |  | | | | |/ _ \ '__| |  _  // _ \/ __|/ _ \ '_ \|  _/ _ \ |/ _` |
- | |__| | |_| |  __/ |    | | \ \ (_) \__ \  __/ | | | ||  __/ | (_| |
- |_____/ \__, |\___|_|    |_|  \_\___/|___/\___|_| |_|_| \___|_|\__,_|
-          __/ |                                                       
-         |___/                                                        
-    """, bcolors.ENDC)
 
-
-class DyerRosenfeldAlgorithm:
+class DyerRosenfeldAlgorithm(Algorithm):
     NORTH_BORDER = 0
     WEST_BORDER = 1
     SOUTH_BORDER = 2
     EAST_BORDER = 3
     percent = 0
 
-    def __init__(self, image):
-        self.img = image
+    def __init__(self, img_name):
+        self.img = get_image_by_name(img_name)
+        self.imgName = img_name
         self.imgBeforeStep = np.zeros((self.img.shape[0], self.img.shape[1]))
         self.borderPointPixels = deque()
         self.pixelsToBeDeletedQueue = deque()
@@ -83,8 +74,21 @@ class DyerRosenfeldAlgorithm:
             h = self.img[row + 1, col]
             self.img[row][col] = minimize(b, d, h, f, e)
 
+    def print_algorithm_name(self):
+        print(bcolors.OK, r"""
+         _____                    _____                       __     _     _ 
+        |  __ \                  |  __ \                     / _|   | |   | |
+        | |  | |_   _  ___ _ __  | |__) |___  ___  ___ _ __ | |_ ___| | __| |
+        | |  | | | | |/ _ \ '__| |  _  // _ \/ __|/ _ \ '_ \|  _/ _ \ |/ _` |
+        | |__| | |_| |  __/ |    | | \ \ (_) \__ \  __/ | | | ||  __/ | (_| |
+        |_____/ \__, |\___|_|    |_|  \_\___/|___/\___|_| |_|_| \___|_|\__,_|
+                 __/ |
+                |___/
+        """, bcolors.ENDC)
 
-dyer = DyerRosenfeldAlgorithm(get_image_by_name('small.png'))
+
+dyer = DyerRosenfeldAlgorithm('shapes.png')
+dyer.print_algorithm_name()
 
 while True:
     print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
@@ -96,5 +100,4 @@ while True:
     else:
         makeequalmatrix(dyer.imgBeforeStep, dyer.img, dyer.img.shape)
 
-flip(dyer.img)
-cv2.imwrite('test.png', dyer.img)
+save_image_by_name(dyer.imgName, dyer.img)
