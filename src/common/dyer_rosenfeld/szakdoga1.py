@@ -12,12 +12,13 @@ class DyerRosenfeldAlgorithm(Algorithm):
     EAST_BORDER = 3
     percent = 0
 
-    def __init__(self, img_name):
+    def __init__(self, img_name, parallel=False):
         self.img = get_image_by_name(img_name)
         self.imgName = img_name
         self.imgBeforeStep = np.zeros((self.img.shape[0], self.img.shape[1]))
         self.borderPointPixels = deque()
         self.pixelsToBeDeletedQueue = deque()
+        self.parallel = parallel
 
     def clear_helpers(self):
         self.borderPointPixels.clear()
@@ -38,14 +39,20 @@ class DyerRosenfeldAlgorithm(Algorithm):
                 f = self.img[rowIndex, colIndex + 1]
                 h = self.img[rowIndex + 1, colIndex]
                 grayness = rvalue(b, d, e, f, h) * self.percent
-                if side == self.NORTH_BORDER and b < e - grayness:
-                    self.borderPointPixels.append([rowIndex, colIndex, e])
-                if side == self.WEST_BORDER and d < e - grayness:
-                    self.borderPointPixels.append([rowIndex, colIndex, e])
-                if side == self.SOUTH_BORDER and h < e - grayness:
-                    self.borderPointPixels.append([rowIndex, colIndex, e])
-                if side == self.EAST_BORDER and f < e - grayness:
-                    self.borderPointPixels.append([rowIndex, colIndex, e])
+                if self.parallel:
+                    if side == self.NORTH_BORDER and side == self.WEST_BORDER and b < e - grayness:
+                        self.borderPointPixels.append([rowIndex, colIndex, e])
+                    if side == self.SOUTH_BORDER and side == self.EAST_BORDER and h < e - grayness:
+                        self.borderPointPixels.append([rowIndex, colIndex, e])
+                else:
+                    if side == self.NORTH_BORDER and b < e - grayness:
+                        self.borderPointPixels.append([rowIndex, colIndex, e])
+                    if side == self.WEST_BORDER and d < e - grayness:
+                        self.borderPointPixels.append([rowIndex, colIndex, e])
+                    if side == self.SOUTH_BORDER and h < e - grayness:
+                        self.borderPointPixels.append([rowIndex, colIndex, e])
+                    if side == self.EAST_BORDER and f < e - grayness:
+                        self.borderPointPixels.append([rowIndex, colIndex, e])
 
     def mark_pixels_to_delete(self):
         for rowIndex, colIndex, value in self.borderPointPixels:
