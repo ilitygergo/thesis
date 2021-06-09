@@ -1,35 +1,22 @@
-import cv2
 import bcolors
-from src.common.functions import imreadgray
-from src.common.functions import flip
-from src.common.functions import localmaximum
-from src.common.functions import endpoint
-from src.common.functions import connectedcorner
-from src.common.functions import connectedpath
-from src.common.functions import equalmatrix
-from src.common.functions import makeequalmatrix
-from src.common.functions import borderpoint
+from src.common.functions import *
 
-print(bcolors.OK, "  _____       _            _        _____ _       ")
-print("  / ____|     | |          (_)      / ____(_)      ")
-print(" | (___   __ _| | __ _ _ __ _ _____| (___  _ _   _ ")
-print("  \___ \ / _` | |/ _` | '__| |______\___ \| | | | |")
-print("  ____) | (_| | | (_| | |  | |      ____) | | |_| |")
-print(" |_____/ \__,_|_|\__,_|_|  |_|     |_____/|_|\__, |")
-print("                                              __/ |")
-print("                                             |___/ ", bcolors.ENDC)
+print(bcolors.OK, r"""
+          _____       _            _        _____ _       
+         / ____|     | |          (_)      / ____(_)      
+        | (___   __ _| | __ _ _ __ _ _____| (___  _ _   _ 
+         \___ \ / _` | |/ _` | '__| |______\___ \| | | | |
+         ____) | (_| | | (_| | |  | |      ____) | | |_| |
+        |_____/ \__,_|_|\__,_|_|  |_|     |_____/|_|\__, |
+                                                     __/ |
+                                                    |___/
+        """, bcolors.ENDC)
 
-# Reading in the pictures as a gray picture
-picture = 'text'
-
-img = imreadgray('../files/input/' + picture + '.png')
-img2 = imreadgray('../files/input/' + picture + '.png')
-g1 = imreadgray('../files/input/' + picture + '.png')
-g2 = imreadgray('../files/input/' + picture + '.png')
-borders = imreadgray('../files/input/' + picture + '.png')
-
-# Converting the values 0-255
-flip(img)
+img = get_image_by_name('text.png')
+img2 = get_image_by_name('text.png')
+g1 = get_image_by_name('text.png')
+g2 = get_image_by_name('text.png')
+borders = get_image_by_name('text.png')
 
 # Initialization
 size = img.shape
@@ -148,6 +135,4 @@ while notequal:
     else:
         makeequalmatrix(img2, img, size)
 
-# Saving
-flip(img)
-cv2.imwrite('results/' + picture + '.png', img)
+save_image_by_name('text.png', img)
