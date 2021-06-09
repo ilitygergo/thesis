@@ -1,4 +1,3 @@
-import bcolors
 from abc import ABC, abstractmethod
 from src.thinning.interface.IAlgorithm import IAlgorithm
 from src.thinning.DyerRosenfeld import DyerRosenfeld

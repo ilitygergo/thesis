@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
-from src.thinning.Image import Image
 from src.core.AlgorithmFactory import *
 
 
