@@ -6,14 +6,107 @@ from src.common.functions import *
 class SalarySiyAlgorithm(Algorithm):
 
     def __init__(self, img_name):
+        self.imgName = img_name
         self.img = get_image_by_name(img_name)
         self.img2 = get_image_by_name(img_name)
         self.g1 = get_image_by_name(img_name)
         self.g2 = get_image_by_name(img_name)
         self.borders = get_image_by_name(img_name)
+        self.maximum = 0
+
+    def initialize(self):
+        hist = [0] * 256
+        maxima = 0
+
+        for rowIndex in range(salary.img.shape[0]):
+            for colIndex in range(salary.img.shape[1]):
+                if rowIndex == 0 or colIndex == 0 or rowIndex == salary.img.shape[0] or colIndex == salary.img.shape[1]:
+                    salary.img[rowIndex][colIndex] = 0
+                salary.g1[rowIndex][colIndex] = 0
+                salary.g2[rowIndex][colIndex] = 0
+                salary.borders[rowIndex][colIndex] = 0
+
+        for rowIndex in range(salary.img.shape[0]):
+            for colIndex in range(salary.img.shape[1]):
+                hist[int(salary.img[rowIndex][colIndex])] += 1
+
+        for index in range(256):
+            if index == 0:
+                continue
+            if maxima < hist[index]:
+                maxima = hist[index]
+                self.maximum = index
+
+    def pre_transformation_step(self):
+        """Central grey distance transform"""
+        for rowIndex in range(1, self.img.shape[0] - 1):
+            for colIndex in range(1, self.img.shape[1] - 1):
+                a = self.g1[rowIndex - 1][colIndex - 1]
+                b = self.g1[rowIndex - 1][colIndex]
+                c = self.g1[rowIndex - 1][colIndex + 1]
+                d = self.g1[rowIndex][colIndex - 1]
+                ave = (int(self.img[rowIndex][colIndex - 1]) + int(self.img[rowIndex][colIndex + 1]) + int(
+                    self.img[rowIndex - 1][colIndex]) + int(self.img[rowIndex + 1][colIndex])) / 4
+                plus = (int(ave) / self.maximum) ** 2
+                if int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus) > 255:
+                    self.g1[rowIndex][colIndex] = 255
+                else:
+                    self.g1[rowIndex][colIndex] = int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * int(plus))
+
+        for rowIndex in reversed(range(1, self.img.shape[0] - 1)):
+            for colIndex in reversed(range(1, self.img.shape[1] - 1)):
+                a = self.g2[rowIndex + 1][colIndex + 1]
+                b = self.g2[rowIndex + 1][colIndex]
+                c = self.g2[rowIndex + 1][colIndex - 1]
+                d = self.g2[rowIndex][colIndex + 1]
+                ave = (int(self.img[rowIndex][colIndex - 1]) + int(self.img[rowIndex][colIndex + 1]) + int(
+                    self.img[rowIndex - 1][colIndex]) + int(self.img[rowIndex + 1][colIndex])) / 4
+                plus = (ave / self.maximum) ** 2
+                if (int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)) > 255:
+                    self.g2[rowIndex][colIndex] = 255
+                else:
+                    self.g2[rowIndex][colIndex] = int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)
+
+        for rowIndex in range(self.img.shape[0]):
+            for colIndex in range(self.img.shape[1]):
+                self.img[rowIndex][colIndex] = min(self.g1[rowIndex][colIndex], self.g2[rowIndex][colIndex])
 
     def step(self):
-        pass
+        hatar = 0
+        localmax = 0
+        end = 0
+        conc = 0
+        conp = 0
+        torolt = 0
+
+        for row in range(1, salary.img.shape[0] - 1):
+            for col in range(1, salary.img.shape[1] - 1):
+                if borderpoint(salary.img, row, col):
+                    hatar += 1
+                    salary.borders[row][col] = 1
+
+        for row in range(1, salary.img.shape[0] - 1):
+            for col in range(1, salary.img.shape[1] - 1):
+                if salary.img[row][col] != 0:
+                    if salary.borders[row][col] == 1:
+                        if localmaximum(salary.img[row][col], salary.img[row][col + 1], salary.img[row - 1][col + 1],
+                                        salary.img[row - 1][col], salary.img[row - 1][col - 1],
+                                        salary.img[row][col - 1],
+                                        salary.img[row + 1][col - 1], salary.img[row + 1][col],
+                                        salary.img[row + 1][col + 1]):
+                            localmax += 1
+                            continue
+                        if endpoint(salary.img, row, col):
+                            end += 1
+                            continue
+                        if not connectedcorner(salary.img, row, col):
+                            conc += 1
+                            continue
+                        if not connectedpath(salary.img, row, col):
+                            conp += 1
+                            continue
+                        torolt += 1
+                        salary.img[row][col] = 0
 
     def clear_helpers(self):
         pass
@@ -31,106 +124,17 @@ class SalarySiyAlgorithm(Algorithm):
                 """, bcolors.ENDC)
 
 
-salary_siy = SalarySiyAlgorithm('shapes.png')
+salary = SalarySiyAlgorithm('shapes.png')
+salary.print_algorithm_name()
+salary.initialize()
+salary.pre_transformation_step()
 
-# Initialization
-size = salary_siy.img.shape
-notequal = True
-hist = [0] * 256
-maximum = 0
-maxima = 0
+while True:
+    salary.step()
 
-for row in range(size[0]):
-    for col in range(size[1]):
-        if row == 0 or col == 0 or row == size[0] or col == size[1]:
-            salary_siy.img[row][col] = 0
-        salary_siy.g1[row][col] = 0
-        salary_siy.g2[row][col] = 0
-        salary_siy.borders[row][col] = 0
-
-for row in range(size[0]):
-    for col in range(size[1]):
-        hist[int(salary_siy.img[row][col])] += 1
-
-for a in range(256):
-    if a == 0:
-        continue
-    if maxima < hist[a]:
-        maxima = hist[a]
-        maximum = a
-
-# Central grey distance transform
-for row in range(1, size[0] - 1):
-    for col in range(1, size[1] - 1):
-        a = salary_siy.g1[row - 1][col - 1]
-        b = salary_siy.g1[row - 1][col]
-        c = salary_siy.g1[row - 1][col + 1]
-        d = salary_siy.g1[row][col - 1]
-        ave = (int(salary_siy.img[row][col - 1]) + int(salary_siy.img[row][col + 1]) + int(salary_siy.img[row - 1][col]) + int(salary_siy.img[row + 1][col])) / 4
-        plus = (int(ave) / maximum)**2
-        if int(salary_siy.img[row][col]) + int(min(a, b, c, d) * plus) > 255:
-            salary_siy.g1[row][col] = 255
-        else:
-            salary_siy.g1[row][col] = int(salary_siy.img[row][col]) + int(min(a, b, c, d) * int(plus))
-
-for row in reversed(range(1, size[0] - 1)):
-    for col in reversed(range(1, size[1] - 1)):
-        a = salary_siy.g2[row + 1][col + 1]
-        b = salary_siy.g2[row + 1][col]
-        c = salary_siy.g2[row + 1][col - 1]
-        d = salary_siy.g2[row][col + 1]
-        ave = (int(salary_siy.img[row][col - 1]) + int(salary_siy.img[row][col + 1]) + int(salary_siy.img[row - 1][col]) + int(salary_siy.img[row + 1][col])) / 4
-        plus = (ave / maximum)**2
-        if (int(salary_siy.img[row][col]) + int(min(a, b, c, d) * plus)) > 255:
-            salary_siy.g2[row][col] = 255
-        else:
-            salary_siy.g2[row][col] = int(salary_siy.img[row][col]) + int(min(a, b, c, d) * plus)
-
-for row in range(size[0]):
-    for col in range(size[1]):
-        salary_siy.img[row][col] = min(salary_siy.g1[row][col], salary_siy.g2[row][col])
-
-print(bcolors.BLUE, 'CGDT:', salary_siy.img, bcolors.ENDC)
-
-# Smoothing by the 5 condition
-while notequal:
-    hatar = 0
-    localmax = 0
-    end = 0
-    conc = 0
-    conp = 0
-    torolt = 0
-
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            if borderpoint(salary_siy.img, row, col):
-                hatar += 1
-                salary_siy.borders[row][col] = 1
-
-    for row in range(1, size[0] - 1):
-        for col in range(1, size[1] - 1):
-            if salary_siy.img[row][col] != 0:
-                if salary_siy.borders[row][col] == 1:
-                    if localmaximum(salary_siy.img[row][col], salary_siy.img[row][col + 1], salary_siy.img[row - 1][col + 1],
-                                     salary_siy.img[row - 1][col], salary_siy.img[row - 1][col - 1], salary_siy.img[row][col - 1],
-                                     salary_siy.img[row + 1][col - 1], salary_siy.img[row + 1][col], salary_siy.img[row + 1][col + 1]):
-                        localmax += 1
-                        continue
-                    if endpoint(salary_siy.img, row, col):
-                        end += 1
-                        continue
-                    if not connectedcorner(salary_siy.img, row, col):
-                        conc += 1
-                        continue
-                    if not connectedpath(salary_siy.img, row, col):
-                        conp += 1
-                        continue
-                    torolt += 1
-                    salary_siy.img[row][col] = 0
-
-    if equalmatrix(salary_siy.img, salary_siy.img2, size):
+    if equalmatrix(salary.img, salary.img2, salary.img.shape):
         break
     else:
-        makeequalmatrix(salary_siy.img2, salary_siy.img, size)
+        makeequalmatrix(salary.img2, salary.img, salary.img.shape)
 
-save_image_by_name('text.png', salary_siy.img)
+save_image_by_name(salary.imgName, salary.img)
