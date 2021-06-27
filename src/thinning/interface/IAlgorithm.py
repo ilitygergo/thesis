@@ -6,9 +6,17 @@ class IAlgorithm(ABC):
     previousStep = None
 
     @abstractmethod
-    def getName(self) -> str:
+    def initialize(self):
         pass
 
     @abstractmethod
-    def processStepOnImage(self, img):
+    def step(self):
+        pass
+
+    @abstractmethod
+    def after_processing(self):
+        pass
+
+    @abstractmethod
+    def print_algorithm_name(self):
         pass
