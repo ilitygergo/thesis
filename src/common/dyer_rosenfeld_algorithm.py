@@ -42,9 +42,17 @@ class DyerRosenfeldAlgorithm(Algorithm):
                 h = self.img[rowIndex + 1, colIndex]
                 grayness = rvalue(b, d, e, f, h) * self.percent
                 if self.parallel:
-                    if side == self.NORTH_BORDER and side == self.WEST_BORDER and b < e - grayness:
+                    if (
+                        side == self.NORTH_BORDER
+                        and side == self.WEST_BORDER
+                        and b < e - grayness
+                    ):
                         self.borderPointPixels.append([rowIndex, colIndex, e])
-                    if side == self.SOUTH_BORDER and side == self.EAST_BORDER and h < e - grayness:
+                    if (
+                        side == self.SOUTH_BORDER
+                        and side == self.EAST_BORDER
+                        and h < e - grayness
+                    ):
                         self.borderPointPixels.append([rowIndex, colIndex, e])
                 else:
                     if side == self.NORTH_BORDER and b < e - grayness:
@@ -69,7 +77,9 @@ class DyerRosenfeldAlgorithm(Algorithm):
             i = self.img[rowIndex + 1, colIndex + 1]
             grayness = rvalue(b, d, e, f, h) * self.percent
 
-            if not notendpoint(b, d, h, f, e - grayness) or not connected(a, b, c, d, e, f, g, h, i, grayness):
+            if not notendpoint(b, d, h, f, e - grayness) or not connected(
+                a, b, c, d, e, f, g, h, i, grayness
+            ):
                 continue
             else:
                 self.pixelsToBeDeletedQueue.append([rowIndex, colIndex])
@@ -84,8 +94,10 @@ class DyerRosenfeldAlgorithm(Algorithm):
             self.img[row][col] = minimize(b, d, h, f, e)
 
     def print_algorithm_name(self):
-        print(bcolors.OK, r"""
-         _____                    _____                       __     _     _ 
+        print(
+            bcolors.OK,
+            r"""
+         _____                    _____                       __     _     _
         |  __ \                  |  __ \                     / _|   | |   | |
         | |  | |_   _  ___ _ __  | |__) |___  ___  ___ _ __ | |_ ___| | __| |
         | |  | | | | |/ _ \ '__| |  _  // _ \/ __|/ _ \ '_ \|  _/ _ \ |/ _` |
@@ -93,14 +105,16 @@ class DyerRosenfeldAlgorithm(Algorithm):
         |_____/ \__, |\___|_|    |_|  \_\___/|___/\___|_| |_|_| \___|_|\__,_|
                  __/ |
                 |___/
-        """, bcolors.ENDC)
+        """,
+            bcolors.ENDC,
+        )
 
 
-dyer = DyerRosenfeldAlgorithm('shapes.png')
+dyer = DyerRosenfeldAlgorithm("shapes.png")
 dyer.print_algorithm_name()
 
 while True:
-    print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
+    print(bcolors.BOLD, dyer.img, bcolors.ENDC, "\n")
     dyer.step()
     dyer.clear_helpers()
 

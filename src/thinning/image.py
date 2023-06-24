@@ -3,9 +3,9 @@ import numpy as np
 
 
 class Image:
-    name = ''
-    path = ''
-    extension = ''
+    name = ""
+    path = ""
+    extension = ""
     pixels = []
     rowSize = 0
     colSize = 0
@@ -13,25 +13,25 @@ class Image:
     __instance = None
 
     @staticmethod
-    def getInstance(path=''):
-        if path != '':
+    def getInstance(path=""):
+        if path != "":
             Image.__instance = Image(path)
         return Image.__instance
 
     @staticmethod
     def isValidImageExtension(path):
-        if '.' not in path:
+        if "." not in path:
             return False
 
-        if path.split('.')[1] not in ['jpg', 'png']:
+        if path.split(".")[1] not in ["jpg", "png"]:
             return False
 
         return True
 
     def __init__(self, file_path):
-        self.name = file_path.split('/').pop()
+        self.name = file_path.split("/").pop()
         self.path = file_path
-        self.extension = self.path.split('.')[1]
+        self.extension = self.path.split(".")[1]
         self.pixels = self.readGrayImage()
         self.rowSize, self.colSize = self.pixels.shape
         self.convertPixelValuesToOpposite()
@@ -51,15 +51,15 @@ class Image:
         self.pixels = lookUpTable[self.pixels]
         self.lookUpTable = []
 
-    def isEqualTo(self, image: 'Image'):
+    def isEqualTo(self, image: "Image"):
         if not self.isEqualInSize(image):
-            raise Exception('Image sizes are not equal!')
+            raise Exception("Image sizes are not equal!")
 
         if np.bitwise_xor(self.pixels, image.pixels).any():
             return False
         return True
 
-    def isEqualInSize(self, image: 'Image'):
+    def isEqualInSize(self, image: "Image"):
         if self.pixels.shape != image.pixels.shape:
             return False
         return True
@@ -75,4 +75,4 @@ class Image:
 
     def save(self):
         self.convertPixelValuesToOpposite()
-        cv2.imwrite('common/assets/output/' + self.name, self.pixels)
+        cv2.imwrite("common/assets/output/" + self.name, self.pixels)

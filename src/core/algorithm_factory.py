@@ -1,8 +1,7 @@
 import tkinter as tk
 from abc import ABC, abstractmethod
 
-from src.common.functions import (equalmatrix, makeequalmatrix,
-                                  save_image_by_name)
+from src.common.functions import equalmatrix, makeequalmatrix, save_image_by_name
 from src.thinning.couprie import Couprie
 from src.thinning.dyer_rosenfeld import DyerRosenfeld
 from src.thinning.image import Image
@@ -29,7 +28,9 @@ class AlgorithmFactory(ABC):
             if equalmatrix(algorithm.img, algorithm.imgBeforeStep, algorithm.img.shape):
                 break
             else:
-                makeequalmatrix(algorithm.imgBeforeStep, algorithm.img, algorithm.img.shape)
+                makeequalmatrix(
+                    algorithm.imgBeforeStep, algorithm.img, algorithm.img.shape
+                )
 
         algorithm.after_processing()
         save_image_by_name(algorithm.imgName, algorithm.img)

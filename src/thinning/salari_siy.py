@@ -5,7 +5,6 @@ from src.thinning.interface.algorithm_interface import IAlgorithm
 
 
 class SalariSiy(IAlgorithm):
-
     def __init__(self, img_name):
         self.imgName = img_name
         self.img = get_image_by_name(img_name)
@@ -21,7 +20,12 @@ class SalariSiy(IAlgorithm):
 
         for rowIndex in range(self.img.shape[0]):
             for colIndex in range(self.img.shape[1]):
-                if rowIndex == 0 or colIndex == 0 or rowIndex == self.img.shape[0] or colIndex == self.img.shape[1]:
+                if (
+                    rowIndex == 0
+                    or colIndex == 0
+                    or rowIndex == self.img.shape[0]
+                    or colIndex == self.img.shape[1]
+                ):
                     self.img[rowIndex][colIndex] = 0
                 self.g1[rowIndex][colIndex] = 0
                 self.g2[rowIndex][colIndex] = 0
@@ -47,13 +51,22 @@ class SalariSiy(IAlgorithm):
                 b = self.g1[rowIndex - 1][colIndex]
                 c = self.g1[rowIndex - 1][colIndex + 1]
                 d = self.g1[rowIndex][colIndex - 1]
-                ave = (int(self.img[rowIndex][colIndex - 1]) + int(self.img[rowIndex][colIndex + 1]) + int(
-                    self.img[rowIndex - 1][colIndex]) + int(self.img[rowIndex + 1][colIndex])) / 4
+                ave = (
+                    int(self.img[rowIndex][colIndex - 1])
+                    + int(self.img[rowIndex][colIndex + 1])
+                    + int(self.img[rowIndex - 1][colIndex])
+                    + int(self.img[rowIndex + 1][colIndex])
+                ) / 4
                 plus = (int(ave) / self.maximum) ** 2
-                if int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus) > 255:
+                if (
+                    int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)
+                    > 255
+                ):
                     self.g1[rowIndex][colIndex] = 255
                 else:
-                    self.g1[rowIndex][colIndex] = int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * int(plus))
+                    self.g1[rowIndex][colIndex] = int(
+                        self.img[rowIndex][colIndex]
+                    ) + int(min(a, b, c, d) * int(plus))
 
         for rowIndex in reversed(range(1, self.img.shape[0] - 1)):
             for colIndex in reversed(range(1, self.img.shape[1] - 1)):
@@ -61,17 +74,27 @@ class SalariSiy(IAlgorithm):
                 b = self.g2[rowIndex + 1][colIndex]
                 c = self.g2[rowIndex + 1][colIndex - 1]
                 d = self.g2[rowIndex][colIndex + 1]
-                ave = (int(self.img[rowIndex][colIndex - 1]) + int(self.img[rowIndex][colIndex + 1]) + int(
-                    self.img[rowIndex - 1][colIndex]) + int(self.img[rowIndex + 1][colIndex])) / 4
+                ave = (
+                    int(self.img[rowIndex][colIndex - 1])
+                    + int(self.img[rowIndex][colIndex + 1])
+                    + int(self.img[rowIndex - 1][colIndex])
+                    + int(self.img[rowIndex + 1][colIndex])
+                ) / 4
                 plus = (ave / self.maximum) ** 2
-                if (int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)) > 255:
+                if (
+                    int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)
+                ) > 255:
                     self.g2[rowIndex][colIndex] = 255
                 else:
-                    self.g2[rowIndex][colIndex] = int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)
+                    self.g2[rowIndex][colIndex] = int(
+                        self.img[rowIndex][colIndex]
+                    ) + int(min(a, b, c, d) * plus)
 
         for rowIndex in range(self.img.shape[0]):
             for colIndex in range(self.img.shape[1]):
-                self.img[rowIndex][colIndex] = min(self.g1[rowIndex][colIndex], self.g2[rowIndex][colIndex])
+                self.img[rowIndex][colIndex] = min(
+                    self.g1[rowIndex][colIndex], self.g2[rowIndex][colIndex]
+                )
 
     def step(self):
         hatar = 0
@@ -91,11 +114,17 @@ class SalariSiy(IAlgorithm):
             for col in range(1, self.img.shape[1] - 1):
                 if self.img[row][col] != 0:
                     if self.borders[row][col] == 1:
-                        if localmaximum(self.img[row][col], self.img[row][col + 1], self.img[row - 1][col + 1],
-                                        self.img[row - 1][col], self.img[row - 1][col - 1],
-                                        self.img[row][col - 1],
-                                        self.img[row + 1][col - 1], self.img[row + 1][col],
-                                        self.img[row + 1][col + 1]):
+                        if localmaximum(
+                            self.img[row][col],
+                            self.img[row][col + 1],
+                            self.img[row - 1][col + 1],
+                            self.img[row - 1][col],
+                            self.img[row - 1][col - 1],
+                            self.img[row][col - 1],
+                            self.img[row + 1][col - 1],
+                            self.img[row + 1][col],
+                            self.img[row + 1][col + 1],
+                        ):
                             localmax += 1
                             continue
                         if endpoint(self.img, row, col):
@@ -114,13 +143,17 @@ class SalariSiy(IAlgorithm):
         pass
 
     def print_algorithm_name(self):
-        print(bcolors.OK, r"""
+        print(
+            bcolors.OK,
+            r"""
           _____       _            _        _____ _
          / ____|     | |          (_)      / ____(_)
-        | (___   __ _| | __ _ _ __ _ _____| (___  _ _   _ 
+        | (___   __ _| | __ _ _ __ _ _____| (___  _ _   _
          \___ \ / _` | |/ _` | '__| |______\___ \| | | | |
          ____) | (_| | | (_| | |  | |      ____) | | |_| |
         |_____/ \__,_|_|\__,_|_|  |_|     |_____/|_|\__, |
                                                      __/ |
                                                     |___/
-        """, bcolors.ENDC)
+        """,
+            bcolors.ENDC,
+        )

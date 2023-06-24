@@ -5,7 +5,6 @@ from src.common.functions import *
 
 
 class SalarySiyAlgorithm(Algorithm):
-
     def __init__(self, img_name):
         self.imgName = img_name
         self.img = get_image_by_name(img_name)
@@ -21,7 +20,12 @@ class SalarySiyAlgorithm(Algorithm):
 
         for rowIndex in range(salary.img.shape[0]):
             for colIndex in range(salary.img.shape[1]):
-                if rowIndex == 0 or colIndex == 0 or rowIndex == salary.img.shape[0] or colIndex == salary.img.shape[1]:
+                if (
+                    rowIndex == 0
+                    or colIndex == 0
+                    or rowIndex == salary.img.shape[0]
+                    or colIndex == salary.img.shape[1]
+                ):
                     salary.img[rowIndex][colIndex] = 0
                 salary.g1[rowIndex][colIndex] = 0
                 salary.g2[rowIndex][colIndex] = 0
@@ -46,13 +50,22 @@ class SalarySiyAlgorithm(Algorithm):
                 b = self.g1[rowIndex - 1][colIndex]
                 c = self.g1[rowIndex - 1][colIndex + 1]
                 d = self.g1[rowIndex][colIndex - 1]
-                ave = (int(self.img[rowIndex][colIndex - 1]) + int(self.img[rowIndex][colIndex + 1]) + int(
-                    self.img[rowIndex - 1][colIndex]) + int(self.img[rowIndex + 1][colIndex])) / 4
+                ave = (
+                    int(self.img[rowIndex][colIndex - 1])
+                    + int(self.img[rowIndex][colIndex + 1])
+                    + int(self.img[rowIndex - 1][colIndex])
+                    + int(self.img[rowIndex + 1][colIndex])
+                ) / 4
                 plus = (int(ave) / self.maximum) ** 2
-                if int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus) > 255:
+                if (
+                    int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)
+                    > 255
+                ):
                     self.g1[rowIndex][colIndex] = 255
                 else:
-                    self.g1[rowIndex][colIndex] = int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * int(plus))
+                    self.g1[rowIndex][colIndex] = int(
+                        self.img[rowIndex][colIndex]
+                    ) + int(min(a, b, c, d) * int(plus))
 
         for rowIndex in reversed(range(1, self.img.shape[0] - 1)):
             for colIndex in reversed(range(1, self.img.shape[1] - 1)):
@@ -60,17 +73,27 @@ class SalarySiyAlgorithm(Algorithm):
                 b = self.g2[rowIndex + 1][colIndex]
                 c = self.g2[rowIndex + 1][colIndex - 1]
                 d = self.g2[rowIndex][colIndex + 1]
-                ave = (int(self.img[rowIndex][colIndex - 1]) + int(self.img[rowIndex][colIndex + 1]) + int(
-                    self.img[rowIndex - 1][colIndex]) + int(self.img[rowIndex + 1][colIndex])) / 4
+                ave = (
+                    int(self.img[rowIndex][colIndex - 1])
+                    + int(self.img[rowIndex][colIndex + 1])
+                    + int(self.img[rowIndex - 1][colIndex])
+                    + int(self.img[rowIndex + 1][colIndex])
+                ) / 4
                 plus = (ave / self.maximum) ** 2
-                if (int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)) > 255:
+                if (
+                    int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)
+                ) > 255:
                     self.g2[rowIndex][colIndex] = 255
                 else:
-                    self.g2[rowIndex][colIndex] = int(self.img[rowIndex][colIndex]) + int(min(a, b, c, d) * plus)
+                    self.g2[rowIndex][colIndex] = int(
+                        self.img[rowIndex][colIndex]
+                    ) + int(min(a, b, c, d) * plus)
 
         for rowIndex in range(self.img.shape[0]):
             for colIndex in range(self.img.shape[1]):
-                self.img[rowIndex][colIndex] = min(self.g1[rowIndex][colIndex], self.g2[rowIndex][colIndex])
+                self.img[rowIndex][colIndex] = min(
+                    self.g1[rowIndex][colIndex], self.g2[rowIndex][colIndex]
+                )
 
     def step(self):
         hatar = 0
@@ -90,11 +113,17 @@ class SalarySiyAlgorithm(Algorithm):
             for col in range(1, salary.img.shape[1] - 1):
                 if salary.img[row][col] != 0:
                     if salary.borders[row][col] == 1:
-                        if localmaximum(salary.img[row][col], salary.img[row][col + 1], salary.img[row - 1][col + 1],
-                                        salary.img[row - 1][col], salary.img[row - 1][col - 1],
-                                        salary.img[row][col - 1],
-                                        salary.img[row + 1][col - 1], salary.img[row + 1][col],
-                                        salary.img[row + 1][col + 1]):
+                        if localmaximum(
+                            salary.img[row][col],
+                            salary.img[row][col + 1],
+                            salary.img[row - 1][col + 1],
+                            salary.img[row - 1][col],
+                            salary.img[row - 1][col - 1],
+                            salary.img[row][col - 1],
+                            salary.img[row + 1][col - 1],
+                            salary.img[row + 1][col],
+                            salary.img[row + 1][col + 1],
+                        ):
                             localmax += 1
                             continue
                         if endpoint(salary.img, row, col):
@@ -113,19 +142,23 @@ class SalarySiyAlgorithm(Algorithm):
         pass
 
     def print_algorithm_name(self):
-        print(bcolors.OK, r"""
+        print(
+            bcolors.OK,
+            r"""
           _____       _            _        _____ _
          / ____|     | |          (_)      / ____(_)
-        | (___   __ _| | __ _ _ __ _ _____| (___  _ _   _ 
+        | (___   __ _| | __ _ _ __ _ _____| (___  _ _   _
          \___ \ / _` | |/ _` | '__| |______\___ \| | | | |
          ____) | (_| | | (_| | |  | |      ____) | | |_| |
         |_____/ \__,_|_|\__,_|_|  |_|     |_____/|_|\__, |
                                                      __/ |
                                                     |___/
-        """, bcolors.ENDC)
+        """,
+            bcolors.ENDC,
+        )
 
 
-salary = SalarySiyAlgorithm('shapes.png')
+salary = SalarySiyAlgorithm("shapes.png")
 salary.print_algorithm_name()
 salary.initialize()
 salary.pre_transformation_step()

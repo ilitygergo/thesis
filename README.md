@@ -22,7 +22,7 @@ The papers in chronological order:
 ### Usage
 The following command installs the dependencies
 > pip install -r requirements.txt
-> 
+>
 <!--stackedit_data:
 eyJoaXN0b3J5IjpbLTE1MTE3MjM0OV19
 -->

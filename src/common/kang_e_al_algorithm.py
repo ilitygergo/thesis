@@ -37,19 +37,31 @@ class KangEtAlAlgorithm(Algorithm):
                 if self.img[rowIndex][colIndex] != 0:
                     if self.img[rowIndex - 1][colIndex] <= self.img[rowIndex][colIndex]:
                         self.psi[rowIndex][colIndex] += 1
-                    if self.img[rowIndex - 1][colIndex - 1] <= self.img[rowIndex][colIndex]:
+                    if (
+                        self.img[rowIndex - 1][colIndex - 1]
+                        <= self.img[rowIndex][colIndex]
+                    ):
                         self.psi[rowIndex][colIndex] += 1
                     if self.img[rowIndex][colIndex - 1] <= self.img[rowIndex][colIndex]:
                         self.psi[rowIndex][colIndex] += 1
-                    if self.img[rowIndex + 1][colIndex - 1] <= self.img[rowIndex][colIndex]:
+                    if (
+                        self.img[rowIndex + 1][colIndex - 1]
+                        <= self.img[rowIndex][colIndex]
+                    ):
                         self.psi[rowIndex][colIndex] += 1
                     if self.img[rowIndex + 1][colIndex] <= self.img[rowIndex][colIndex]:
                         self.psi[rowIndex][colIndex] += 1
-                    if self.img[rowIndex + 1][colIndex + 1] <= self.img[rowIndex][colIndex]:
+                    if (
+                        self.img[rowIndex + 1][colIndex + 1]
+                        <= self.img[rowIndex][colIndex]
+                    ):
                         self.psi[rowIndex][colIndex] += 1
                     if self.img[rowIndex][colIndex + 1] <= self.img[rowIndex][colIndex]:
                         self.psi[rowIndex][colIndex] += 1
-                    if self.img[rowIndex - 1][colIndex + 1] <= self.img[rowIndex][colIndex]:
+                    if (
+                        self.img[rowIndex - 1][colIndex + 1]
+                        <= self.img[rowIndex][colIndex]
+                    ):
                         self.psi[rowIndex][colIndex] += 1
 
         for rowIndex in range(1, self.img.shape[0] - 1):
@@ -72,10 +84,17 @@ class KangEtAlAlgorithm(Algorithm):
             for colIndex in range(2, self.img.shape[1] - 2):
                 if self.psi[rowIndex][colIndex] == self.psi_value + x:
                     if self.borders[rowIndex][colIndex] == 1:
-                        if localmaximum(self.img2[rowIndex][colIndex], self.img2[rowIndex][colIndex + 1], self.img2[rowIndex - 1][colIndex + 1],
-                                        self.img2[rowIndex - 1][colIndex], self.img2[rowIndex - 1][colIndex - 1], self.img2[rowIndex][colIndex - 1],
-                                        self.img2[rowIndex + 1][colIndex - 1], self.img2[rowIndex + 1][colIndex],
-                                        self.img2[rowIndex + 1][colIndex + 1]):
+                        if localmaximum(
+                            self.img2[rowIndex][colIndex],
+                            self.img2[rowIndex][colIndex + 1],
+                            self.img2[rowIndex - 1][colIndex + 1],
+                            self.img2[rowIndex - 1][colIndex],
+                            self.img2[rowIndex - 1][colIndex - 1],
+                            self.img2[rowIndex][colIndex - 1],
+                            self.img2[rowIndex + 1][colIndex - 1],
+                            self.img2[rowIndex + 1][colIndex],
+                            self.img2[rowIndex + 1][colIndex + 1],
+                        ):
                             continue
                         if endpoint(self.img2, rowIndex, colIndex):
                             continue
@@ -96,7 +115,9 @@ class KangEtAlAlgorithm(Algorithm):
                         self.img2[rowIndex][colIndex] = self.helper[rowIndex][colIndex]
 
     def print_algorithm_name(self):
-        print(bcolors.OK, r"""
+        print(
+            bcolors.OK,
+            r"""
          _  __                    _____       _       _  ___
         | |/ /                   / ____|     | |     | |/ (_)
         | ' / __ _ _ __   __ _  | (___  _   _| |__   | ' / _ _ __ ___
@@ -105,10 +126,12 @@ class KangEtAlAlgorithm(Algorithm):
         |_|\_\__,_|_| |_|\__, | |_____/ \__,_|_| |_| |_|\_\_|_| |_| |_|
                           __/ |
                          |___/
-        """, bcolors.ENDC)
+        """,
+            bcolors.ENDC,
+        )
 
 
-kang = KangEtAlAlgorithm('shapes.png')
+kang = KangEtAlAlgorithm("shapes.png")
 kang.print_algorithm_name()
 kang.initialize()
 

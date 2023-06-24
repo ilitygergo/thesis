@@ -62,15 +62,21 @@ class Kim(IAlgorithm):
 
         for rowIndex in range(1, self.img.shape[0] - 1):
             for colIndex in range(1, self.img.shape[1] - 1):
-                if (int(self.img[rowIndex][colIndex]) - int(self.O1[rowIndex][colIndex]) > 0) and int(self.img[rowIndex][colIndex]) - int(
-                        self.O2[rowIndex][colIndex]) > Kim.h:
+                if (
+                    int(self.img[rowIndex][colIndex]) - int(self.O1[rowIndex][colIndex])
+                    > 0
+                ) and int(self.img[rowIndex][colIndex]) - int(
+                    self.O2[rowIndex][colIndex]
+                ) > Kim.h:
                     self.R[rowIndex][colIndex] = self.img[rowIndex][colIndex]
                 else:
                     self.R[rowIndex][colIndex] = 0
 
         for rowIndex in range(1, self.img.shape[0] - 1):
             for colIndex in range(1, self.img.shape[1] - 1):
-                self.compstar[rowIndex][colIndex] = max(int(self.E[rowIndex][colIndex]), int(self.R[rowIndex][colIndex]))
+                self.compstar[rowIndex][colIndex] = max(
+                    int(self.E[rowIndex][colIndex]), int(self.R[rowIndex][colIndex])
+                )
 
         for rowIndex in range(1, self.img.shape[0] - 1):
             for colIndex in range(1, self.img.shape[1] - 1):
@@ -102,18 +108,26 @@ class Kim(IAlgorithm):
 
         for rowIndex in range(1, self.img.shape[0] - 1):
             for colIndex in range(1, self.img.shape[1] - 1):
-                if (int(self.img[rowIndex][colIndex]) - int(self.O1[rowIndex][colIndex]) > 0) and int(self.img[rowIndex][colIndex]) - int(
-                        self.O2[rowIndex][colIndex]) > Kim.h:
+                if (
+                    int(self.img[rowIndex][colIndex]) - int(self.O1[rowIndex][colIndex])
+                    > 0
+                ) and int(self.img[rowIndex][colIndex]) - int(
+                    self.O2[rowIndex][colIndex]
+                ) > Kim.h:
                     self.R[rowIndex][colIndex] = self.img[rowIndex][colIndex]
                 else:
                     self.R[rowIndex][colIndex] = 0
 
     def print_algorithm_name(self):
-        print(bcolors.OK, r"""
-          _  ___             _                  _____ _           _ 
+        print(
+            bcolors.OK,
+            r"""
+          _  ___             _                  _____ _           _
          | |/ (_)           | |                / ____| |         (_)
-         | ' / _ _ __ ___   | |     ___  ___  | |    | |__   ___  _ 
+         | ' / _ _ __ ___   | |     ___  ___  | |    | |__   ___  _
          |  < | | '_ ` _ \  | |    / _ \/ _ \ | |    | '_ \ / _ \| |
          | . \| | | | | | | | |___|  __/  __/ | |____| | | | (_) | |
          |_|\_\_|_| |_| |_| |______\___|\___|  \_____|_| |_|\___/|_|
-        """, bcolors.ENDC)
+        """,
+            bcolors.ENDC,
+        )

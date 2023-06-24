@@ -22,7 +22,7 @@ class CouprieEtAlAlgorithm(Algorithm):
         m = self.img.shape[1]
         self.border = [0] * n
         for x in range(n):
-            self.border[x] = ['O'] * m
+            self.border[x] = ["O"] * m
 
         with open("lookup", "rb") as f:
             byte = f.read(1)
@@ -33,7 +33,7 @@ class CouprieEtAlAlgorithm(Algorithm):
     def step(self):
         for rowIndex in range(0, self.img.shape[0]):
             for colIndex in range(0, self.img.shape[1]):
-                self.border[rowIndex][colIndex] = 'O'
+                self.border[rowIndex][colIndex] = "O"
                 self.lowest[rowIndex][colIndex] = 0
 
         for rowIndex in range(2, self.img.shape[0] - 2):
@@ -41,25 +41,37 @@ class CouprieEtAlAlgorithm(Algorithm):
                 if self.img[rowIndex][colIndex] == 0:
                     continue
                 if borderpoint8(self.img, rowIndex, colIndex):
-                    self.lowest[rowIndex][colIndex] = lowneighbour(self.img, rowIndex, colIndex)
-                    self.border[rowIndex][colIndex] = 'X'
+                    self.lowest[rowIndex][colIndex] = lowneighbour(
+                        self.img, rowIndex, colIndex
+                    )
+                    self.border[rowIndex][colIndex] = "X"
 
         for rowIndex in range(2, self.img.shape[0] - 2):
             for colIndex in range(2, self.img.shape[1] - 2):
-                CouprieEtAlAlgorithm.binmatrixhelper = binmatrix(self.img, rowIndex, colIndex, self.img.shape)
-                if self.border[rowIndex][colIndex] == 'O':
+                CouprieEtAlAlgorithm.binmatrixhelper = binmatrix(
+                    self.img, rowIndex, colIndex, self.img.shape
+                )
+                if self.border[rowIndex][colIndex] == "O":
                     continue
 
                 if self.lookup:
-                    CouprieEtAlAlgorithm.binmatrixhelper = converttoarray(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2)
-                    CouprieEtAlAlgorithm.binmatrixhelper = arraytonum(CouprieEtAlAlgorithm.binmatrixhelper)
-                    self.helper[rowIndex][colIndex] = self.table[CouprieEtAlAlgorithm.binmatrixhelper]
+                    CouprieEtAlAlgorithm.binmatrixhelper = converttoarray(
+                        CouprieEtAlAlgorithm.binmatrixhelper, 2, 2
+                    )
+                    CouprieEtAlAlgorithm.binmatrixhelper = arraytonum(
+                        CouprieEtAlAlgorithm.binmatrixhelper
+                    )
+                    self.helper[rowIndex][colIndex] = self.table[
+                        CouprieEtAlAlgorithm.binmatrixhelper
+                    ]
                 else:
                     if endpointmodified(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2):
                         continue
                     if not oneobject(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2) <= 1:
                         continue
-                    if not simpleafterremove(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2):
+                    if not simpleafterremove(
+                        CouprieEtAlAlgorithm.binmatrixhelper, 2, 2
+                    ):
                         continue
                     if forbidden(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2):
                         continue
@@ -76,7 +88,9 @@ class CouprieEtAlAlgorithm(Algorithm):
         pass
 
     def print_algorithm_name(self):
-        print(bcolors.OK, r"""
+        print(
+            bcolors.OK,
+            r"""
           _____                       _             _           _
          / ____|                     (_)           | |         | |
         | |     ___  _   _ _ __  _ __ _  ___    ___| |_    __ _| |
@@ -85,10 +99,12 @@ class CouprieEtAlAlgorithm(Algorithm):
          \_____\___/ \__,_| .__/|_|  |_|\___|  \___|\__|  \__,_|_|
                           | |
                           |_|
-        """, bcolors.ENDC)
+        """,
+            bcolors.ENDC,
+        )
 
 
-couprie = CouprieEtAlAlgorithm('shapes.png')
+couprie = CouprieEtAlAlgorithm("shapes.png")
 couprie.initialize()
 
 while True:

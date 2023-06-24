@@ -22,7 +22,7 @@ class Couprie(IAlgorithm):
         m = self.img.shape[1]
         self.border = [0] * n
         for x in range(n):
-            self.border[x] = ['O'] * m
+            self.border[x] = ["O"] * m
 
         with open("lookup", "rb") as f:
             byte = f.read(1)
@@ -33,7 +33,7 @@ class Couprie(IAlgorithm):
     def step(self):
         for rowIndex in range(0, self.img.shape[0]):
             for colIndex in range(0, self.img.shape[1]):
-                self.border[rowIndex][colIndex] = 'O'
+                self.border[rowIndex][colIndex] = "O"
                 self.lowest[rowIndex][colIndex] = 0
 
         for rowIndex in range(2, self.img.shape[0] - 2):
@@ -41,19 +41,27 @@ class Couprie(IAlgorithm):
                 if self.img[rowIndex][colIndex] == 0:
                     continue
                 if borderpoint8(self.img, rowIndex, colIndex):
-                    self.lowest[rowIndex][colIndex] = lowneighbour(self.img, rowIndex, colIndex)
-                    self.border[rowIndex][colIndex] = 'X'
+                    self.lowest[rowIndex][colIndex] = lowneighbour(
+                        self.img, rowIndex, colIndex
+                    )
+                    self.border[rowIndex][colIndex] = "X"
 
         for rowIndex in range(2, self.img.shape[0] - 2):
             for colIndex in range(2, self.img.shape[1] - 2):
-                Couprie.binmatrixhelper = binmatrix(self.img, rowIndex, colIndex, self.img.shape)
-                if self.border[rowIndex][colIndex] == 'O':
+                Couprie.binmatrixhelper = binmatrix(
+                    self.img, rowIndex, colIndex, self.img.shape
+                )
+                if self.border[rowIndex][colIndex] == "O":
                     continue
 
                 if self.lookup:
-                    Couprie.binmatrixhelper = converttoarray(Couprie.binmatrixhelper, 2, 2)
+                    Couprie.binmatrixhelper = converttoarray(
+                        Couprie.binmatrixhelper, 2, 2
+                    )
                     Couprie.binmatrixhelper = arraytonum(Couprie.binmatrixhelper)
-                    self.helper[rowIndex][colIndex] = self.table[Couprie.binmatrixhelper]
+                    self.helper[rowIndex][colIndex] = self.table[
+                        Couprie.binmatrixhelper
+                    ]
                 else:
                     if endpointmodified(Couprie.binmatrixhelper, 2, 2):
                         continue
@@ -79,7 +87,9 @@ class Couprie(IAlgorithm):
         pass
 
     def print_algorithm_name(self):
-        print(bcolors.OK, r"""
+        print(
+            bcolors.OK,
+            r"""
           _____                       _             _           _
          / ____|                     (_)           | |         | |
         | |     ___  _   _ _ __  _ __ _  ___    ___| |_    __ _| |
@@ -88,4 +98,6 @@ class Couprie(IAlgorithm):
          \_____\___/ \__,_| .__/|_|  |_|\___|  \___|\__|  \__,_|_|
                           | |
                           |_|
-        """, bcolors.ENDC)
+        """,
+            bcolors.ENDC,
+        )
