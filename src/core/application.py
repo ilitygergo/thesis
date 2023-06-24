@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
-from src.core.AlgorithmFactory import (AlgorithmFactory, CouprieFactory,
-                                       DyerRosenfeldFactory, KangFactory,
-                                       KimFactory, SalariSiyFactory)
-from src.thinning.Image import Image
+from src.core.algorithm_factory import (AlgorithmFactory, CouprieFactory,
+                                        DyerRosenfeldFactory, KangFactory,
+                                        KimFactory, SalariSiyFactory)
+from src.thinning.image import Image
 
 
 class Application(tk.Frame):

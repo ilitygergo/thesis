@@ -2,7 +2,7 @@ import bcolors
 import numpy as np
 
 from src.common.functions import *
-from src.thinning.interface.IAlgorithm import IAlgorithm
+from src.thinning.interface.algorithm_interface import IAlgorithm
 
 
 class Kim(IAlgorithm):

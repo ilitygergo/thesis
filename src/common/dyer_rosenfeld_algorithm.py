@@ -3,11 +3,11 @@ from collections import deque
 import bcolors
 import numpy as np
 
-from src.common.functions import *
-from src.thinning.interface.IAlgorithm import IAlgorithm
+from common.algorithm import Algorithm
+from common.functions import *
 
 
-class DyerRosenfeld(IAlgorithm):
+class DyerRosenfeldAlgorithm(Algorithm):
     NORTH_BORDER = 0
     WEST_BORDER = 1
     SOUTH_BORDER = 2
@@ -26,19 +26,11 @@ class DyerRosenfeld(IAlgorithm):
         self.borderPointPixels.clear()
         self.pixelsToBeDeletedQueue.clear()
 
-    def initialize(self):
-        pass
-
     def step(self):
         for sideValue in range(0, 4):
             self.find_border_points(sideValue)
             self.mark_pixels_to_delete()
             self.minimize_marked_points()
-
-        self.clear_helpers()
-
-    def after_processing(self):
-        pass
 
     def find_border_points(self, side):
         for rowIndex in range(1, self.img.shape[0] - 1):
@@ -102,3 +94,19 @@ class DyerRosenfeld(IAlgorithm):
                  __/ |
                 |___/
         """, bcolors.ENDC)
+
+
+dyer = DyerRosenfeldAlgorithm('shapes.png')
+dyer.print_algorithm_name()
+
+while True:
+    print(bcolors.BOLD, dyer.img, bcolors.ENDC, '\n')
+    dyer.step()
+    dyer.clear_helpers()
+
+    if equalmatrix(dyer.img, dyer.imgBeforeStep, dyer.img.shape):
+        break
+    else:
+        makeequalmatrix(dyer.imgBeforeStep, dyer.img, dyer.img.shape)
+
+save_image_by_name(dyer.imgName, dyer.img)

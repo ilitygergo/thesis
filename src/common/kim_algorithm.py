@@ -1,7 +1,8 @@
-import numpy as np
 import bcolors
+import numpy as np
+
+from common.algorithm import Algorithm
 from src.common.functions import *
-from common.Algorithm import Algorithm
 
 
 class KimAlgorithm(Algorithm):

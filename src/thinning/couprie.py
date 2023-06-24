@@ -1,16 +1,17 @@
 import bcolors
+
 from src.common.functions import *
-from common.Algorithm import Algorithm
+from src.thinning.interface.algorithm_interface import IAlgorithm
 
 
-class CouprieEtAlAlgorithm(Algorithm):
+class Couprie(IAlgorithm):
     binmatrixhelper = 0
 
     def __init__(self, img_name, lookup=False):
         self.imgName = img_name
         self.lookup = lookup
         self.img = get_image_by_name(img_name)
-        self.img2 = get_image_by_name(img_name)
+        self.imgBeforeStep = get_image_by_name(img_name)
         self.helper = get_image_by_name(img_name)
         self.lowest = get_image_by_name(img_name)
         self.border = None
@@ -45,22 +46,22 @@ class CouprieEtAlAlgorithm(Algorithm):
 
         for rowIndex in range(2, self.img.shape[0] - 2):
             for colIndex in range(2, self.img.shape[1] - 2):
-                CouprieEtAlAlgorithm.binmatrixhelper = binmatrix(self.img, rowIndex, colIndex, self.img.shape)
+                Couprie.binmatrixhelper = binmatrix(self.img, rowIndex, colIndex, self.img.shape)
                 if self.border[rowIndex][colIndex] == 'O':
                     continue
 
                 if self.lookup:
-                    CouprieEtAlAlgorithm.binmatrixhelper = converttoarray(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2)
-                    CouprieEtAlAlgorithm.binmatrixhelper = arraytonum(CouprieEtAlAlgorithm.binmatrixhelper)
-                    self.helper[rowIndex][colIndex] = self.table[CouprieEtAlAlgorithm.binmatrixhelper]
+                    Couprie.binmatrixhelper = converttoarray(Couprie.binmatrixhelper, 2, 2)
+                    Couprie.binmatrixhelper = arraytonum(Couprie.binmatrixhelper)
+                    self.helper[rowIndex][colIndex] = self.table[Couprie.binmatrixhelper]
                 else:
-                    if endpointmodified(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2):
+                    if endpointmodified(Couprie.binmatrixhelper, 2, 2):
                         continue
-                    if not oneobject(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2) <= 1:
+                    if not oneobject(Couprie.binmatrixhelper, 2, 2) <= 1:
                         continue
-                    if not simpleafterremove(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2):
+                    if not simpleafterremove(Couprie.binmatrixhelper, 2, 2):
                         continue
-                    if forbidden(CouprieEtAlAlgorithm.binmatrixhelper, 2, 2):
+                    if forbidden(Couprie.binmatrixhelper, 2, 2):
                         continue
                     self.helper[rowIndex][colIndex] = 1
 
@@ -70,6 +71,9 @@ class CouprieEtAlAlgorithm(Algorithm):
                     self.img[row][col] = self.lowest[row][col]
 
         makeequalmatrix(self.helper, self.img, self.img.shape)
+
+    def after_processing(self):
+        pass
 
     def clear_helpers(self):
         pass
@@ -85,17 +89,3 @@ class CouprieEtAlAlgorithm(Algorithm):
                           | |
                           |_|
         """, bcolors.ENDC)
-
-
-couprie = CouprieEtAlAlgorithm('shapes.png')
-couprie.initialize()
-
-while True:
-    couprie.step()
-
-    if equalmatrix(couprie.img, couprie.img2, couprie.img.shape):
-        break
-    else:
-        makeequalmatrix(couprie.img2, couprie.img, couprie.img.shape)
-
-save_image_by_name(couprie.imgName, couprie.img)

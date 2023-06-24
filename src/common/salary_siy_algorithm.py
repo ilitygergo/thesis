@@ -1,15 +1,15 @@
 import bcolors
 
+from common.algorithm import Algorithm
 from src.common.functions import *
-from src.thinning.interface.IAlgorithm import IAlgorithm
 
 
-class SalariSiy(IAlgorithm):
+class SalarySiyAlgorithm(Algorithm):
 
     def __init__(self, img_name):
         self.imgName = img_name
         self.img = get_image_by_name(img_name)
-        self.imgBeforeStep = get_image_by_name(img_name)
+        self.img2 = get_image_by_name(img_name)
         self.g1 = get_image_by_name(img_name)
         self.g2 = get_image_by_name(img_name)
         self.borders = get_image_by_name(img_name)
@@ -19,17 +19,17 @@ class SalariSiy(IAlgorithm):
         hist = [0] * 256
         maxima = 0
 
-        for rowIndex in range(self.img.shape[0]):
-            for colIndex in range(self.img.shape[1]):
-                if rowIndex == 0 or colIndex == 0 or rowIndex == self.img.shape[0] or colIndex == self.img.shape[1]:
-                    self.img[rowIndex][colIndex] = 0
-                self.g1[rowIndex][colIndex] = 0
-                self.g2[rowIndex][colIndex] = 0
-                self.borders[rowIndex][colIndex] = 0
+        for rowIndex in range(salary.img.shape[0]):
+            for colIndex in range(salary.img.shape[1]):
+                if rowIndex == 0 or colIndex == 0 or rowIndex == salary.img.shape[0] or colIndex == salary.img.shape[1]:
+                    salary.img[rowIndex][colIndex] = 0
+                salary.g1[rowIndex][colIndex] = 0
+                salary.g2[rowIndex][colIndex] = 0
+                salary.borders[rowIndex][colIndex] = 0
 
-        for rowIndex in range(self.img.shape[0]):
-            for colIndex in range(self.img.shape[1]):
-                hist[int(self.img[rowIndex][colIndex])] += 1
+        for rowIndex in range(salary.img.shape[0]):
+            for colIndex in range(salary.img.shape[1]):
+                hist[int(salary.img[rowIndex][colIndex])] += 1
 
         for index in range(256):
             if index == 0:
@@ -38,9 +38,8 @@ class SalariSiy(IAlgorithm):
                 maxima = hist[index]
                 self.maximum = index
 
-        self.pre_transformation_step()
-
     def pre_transformation_step(self):
+        """Central grey distance transform"""
         for rowIndex in range(1, self.img.shape[0] - 1):
             for colIndex in range(1, self.img.shape[1] - 1):
                 a = self.g1[rowIndex - 1][colIndex - 1]
@@ -81,36 +80,36 @@ class SalariSiy(IAlgorithm):
         conp = 0
         torolt = 0
 
-        for row in range(1, self.img.shape[0] - 1):
-            for col in range(1, self.img.shape[1] - 1):
-                if borderpoint(self.img, row, col):
+        for row in range(1, salary.img.shape[0] - 1):
+            for col in range(1, salary.img.shape[1] - 1):
+                if borderpoint(salary.img, row, col):
                     hatar += 1
-                    self.borders[row][col] = 1
+                    salary.borders[row][col] = 1
 
-        for row in range(1, self.img.shape[0] - 1):
-            for col in range(1, self.img.shape[1] - 1):
-                if self.img[row][col] != 0:
-                    if self.borders[row][col] == 1:
-                        if localmaximum(self.img[row][col], self.img[row][col + 1], self.img[row - 1][col + 1],
-                                        self.img[row - 1][col], self.img[row - 1][col - 1],
-                                        self.img[row][col - 1],
-                                        self.img[row + 1][col - 1], self.img[row + 1][col],
-                                        self.img[row + 1][col + 1]):
+        for row in range(1, salary.img.shape[0] - 1):
+            for col in range(1, salary.img.shape[1] - 1):
+                if salary.img[row][col] != 0:
+                    if salary.borders[row][col] == 1:
+                        if localmaximum(salary.img[row][col], salary.img[row][col + 1], salary.img[row - 1][col + 1],
+                                        salary.img[row - 1][col], salary.img[row - 1][col - 1],
+                                        salary.img[row][col - 1],
+                                        salary.img[row + 1][col - 1], salary.img[row + 1][col],
+                                        salary.img[row + 1][col + 1]):
                             localmax += 1
                             continue
-                        if endpoint(self.img, row, col):
+                        if endpoint(salary.img, row, col):
                             end += 1
                             continue
-                        if not connectedcorner(self.img, row, col):
+                        if not connectedcorner(salary.img, row, col):
                             conc += 1
                             continue
-                        if not connectedpath(self.img, row, col):
+                        if not connectedpath(salary.img, row, col):
                             conp += 1
                             continue
                         torolt += 1
-                        self.img[row][col] = 0
+                        salary.img[row][col] = 0
 
-    def after_processing(self):
+    def clear_helpers(self):
         pass
 
     def print_algorithm_name(self):
@@ -124,3 +123,19 @@ class SalariSiy(IAlgorithm):
                                                      __/ |
                                                     |___/
         """, bcolors.ENDC)
+
+
+salary = SalarySiyAlgorithm('shapes.png')
+salary.print_algorithm_name()
+salary.initialize()
+salary.pre_transformation_step()
+
+while True:
+    salary.step()
+
+    if equalmatrix(salary.img, salary.img2, salary.img.shape):
+        break
+    else:
+        makeequalmatrix(salary.img2, salary.img, salary.img.shape)
+
+save_image_by_name(salary.imgName, salary.img)

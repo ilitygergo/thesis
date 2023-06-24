@@ -3,13 +3,13 @@ from abc import ABC, abstractmethod
 
 from src.common.functions import (equalmatrix, makeequalmatrix,
                                   save_image_by_name)
-from src.thinning.Couprie import Couprie
-from src.thinning.DyerRosenfeld import DyerRosenfeld
-from src.thinning.Image import Image
-from src.thinning.interface.IAlgorithm import IAlgorithm
-from src.thinning.Kang import Kang
-from src.thinning.Kim import Kim
-from src.thinning.SalariSiy import SalariSiy
+from src.thinning.couprie import Couprie
+from src.thinning.dyer_rosenfeld import DyerRosenfeld
+from src.thinning.image import Image
+from src.thinning.interface.algorithm_interface import IAlgorithm
+from src.thinning.kang import Kang
+from src.thinning.kim import Kim
+from src.thinning.salari_siy import SalariSiy
 
 
 class AlgorithmFactory(ABC):
