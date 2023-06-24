@@ -1,8 +1,10 @@
+from collections import deque
+
 import bcolors
 import numpy as np
-from collections import deque
-from common.functions import *
-from thinning.interface.IAlgorithm import IAlgorithm
+
+from src.common.functions import *
+from src.thinning.interface.IAlgorithm import IAlgorithm
 
 
 class DyerRosenfeld(IAlgorithm):

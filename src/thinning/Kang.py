@@ -1,6 +1,7 @@
 import bcolors
+
 from src.common.functions import *
-from thinning.interface.IAlgorithm import IAlgorithm
+from src.thinning.interface.IAlgorithm import IAlgorithm
 
 
 class Kang(IAlgorithm):

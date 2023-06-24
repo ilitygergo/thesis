@@ -1,7 +1,10 @@
 import tkinter as tk
-from tkinter import filedialog
-from tkinter import messagebox
-from src.core.AlgorithmFactory import *
+from tkinter import filedialog, messagebox
+
+from src.core.AlgorithmFactory import (AlgorithmFactory, CouprieFactory,
+                                       DyerRosenfeldFactory, KangFactory,
+                                       KimFactory, SalariSiyFactory)
+from src.thinning.Image import Image
 
 
 class Application(tk.Frame):
