@@ -23,14 +23,16 @@ class Application(tk.Frame):
     canvas = tk.Canvas
     photo = tk.PhotoImage
 
-    def __init__(self, master) -> None:
+    def __init__(self, master: tk.Tk) -> None:
         super().__init__(master)
-        master.title(self.title)
-        master.minsize(width=self.width, height=self.height)
-        master.maxsize(width=self.width, height=self.height)
-        master.columnconfigure(0, weight=1)
-        master.rowconfigure(0, weight=1)
-        master.configure(bg="#CECECE")
+        self.master = master
+        self.master.title(self.title)
+        self.master.minsize(width=self.width, height=self.height)
+        self.master.maxsize(width=self.width, height=self.height)
+        self.master.columnconfigure(0, weight=1)
+        self.master.rowconfigure(0, weight=1)
+        self.master.configure(bg="#CECECE")
+
         self.display_menu()
         self.display_image()
         self.display_image_details()
@@ -84,8 +86,8 @@ class Application(tk.Frame):
             self.image_size_label.grid(row=2, column=0)
         else:
             self.image_src_label.config(text=img.name)
-            sizeString = str(img.rowSize) + " x " + str(img.colSize)
-            self.image_size_label.config(text=sizeString)
+            size_string = str(img.rowSize) + " x " + str(img.colSize)
+            self.image_size_label.config(text=size_string)
 
     def select_image(self) -> None:
         imagePath = self.get_image_path()
