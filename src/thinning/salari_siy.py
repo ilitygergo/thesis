@@ -1,6 +1,13 @@
 import bcolors
 
-from src.common.functions import *
+from src.common.functions import (
+    borderpoint,
+    connectedcorner,
+    connectedpath,
+    endpoint,
+    get_image_by_name,
+    localmaximum,
+)
 from src.thinning.interface.algorithm_interface import IAlgorithm
 
 
@@ -96,7 +103,7 @@ class SalariSiy(IAlgorithm):
                     self.g1[rowIndex][colIndex], self.g2[rowIndex][colIndex]
                 )
 
-    def step(self):
+    def step(self):  # noqa: C901
         hatar = 0
         localmax = 0
         end = 0

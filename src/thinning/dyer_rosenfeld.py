@@ -3,7 +3,13 @@ from collections import deque
 import bcolors
 import numpy as np
 
-from src.common.functions import *
+from src.common.functions import (
+    connected,
+    get_image_by_name,
+    minimize,
+    notendpoint,
+    rvalue,
+)
 from src.thinning.interface.algorithm_interface import IAlgorithm
 
 

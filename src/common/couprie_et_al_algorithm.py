@@ -1,7 +1,21 @@
 import bcolors
 
 from common.algorithm import Algorithm
-from src.common.functions import *
+from src.common.functions import (
+    arraytonum,
+    binmatrix,
+    borderpoint8,
+    converttoarray,
+    endpointmodified,
+    equalmatrix,
+    forbidden,
+    get_image_by_name,
+    lowneighbour,
+    makeequalmatrix,
+    oneobject,
+    save_image_by_name,
+    simpleafterremove,
+)
 
 
 class CouprieEtAlAlgorithm(Algorithm):
@@ -30,7 +44,7 @@ class CouprieEtAlAlgorithm(Algorithm):
                 self.table.append(int.from_bytes(byte, "little"))
                 byte = f.read(1)
 
-    def step(self):
+    def step(self):  # noqa: C901
         for rowIndex in range(0, self.img.shape[0]):
             for colIndex in range(0, self.img.shape[1]):
                 self.border[rowIndex][colIndex] = "O"

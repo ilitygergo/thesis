@@ -1,7 +1,8 @@
 import bcolors
+import cv2
 import numpy as np
 
-from src.common.functions import *
+from src.common.functions import countf, get_image_by_name, makeequalmatrix
 from src.thinning.interface.algorithm_interface import IAlgorithm
 
 
@@ -53,7 +54,7 @@ class Kim(IAlgorithm):
         self.kernel2[4][3] = 0
         self.kernel2[4][4] = 0
 
-    def step(self):
+    def step(self):  # noqa: C901
         self.E = cv2.erode(self.img, self.kernel, iterations=1)
         self.helper1 = cv2.erode(self.img, self.kernel, iterations=1)
         self.helper2 = cv2.erode(self.img, self.kernel2, iterations=1)

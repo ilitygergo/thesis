@@ -1,6 +1,14 @@
 import bcolors
 
-from src.common.functions import *
+from src.common.functions import (
+    borderpoint,
+    connectedcorner,
+    connectedpath,
+    countnotzero,
+    endpoint,
+    get_image_by_name,
+    localmaximum,
+)
 from src.thinning.interface.algorithm_interface import IAlgorithm
 
 
@@ -20,7 +28,7 @@ class Kang(IAlgorithm):
         self.help = get_image_by_name(img_name)
         self.borders = get_image_by_name(img_name)
 
-    def initialize(self):
+    def initialize(self):  # noqa: C901
         for rowIndex in range(0, self.img.shape[0]):
             for colIndex in range(0, self.img.shape[1]):
                 self.psi[rowIndex][colIndex] = 0
@@ -76,7 +84,7 @@ class Kang(IAlgorithm):
             for colIndex in range(1, self.img.shape[1] - 1):
                 self.img[rowIndex][colIndex] = self.imgBeforeStep[rowIndex][colIndex]
 
-    def step(self):
+    def step(self):  # noqa: C901
         for rowIndex in range(1, self.img.shape[0] - 1):
             for colIndex in range(1, self.img.shape[1] - 1):
                 if borderpoint(self.img, rowIndex, colIndex):
@@ -84,7 +92,7 @@ class Kang(IAlgorithm):
 
         for rowIndex in range(2, self.img.shape[0] - 2):
             for colIndex in range(2, self.img.shape[1] - 2):
-                if self.psi[rowIndex][colIndex] == self.psi_value + x:
+                if self.psi[rowIndex][colIndex] == self.psi_value:
                     if self.borders[rowIndex][colIndex] == 1:
                         if localmaximum(
                             self.imgBeforeStep[rowIndex][colIndex],

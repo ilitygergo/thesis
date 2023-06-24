@@ -1,7 +1,17 @@
 import bcolors
 
 from common.algorithm import Algorithm
-from src.common.functions import *
+from src.common.functions import (
+    borderpoint,
+    connectedcorner,
+    connectedpath,
+    endpoint,
+    equalmatrix,
+    get_image_by_name,
+    localmaximum,
+    makeequalmatrix,
+    save_image_by_name,
+)
 
 
 class SalarySiyAlgorithm(Algorithm):
@@ -95,7 +105,7 @@ class SalarySiyAlgorithm(Algorithm):
                     self.g1[rowIndex][colIndex], self.g2[rowIndex][colIndex]
                 )
 
-    def step(self):
+    def step(self):  # noqa: C901
         hatar = 0
         localmax = 0
         end = 0

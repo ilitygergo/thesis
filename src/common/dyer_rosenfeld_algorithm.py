@@ -4,7 +4,16 @@ import bcolors
 import numpy as np
 
 from common.algorithm import Algorithm
-from common.functions import *
+from common.functions import (
+    connected,
+    equalmatrix,
+    get_image_by_name,
+    makeequalmatrix,
+    minimize,
+    notendpoint,
+    rvalue,
+    save_image_by_name,
+)
 
 
 class DyerRosenfeldAlgorithm(Algorithm):

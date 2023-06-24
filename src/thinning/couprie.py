@@ -1,6 +1,18 @@
 import bcolors
 
-from src.common.functions import *
+from src.common.functions import (
+    arraytonum,
+    binmatrix,
+    borderpoint8,
+    converttoarray,
+    endpointmodified,
+    forbidden,
+    get_image_by_name,
+    lowneighbour,
+    makeequalmatrix,
+    oneobject,
+    simpleafterremove,
+)
 from src.thinning.interface.algorithm_interface import IAlgorithm
 
 
@@ -30,7 +42,7 @@ class Couprie(IAlgorithm):
                 self.table.append(int.from_bytes(byte, "little"))
                 byte = f.read(1)
 
-    def step(self):
+    def step(self):  # noqa:C901
         for rowIndex in range(0, self.img.shape[0]):
             for colIndex in range(0, self.img.shape[1]):
                 self.border[rowIndex][colIndex] = "O"

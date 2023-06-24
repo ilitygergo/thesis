@@ -105,7 +105,7 @@ def notendpoint(b, d, h, f, r):
         return False
 
 
-def connected(a, b, c, d, e, f, g, h, i, r):
+def connected(a, b, c, d, e, f, g, h, i, r):  # noqa: C901
     connect = [b, d, f, h]
     szam = 0
     ret = 0
@@ -159,7 +159,7 @@ def connected(a, b, c, d, e, f, g, h, i, r):
         return False
 
 
-def findpath(a, b, c, d, f, g, h, i, m, x, y, r):
+def findpath(a, b, c, d, f, g, h, i, m, x, y, r):  # noqa: C901
     if x == 0 and y == 1:
         if (b >= (m - r) and a >= (m - r) and d >= (m - r)) or (
             b >= (m - r)
@@ -406,7 +406,7 @@ def countnotzero(img, row, col):
         int(img[row + 1][col]),
         int(img[row + 1][col + 1]),
     ]
-    if sum(x is not 0 for x in lst) == 2:
+    if sum(x != 0 for x in lst) == 2:
         return True
     return False
 
@@ -414,7 +414,8 @@ def countnotzero(img, row, col):
 # SALARI_SIY AND KANG_ET_AL AND COUPRIE_ET_AL SPECIFIC
 
 
-# Returns true if the img[row][col] has only one 4 neighbour with nonzero value or only one 8 neighbour with zero value
+# Returns true if the img[row][col] has only one 4 neighbour with nonzero value
+# or only one 8 neighbour with zero value
 def endpointmodified(img, row, col):
     four = [img[row - 1][col], img[row][col - 1], img[row][col + 1], img[row + 1][col]]
     eight = [
@@ -432,7 +433,7 @@ def endpointmodified(img, row, col):
 
 
 # Count the value differences in the 8 neighbourhood
-def countf(img, row, col):
+def countf(img, row, col):  # noqa: C901
     # l = 1
     if img[row][col + 1] < img[row][col] and (
         img[row][col + 1] < img[row - 1][col + 1]
@@ -527,7 +528,8 @@ def borderpoint8(img, row, col):
     return False
 
 
-# Checks the neighbourhood of a point and returns the number of objects in the neighbourhood
+# Checks the neighbourhood of a point and returns the number
+# of objects in the neighbourhood
 def oneobject(img, row, col):
     objects = 0
     if img[row - 1][col] == 0 and (
@@ -550,7 +552,7 @@ def oneobject(img, row, col):
 
 
 # Returns True if the field equals any of the forbidden shapes
-def forbidden(img, row, col):
+def forbidden(img, row, col):  # noqa: C901
     # a
     if (
         img[row][col] != 0

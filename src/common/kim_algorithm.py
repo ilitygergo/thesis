@@ -1,8 +1,15 @@
 import bcolors
+import cv2
 import numpy as np
 
 from common.algorithm import Algorithm
-from src.common.functions import *
+from src.common.functions import (
+    countf,
+    equalmatrix,
+    get_image_by_name,
+    makeequalmatrix,
+    save_image_by_name,
+)
 
 
 class KimAlgorithm(Algorithm):
@@ -54,7 +61,7 @@ class KimAlgorithm(Algorithm):
         self.kernel2[4][3] = 0
         self.kernel2[4][4] = 0
 
-    def step(self):
+    def step(self):  # noqa: C901
         self.E = cv2.erode(self.comp, self.kernel, iterations=1)
         self.helper1 = cv2.erode(self.comp, self.kernel, iterations=1)
         self.helper2 = cv2.erode(self.comp, self.kernel2, iterations=1)
