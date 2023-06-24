@@ -16,7 +16,7 @@ class AlgorithmFactory(ABC):
     def factory(self, img_name):
         pass
 
-    def runAlgorithm(self, loading_screen: tk.Tk):
+    def run_algorithm(self, loading_screen: tk.Tk):
         img = Image.getInstance()
         algorithm = self.factory(img.name)
         algorithm.initialize()

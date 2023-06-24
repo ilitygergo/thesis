@@ -17,13 +17,13 @@ class Application(tk.Frame):
     width: int = 800
     height: int = 400
     font: str = "Courier"
-    menu: tk.Menu = tk.Menu
-    imageSrcLabel: tk.Label = tk.Label
-    imageSizeLabel: tk.Label = tk.Label
-    canvas: tk.Canvas = tk.Canvas
-    photo: tk.PhotoImage = tk.PhotoImage
+    menu = tk.Menu
+    image_src_label = tk.Label
+    image_size_label = tk.Label
+    canvas = tk.Canvas
+    photo = tk.PhotoImage
 
-    def __init__(self, master=None):
+    def __init__(self, master) -> None:
         super().__init__(master)
         master.title(self.title)
         master.minsize(width=self.width, height=self.height)
@@ -35,7 +35,7 @@ class Application(tk.Frame):
         self.display_image()
         self.display_image_details()
 
-    def display_menu(self):
+    def display_menu(self) -> None:
         self.menu = tk.Menu(self.master)
         self.master.config(menu=self.menu)
 
@@ -46,23 +46,21 @@ class Application(tk.Frame):
         algorithmMenu = tk.Menu(self.master, tearoff=0)
         algorithmMenu.add_command(
             label="Dyer Rosenfeld",
-            command=lambda: self.run_algorithm(DyerRosenfeldFactory()),
+            command=lambda: self.run(DyerRosenfeldFactory()),
         )
         algorithmMenu.add_command(
-            label="Salari Siy", command=lambda: self.run_algorithm(SalariSiyFactory())
+            label="Salari Siy", command=lambda: self.run(SalariSiyFactory())
         )
         algorithmMenu.add_command(
-            label="Kang Et Al", command=lambda: self.run_algorithm(KangFactory())
+            label="Kang Et Al", command=lambda: self.run(KangFactory())
         )
+        algorithmMenu.add_command(label="Kim", command=lambda: self.run(KimFactory()))
         algorithmMenu.add_command(
-            label="Kim", command=lambda: self.run_algorithm(KimFactory())
-        )
-        algorithmMenu.add_command(
-            label="Couprie Et Al", command=lambda: self.run_algorithm(CouprieFactory())
+            label="Couprie Et Al", command=lambda: self.run(CouprieFactory())
         )
         self.menu.add_cascade(label="Algorithm", menu=algorithmMenu)
 
-    def display_image(self):
+    def display_image(self) -> None:
         img = Image.getInstance()
         if img is None:
             self.canvas = tk.Canvas(self.master)
@@ -75,21 +73,21 @@ class Application(tk.Frame):
             )
             self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)
 
-    def display_image_details(self):
+    def display_image_details(self) -> None:
         img = Image.getInstance()
         if img is None:
-            self.imageSrcLabel = tk.Label()
-            self.imageSrcLabel.config(bg="#CECECE", font=(self.font, 28))
-            self.imageSrcLabel.grid(row=1, column=0)
-            self.imageSizeLabel = tk.Label()
-            self.imageSizeLabel.config(bg="#CECECE", font=(self.font, 32))
-            self.imageSizeLabel.grid(row=2, column=0)
+            self.image_src_label = tk.Label()
+            self.image_src_label.config(bg="#CECECE", font=(self.font, 28))
+            self.image_src_label.grid(row=1, column=0)
+            self.image_size_label = tk.Label()
+            self.image_size_label.config(bg="#CECECE", font=(self.font, 32))
+            self.image_size_label.grid(row=2, column=0)
         else:
-            self.imageSrcLabel.config(text=img.name)
+            self.image_src_label.config(text=img.name)
             sizeString = str(img.rowSize) + " x " + str(img.colSize)
-            self.imageSizeLabel.config(text=sizeString)
+            self.image_size_label.config(text=sizeString)
 
-    def select_image(self):
+    def select_image(self) -> None:
         imagePath = self.get_image_path()
         if not imagePath:
             return
@@ -101,7 +99,7 @@ class Application(tk.Frame):
             messagebox.showerror("Error", "Image extension is not supported")
 
     @staticmethod
-    def get_image_path():
+    def get_image_path() -> str:
         return filedialog.askopenfilename(
             initialdir="./assets/input",
             title="Select A File",
@@ -109,7 +107,7 @@ class Application(tk.Frame):
         )
 
     @staticmethod
-    def run_algorithm(factory: AlgorithmFactory):
+    def run(factory: AlgorithmFactory) -> None:
         loading_screen = Application.init_loading_screen()
 
         if Image.getInstance() is None:
@@ -130,6 +128,6 @@ class Application(tk.Frame):
 
         return loading_screen
 
-    def refresh_window(self):
+    def refresh_window(self) -> None:
         self.destroy()
         self.__init__(self.master)
