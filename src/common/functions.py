@@ -1,9 +1,11 @@
-import os
-import cv2
 import copy
+import os
+
+import cv2
 import numpy
-import files.input as pic_folder_input
-import files.output as pic_folder_output
+
+import assets.input as pic_folder_input
+import assets.output as pic_folder_output
 
 
 def get_image_by_name(name):

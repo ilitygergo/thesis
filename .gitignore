@@ -4,8 +4,8 @@ venv/
 .idea/
 .vscode
 
-files/output/*.png
-files/output/*.jpg
+assets/output/*.png
+assets/output/*.jpg
 *.swp
 
 TODO

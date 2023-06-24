@@ -75,4 +75,4 @@ class Image:
 
     def save(self):
         self.convertPixelValuesToOpposite()
-        cv2.imwrite('common/files/output/' + self.name, self.pixels)
+        cv2.imwrite('common/assets/output/' + self.name, self.pixels)

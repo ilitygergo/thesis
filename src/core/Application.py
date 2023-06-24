@@ -85,7 +85,7 @@ class Application(tk.Frame):
     @staticmethod
     def getImagePath():
         return filedialog.askopenfilename(
-            initialdir='./files/input',
+            initialdir='./assets/input',
             title='Select A File',
             filetypes=[('image files', '*.jpg *.png'), ('all files', '*.*')]
         )
