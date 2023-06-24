@@ -1,3 +1,4 @@
+import tkinter as tk
 from abc import ABC, abstractmethod
 
 from src.common.functions import (equalmatrix, makeequalmatrix,
@@ -16,12 +17,13 @@ class AlgorithmFactory(ABC):
     def factory(self, img_name):
         pass
 
-    def runAlgorithm(self):
+    def runAlgorithm(self, loading_screen: tk.Tk):
         img = Image.getInstance()
         algorithm = self.factory(img.name)
         algorithm.initialize()
 
         while True:
+            loading_screen.update()
             algorithm.step()
 
             if equalmatrix(algorithm.img, algorithm.imgBeforeStep, algorithm.img.shape):

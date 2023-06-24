@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, ttk
 
 from src.core.AlgorithmFactory import (AlgorithmFactory, CouprieFactory,
                                        DyerRosenfeldFactory, KangFactory,
@@ -92,12 +92,25 @@ class Application(tk.Frame):
 
     @staticmethod
     def runAlgorithm(factory: AlgorithmFactory):
+        loading_screen = Application.init_loading_screen()
+
         if Image.getInstance() is None:
             messagebox.showerror('Error', 'Select an image first!')
         if not factory:
             raise Exception('Wrong algorithm!')
 
-        factory.runAlgorithm()
+        factory.runAlgorithm(loading_screen)
+        loading_screen.withdraw()
+
+    @staticmethod
+    def init_loading_screen() -> tk.Tk:
+        loading_screen = tk.Tk()
+        tk.Label(loading_screen, text='Running algorithm...').pack()
+        pb = ttk.Progressbar(loading_screen, length=200, mode='indeterminate')
+        pb.pack()
+        pb.start()
+
+        return loading_screen
 
     def refreshWindow(self):
         self.destroy()

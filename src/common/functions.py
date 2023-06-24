@@ -9,7 +9,8 @@ import assets.output as pic_folder_output
 
 
 def get_image_by_name(name):
-    return flip(imreadgray(f'{os.path.dirname(pic_folder_input.__file__)}{os.path.sep}{name}'))
+    file_path = os.path.dirname(pic_folder_input.__file__) + os.path.sep + name
+    return flip(imreadgray(file_path))
 
 
 def save_image_by_name(name, img):
