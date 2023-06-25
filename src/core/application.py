@@ -14,9 +14,9 @@ from src.thinning.image import Image
 
 class Application(tk.Frame):
     title: str = "Thesis - Grayscale image thinning"
-    width: int = 800
-    height: int = 400
-    font: str = "Courier"
+    width: int = 1000
+    height: int = 600
+    font: str = "Modern"
     menu = tk.Menu
     image_src_label = tk.Label
     image_size_label = tk.Label
@@ -90,7 +90,7 @@ class Application(tk.Frame):
             self.image_size_label.config(text=size_string)
 
     def select_image(self) -> None:
-        imagePath = self.get_image_path()
+        imagePath = self.get_image_path("./assets/input")
         if not imagePath:
             return
 
@@ -100,17 +100,15 @@ class Application(tk.Frame):
         else:
             messagebox.showerror("Error", "Image extension is not supported")
 
-    @staticmethod
-    def get_image_path() -> str:
+    def get_image_path(self, init_dir: str) -> str:
         return filedialog.askopenfilename(
-            initialdir="./assets/input",
+            initialdir=init_dir,
             title="Select A File",
             filetypes=[("image files", "*.jpg *.png"), ("all files", "*.*")],
         )
 
-    @staticmethod
-    def run(factory: AlgorithmFactory) -> None:
-        loading_screen = Application.init_loading_screen()
+    def run(self, factory: AlgorithmFactory) -> None:
+        loading_screen = self._init_loading_screen()
 
         if Image.getInstance() is None:
             messagebox.showerror("Error", "Select an image first!")
@@ -120,8 +118,7 @@ class Application(tk.Frame):
         factory.run_algorithm(loading_screen)
         loading_screen.withdraw()
 
-    @staticmethod
-    def init_loading_screen() -> tk.Tk:
+    def _init_loading_screen(self) -> tk.Tk:
         loading_screen = tk.Tk()
         tk.Label(loading_screen, text="Running algorithm...").pack()
         pb = ttk.Progressbar(loading_screen, length=200, mode="indeterminate")
